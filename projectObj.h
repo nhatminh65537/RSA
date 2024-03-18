@@ -19,6 +19,7 @@ Int256 pls(Int256*, Int256*, Int256*);
 Int256 sub(Int256*, Int256*, Int256*);
 Int256 mul(Int256*, Int256*, Int256*);
 Int256 pow(Int256*, Int256*, Int256*);
+
 Int256 mod(Int256*, Int256*);
 Int256 div(Int256*, Int256*);
 
