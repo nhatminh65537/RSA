@@ -1,24 +1,33 @@
 #ifndef __PROJECTOBJ__
 #define __PROJECTOBJ__
 
+#define MAXBYTE 32
+#define MAXHEX 64
+// #define MAXCHAR 32
+
 struct Int256
 {
     char value[32];
+    int mostbit;
 };
 
-char* conv2hex(Int256*);
-char* conv2char(Int256*);
+void conv2hex(char*, struct Int256*);
+void conv2char(char*, struct Int256*);
 
-void assign(Int256*, Int256*);
-void assign(Int256*, char*, int);
-void index(Int256*, int);
+void assign(struct Int256*, struct Int256*);
+void load(struct Int256*, char*, int);
+char index(struct Int256*, int);
 
-Int256 pls(Int256*, Int256*, Int256*);
-Int256 sub(Int256*, Int256*, Int256*);
-Int256 mul(Int256*, Int256*, Int256*);
-Int256 pow(Int256*, Int256*, Int256*);
+struct Int256* pls(struct Int256*, struct Int256*, struct Int256*);
+struct Int256* sub(struct Int256*, struct Int256*, struct Int256*);
+struct Int256* mul(struct Int256*, struct Int256*, struct Int256*);
+struct Int256* pow(struct Int256*, struct Int256*, struct Int256*);
 
-Int256 mod(Int256*, Int256*);
-Int256 div(Int256*, Int256*);
+struct Int256* mod(struct Int256*, struct Int256*);
+struct Int256* div(struct Int256*, struct Int256*);
+
+int less(struct Int256*, struct Int256*);
+
+struct Int256* temp;
 
 #endif
