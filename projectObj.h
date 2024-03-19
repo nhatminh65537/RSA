@@ -4,16 +4,14 @@
 struct Int256
 {
     char value[32];
-    char hex[64];
-
-    Int256(char [], int);
-
-    char* conv2hex();
-    char* conv2char();
-
-    void assign(Int256*);
-    void index(int);
 };
+
+char* conv2hex(Int256*);
+char* conv2char(Int256*);
+
+void assign(Int256*, Int256*);
+void assign(Int256*, char*, int);
+void index(Int256*, int);
 
 Int256 pls(Int256*, Int256*, Int256*);
 Int256 sub(Int256*, Int256*, Int256*);
