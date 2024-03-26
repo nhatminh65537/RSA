@@ -1,104 +1,100 @@
 #include "projectObj.h"
+#include <string.h>
+#include <stdio.h>
+
+int _min(int a, int b) {return a > b? b: a;}
 
 struct Int256 zero()
 {
     struct Int256 num;
-    num.mostbit == -1;
     for (int i = 0; i < MAXBYTE; ++i) num.value[i] = 0;
     return num;
 }
 
 char tonum(char c)
 {
+    if (c == 0)            return 0;
     if (c > 47 && c <= 57) return c - 48;
     if (c > 64 && c <= 70) return c - 55;
 }
 
 char tohex(char c)
 {
+    if (c == 0)            return 0;
     if (c < 10 && c >=  0) return c + 48;
     if (c < 17 && c >= 10) return c + 55;
 }
 
 int index(struct Int256* num, int pos)
 {
-    if (256 > num && num >= 0)
+    if (256 > pos && pos >= 0)
         return (num->value[pos/8] >> (pos%8)) & 1;  
     else return -1; 
 }
 
 void set(struct Int256* num, int pos, int value)
 {
-    if (256 > num && num >= 0 && value == 1)
+    if (256 > pos && pos >= 0 && value == 1)
         num->value[pos/8] |= 1 << (pos%8);
-    if (256 > num && num >= 0 && value == 0) 
+    if (256 > pos && pos >= 0 && value == 0) 
         num->value[pos/8] &= 0 << (pos%8);
 }
 
 void assign(struct Int256* des, struct Int256* ref)
 {
     for (int i = 0; i < MAXBYTE; ++i)
-    {
         des->value[i] = ref->value[i];
-        des->mostbit  = des->mostbit;
-    }       
 }
 
-void load(struct Int256* num, char* str, int mode)
+struct Int256 int256_c(char* str, int mode)
 {
-    char first = 1;
-    num->mostbit = -1;
+    struct Int256 num;
+    int len = strlen(str);
+
+
     // ASCII mode
-    if (mode = 0)
-        for (int i = MAXBYTE - 1; i >= 0; --i)
-        {        
-            if (str[i] != 0 || first == 1)
-            {
-                char j = 7;
-                while (str[i] >> j == 0) 
-                    ;
-                num->mostbit = 8*i + j;
-                first = 0;
-            }
-            num->value[i] = str[i];     
-        }
+    if (mode == 0)
+        for (int i = 0; i < MAXBYTE; --i)
+        {
+            num.value[i] = str[_min(i, len)];     
+        }      
     
     // HEX mode
-    if (mode = 1)
-        for (int i = MAXBYTE - 1; i >= 0; --i)
-        {
-            num->value[i] = tonum(str[2*i]) << 4 + tonum(str[2*i + 1]);
-            char first = 1;
-            if (num->value[i] != 0 || first == 1)
-            {
-                char j = 7;
-                while (num->value[i] >> j == 0) 
-                    --j;
-                num->mostbit = 8*i + j;
-                first = 0;
-            }    
-        }
-
-    // DEC mode
-    if (mode = 2)
+    if (mode == 1)
     {
-        int exp = 0;
+        int num_left, num_right;
+        for (int i = 0; i < MAXBYTE; ++i)
+        {
+            num_right = --len >= 0? tonum(str[len]): 0;
+            num_left  = --len >= 0? tonum(str[len]): 0;
+            num.value[i] = num_right + (num_left << 4);
+        }
     }
+        
+    // DEC mode
+    // if (mode = 2)
+    // {
+    //     int exp = 0;
+    // }
+    return num;
 }
 
 void conv2char(char* str, struct Int256* num)
 {
     for (int i = 1; i < MAXBYTE; ++i)
         str[i] = num->value[i];
+    str[MAXBYTE] = 0;
 }
 
 void conv2hex(char* hex, struct Int256* num)
 {
     for (int i = 0; i < MAXBYTE; ++i)
     {
-        hex[2*i]     = tohex(num->value[i] >> 4);
-        hex[2*i + 1] = tohex(num->value - (hex[2*i] >> 4));
+        hex[2*i]     = tohex(num->value[i] & 0x0f);
+        hex[2*i + 1] = tohex(num->value[i] >> 4 & 0x0f );
     }
+    hex[2*MAXBYTE] = 0;
+    strrev(hex);
 }
 
 struct Int256 shiftleft(struct Int256 num, int times)
@@ -112,31 +108,24 @@ struct Int256 shiftleft(struct Int256 num, int times)
 struct Int256 _sub(struct Int256 a, struct Int256 b)
 {
     struct Int256 temp;
-    temp.mostbit = -1;
     int carry = 0, value;
     for (int i = 0; i < MAXBYTE; ++i)
     {
-        value = index(&a, i) ^ index(&b, i) ^ carry;
-        if (value == 1) temp.mostbit = i;
-
-        set(&temp, i, value);
+        set(&temp, i, index(&a, i) ^ index(&b, i) ^ carry);
         carry = index(&a, i) < index(&b, i) + carry? 1: 0; 
     } 
 }
 
-struct Int256 pls_mod(struct Int256 a, struct Int256 b, struct Int256 n)
+struct Int256 pls(struct Int256 a, struct Int256 b, struct Int256 n)
 {
     struct Int256 temp;
-    temp.mostbit = -1;
     int carry = 0, value;
     for (int i = 0; i < MAXBYTE; ++i)
     {
-        value = index(&a, i) ^ index(&b, i) ^ carry;
-        if (value == 1) temp.mostbit = i;
-
-        set(&temp, i, value);
+        set(&temp, i, index(&a, i) ^ index(&b, i) ^ carry);
         carry = index(&a, i) + index(&b, i) + carry > 1? 1: 0; 
     } 
+    
 }
 struct Int256 sub(struct Int256 a, struct Int256 b, struct Int256 n)
 {
@@ -149,10 +138,9 @@ struct Int256 mod(struct Int256 a, struct Int256 b)
 {
     struct Int256 temp, remainder = a;
 
-    for (int i = a.mostbit-b.mostbit; i >= 0; --i)
+    for (int i = MAXBYTE; i >= 0; --i)
         if (!less(remainder, shiftleft(b, i)))
             remainder = _sub(remainder, shiftleft(b, i));
-    
     return remainder;
 }
 
@@ -162,8 +150,7 @@ struct Int256 div(struct Int256 a, struct Int256 b)
     
     if (less(a, b)) return zero();
 
-    temp.mostbit = a.mostbit-b.mostbit;
-    for (int i = temp.mostbit; i >= 0; --i)
+    for (int i = MAXBYTE; i >= 0; --i)
     {
         if (less(remainder, shiftleft(b, i)))
             set(&temp, i, 0);
@@ -173,8 +160,6 @@ struct Int256 div(struct Int256 a, struct Int256 b)
             remainder = _sub(remainder, shiftleft(b, i));
         }
     }
-    if (index(&temp, temp.mostbit) == 0) 
-        --temp.mostbit;
     return temp;
 }
 
@@ -187,7 +172,16 @@ int less(struct Int256 a, struct Int256 b)
     else                                   return 1;
 }
 
+void show(struct Int256 n)
+{
+    char hex[64];
+    conv2hex(hex, &n);
+    printf("%s", hex);
+}
+
 int main()
 {
+    struct Int256 n = int256_c("12" ,1);
+    show(n);
     return 0;
 }
