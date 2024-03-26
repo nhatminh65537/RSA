@@ -4,7 +4,8 @@ void nhap(char* );
 
 int main()
 {
-    nhap("1234567890");
+    // nhap("1234567890");
+    
     return 0;
 }
 

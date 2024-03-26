@@ -3,18 +3,26 @@
 
 #define MAXBYTE 32
 #define MAXHEX 64
+#define MAXBIT MAXBYTE*8
 // #define MAXCHAR 32
 
 struct Int256
 {
-    char value[MAXBYTE];
+    unsigned char value[MAXBYTE];
 };
 
-void conv2hex(char*, struct Int256*);
-void conv2char(char*, struct Int256*);
+enum Mode
+{
+    ASCIIMODE,
+    HEXMODE,
+    DECMODE,
+};
+
+void conv2hex(unsigned char*, struct Int256*);
+void conv2char(unsigned char*, struct Int256*);
 
 // void assign(struct Int256*, struct Int256*);
-void load(struct Int256*, char*, int);
+void load(struct Int256*, unsigned char*, int);
 int index(struct Int256*, int);
 
 struct Int256 pls(struct Int256, struct Int256, struct Int256);
