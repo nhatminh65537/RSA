@@ -1,7 +1,11 @@
 #include "projectObj.h"
 #include <stdio.h>
 
-int _min(int a, int b) {return a > b? b: a;}
+int _min(int a, int b) 
+{
+    return a > b? b: a;
+}
+
 void _reverse(unsigned char *str)
 {
     int ri = 0;
@@ -15,18 +19,36 @@ void _reverse(unsigned char *str)
         str[ri] = temp;
     }
 }
+
 int _len(unsigned char *str)
 {
     int result = 0;
     while (str[result] != 0) ++result;
     return result;
+}
+
+int _sub(struct Int256* result, struct Int256 a, struct Int256 b)
+{
+    int carry = 0;
+    for (int i = 0; i < MAXBYTE; ++i)
+    {
+        result->value[i] = a.value[i] - b.value[i] - carry;
+        if (a.value[i] < b.value[i] + carry) carry = 1;
+        else                                 carry = 0;
+    } 
+    return carry;
 } 
 
-struct Int256 zero()
+int _pls(struct Int256 *result, struct Int256 a, struct Int256 b)
 {
-    struct Int256 num;
-    for (int i = 0; i < MAXBYTE; ++i) num.value[i] = 0;
-    return num;
+    int carry = 0;
+    for (int i = 0; i < MAXBYTE; ++i)
+    {
+        result->value[i] = a.value[i] + b.value[i] + carry;
+        if (a.value[i] + b.value[i] + carry > 0xff) carry = 1;
+        else                                        carry = 0;
+    }
+    return carry;
 }
 
 unsigned char tonum(unsigned char c)
@@ -44,16 +66,16 @@ unsigned char tohex(unsigned char c)
 
 int index(struct Int256* num, int pos)
 {
-    if (256 > pos && pos >= 0)
+    if (MAXBIT > pos && pos >= 0)
         return (num->value[pos/8] >> (pos%8)) & 0x01;  
     else return -1; 
 }
 
 void set(struct Int256* num, int pos, int value)
 {
-    if (256 > pos && pos >= 0 && value == 1)
+    if (MAXBIT > pos && pos >= 0 && value == 1)
         num->value[pos/8] |= 1 << (pos%8);
-    if (256 > pos && pos >= 0 && value == 0) 
+    if (MAXBIT > pos && pos >= 0 && value == 0) 
         num->value[pos/8] &= ~(1 << (pos%8));
 }
 
@@ -116,57 +138,51 @@ void conv2hex(unsigned char* hex, struct Int256* num)
 
 struct Int256 shiftleft(struct Int256 num, int times)
 {
-    struct Int256 temp = zero();
+    struct Int256 temp = zero;
     for (int i = 0; i < MAXBIT; ++i)
         set(&temp, i + times, index(&num, i));
     return temp;
 }
 
-struct Int256 _sub(struct Int256 a, struct Int256 b)
-{
-    struct Int256 temp;
-    int carry = 0;
-    for (int i = 0; i < MAXBYTE; ++i)
-    {
-        if (a.value[i] < b.value[i] + carry)
-        {
-            temp.value[i] = a.value[i] + 0x100 - b.value[i] - carry;
-            carry = 1;
-        }
-        else
-        {
-            temp.value[i] = a.value[i] - b.value[i] - carry;
-            carry = 0;
-        }
-    } 
-    return temp;
-}
-
 struct Int256 pls(struct Int256 a, struct Int256 b, struct Int256 n)
 {
-    struct Int256 temp;
+    struct Int256 result;
     int carry = 0, value;
-    for (int i = 0; i < MAXBYTE; ++i)
+    carry = _pls(&result, a, b);
+    if (!eq(n, zero))
     {
-        set(&temp, i, index(&a, i) ^ index(&b, i) ^ carry);
-        carry = index(&a, i) + index(&b, i) + carry > 1? 1: 0; 
-    } 
-    
+        result = mod(result, n);
+        if (carry == 1)
+        {
+            _pls(&result, result, mod(maxv, n));
+            _pls(&result, result, int256_c("1", HEXMODE));
+            result = mod(result, n);
+        }
+    }
+    return result;
 }
+
 struct Int256 sub(struct Int256 a, struct Int256 b, struct Int256 n)
 {
-    return mod(_sub(a, b), n);
+    struct Int256 result;
+    _sub(&result, a, b);
+    return mod(result, n);
 }
 struct Int256 pow(struct Int256, struct Int256, struct Int256);
 struct Int256 mul(struct Int256, struct Int256, struct Int256);
 
 struct Int256 mod(struct Int256 a, struct Int256 b)
 {
-    struct Int256 temp, remainder = a;
+    struct Int256 remainder;
+    remainder = a;
 
-    for (int i = MAXBYTE; i >= 0; --i)
-        if (!less(remainder, shiftleft(b, i)))
-            remainder = _sub(remainder, shiftleft(b, i));
+    int mostbit = MAXBIT-1;
+
+    while (index(&b, mostbit) == 0) --mostbit; 
+    for (int i = MAXBIT - mostbit - 1; i >= 0; --i)
+        if (!le(remainder, shiftleft(b, i)))
+            _sub(&remainder ,remainder, shiftleft(b, i));
+    
     return remainder;
 }
 
@@ -174,26 +190,26 @@ struct Int256 div(struct Int256 a, struct Int256 b)
 {
     struct Int256 temp, remainder;
     remainder = a;
-    temp = zero();
+    temp = zero;
     int mostbit = MAXBIT-1;
 
-    // if (less(a, b)) return temp;
+    // if (le(a, b)) return temp;
 
     while (index(&b, mostbit) == 0) --mostbit; 
     for (int i = MAXBIT - mostbit - 1; i >= 0; --i)
     {
-        if (less(remainder, shiftleft(b, i)))
+        if (le(remainder, shiftleft(b, i)))
             set(&temp, i, 0);
         else 
         {
             set(&temp, i, 1);
-            remainder = _sub(remainder, shiftleft(b, i));
+            _sub(&remainder, remainder, shiftleft(b, i));
         }
     }
     return temp;
 }
 
-int less(struct Int256 a, struct Int256 b)
+int le(struct Int256 a, struct Int256 b)
 {
     int i = MAXBYTE - 1, result = 0;
     while (i >= 0 && a.value[i] == b.value[i])
@@ -201,18 +217,33 @@ int less(struct Int256 a, struct Int256 b)
     if (i < 0 || a.value[i] > b.value[i]) return 0;
     else                                  return 1;
 }
+int eq(struct Int256 a, struct Int256 b)
+{
+    int i = MAXBYTE - 1, result = 0;
+    while (i >= 0 && a.value[i] == b.value[i])
+        --i;
+    if (i < 0) return 1;
+    else       return 0;
+}
 void show(struct Int256 n)
 {
-    char hex[64];
+    char hex[MAXHEX];
     conv2hex(hex, &n);
     printf("%s", hex);
 }
 
 int main()
 {
-    struct Int256 n = int256_c("12123" , HEXMODE), m = int256_c("654", HEXMODE), t = int256_c("10" , HEXMODE);
-    set(&t, 0, 1);
-    show(div(n,m));
+    // Init start
+    zero = int256_c("0", HEXMODE);
+    for (int i = 0; i < MAXBYTE; ++i) maxv.value[i] = 0xff;
+    // Init end
+    struct Int256 n = int256_c("99212311", HEXMODE), 
+                  m = int256_c("96541111", HEXMODE), 
+                  t = int256_c("2345678" , HEXMODE);
+    // set(&t, 0, 1);
+    show(n);
+    // show(div(n, m));
     // printf("\n");
     // printf("%d", index(&t, 0));
     return 0;

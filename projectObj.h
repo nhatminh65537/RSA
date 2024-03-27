@@ -1,9 +1,10 @@
 #ifndef __PROJECTOBJ__
 #define __PROJECTOBJ__
 
-#define MAXBYTE 32
-#define MAXHEX 64
+#define MAXBYTE 4
+#define MAXHEX MAXBYTE*2
 #define MAXBIT MAXBYTE*8
+#define NON zero
 // #define MAXCHAR 32
 
 struct Int256
@@ -33,8 +34,10 @@ struct Int256 pow(struct Int256, struct Int256, struct Int256);
 struct Int256 mod(struct Int256, struct Int256);
 struct Int256 div(struct Int256, struct Int256);
 
-int less(struct Int256, struct Int256);
+int le(struct Int256, struct Int256);
+int eq(struct Int256, struct Int256);
 
-struct Int256 zero();
+struct Int256 zero;
+struct Int256 maxv;
 
 #endif

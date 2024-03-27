@@ -1,5 +1,14 @@
 hex: 0..9A..F (not a..f)
 tinh toan tren co so he 128 (8bit/1byte)
+Khong gan khi tao struct obj
 
 Exp:
     Nen check ki tung ham trong moi tinh huong.
+
+Task:
+    Chu thich lai chuong trinh
+    Phan chia cac module
+    Chinh sua lai ten bien
+    Chinh sua cac ham _func toi uu bo nho
+    Tao init func de load tham so
+    Xem chu lai code
