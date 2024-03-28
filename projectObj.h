@@ -1,7 +1,7 @@
 #ifndef __PROJECTOBJ__
 #define __PROJECTOBJ__
 
-#define MAXBYTE 4
+#define MAXBYTE 2
 #define MAXHEX MAXBYTE*2
 #define MAXBIT MAXBYTE*8
 #define NON zero
@@ -11,6 +11,7 @@ struct Int256
 {
     unsigned char value[MAXBYTE];
 };
+typedef struct Int256 INT256;
 
 enum Mode
 {
@@ -19,25 +20,25 @@ enum Mode
     DECMODE,
 };
 
-void conv2hex(unsigned char*, struct Int256*);
-void conv2char(unsigned char*, struct Int256*);
+void conv2hex(unsigned char*, INT256*);
+void conv2char(unsigned char*, INT256*);
 
-// void assign(struct Int256*, struct Int256*);
-void load(struct Int256*, unsigned char*, int);
-int index(struct Int256*, int);
+// void assign(INT256*, INT256*);
+INT256 int256_c(unsigned char*, int);
 
-struct Int256 pls(struct Int256, struct Int256, struct Int256);
-struct Int256 sub(struct Int256, struct Int256, struct Int256);
-struct Int256 mul(struct Int256, struct Int256, struct Int256);
-struct Int256 pow(struct Int256, struct Int256, struct Int256);
+INT256 pls(INT256, INT256, INT256);
+INT256 sub(INT256, INT256, INT256);
+INT256 mul(INT256, INT256, INT256);
+INT256 pow(INT256, INT256, INT256);
 
-struct Int256 mod(struct Int256, struct Int256);
-struct Int256 div(struct Int256, struct Int256);
+INT256 mod(INT256, INT256);
+INT256 div(INT256, INT256);
 
-int le(struct Int256, struct Int256);
-int eq(struct Int256, struct Int256);
+int le(INT256, INT256);
+int eq(INT256, INT256);
 
-struct Int256 zero;
-struct Int256 maxv;
+INT256 zero;
+INT256 maxv;
+INT256 one;
 
 #endif
