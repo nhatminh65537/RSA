@@ -9,7 +9,18 @@ Task:
     Chu thich lai chuong trinh
     Phan chia cac module
     Chinh sua lai ten bien
+        (int256: ok, )
     Chinh sua cac ham _func toi uu bo nho
-    Tao init func de load tham so
+        (int256: ok, )
+    Tao init func de load tham so 
+        (int256: ok, )
     Xem chu lai code
-    Check lại tinh dung sai cau cac ham trong ctr
+        (not need)
+    Check lại tinh dung sai cau cac ham trong ctr 
+        (int256: ok, )
+
+Check note:
+    int256.c:
+        uncheck: conv2char, ANSCII mode, show (other mode), 
+
+        

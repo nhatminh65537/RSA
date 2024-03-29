@@ -5,7 +5,10 @@ void nhap(char* );
 int main()
 {
     // nhap("1234567890");
-    
+    unsigned char x, y;
+    x = 255 + 255;
+    y = 0 - 255;
+    printf("%d %d", x, y);
     return 0;
 }
 
