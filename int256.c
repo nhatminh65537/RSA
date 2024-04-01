@@ -90,7 +90,7 @@ INT256 int256_c(unsigned char* str, enum Mode mode)
 
     // ASCII mode
     if (mode == ASCIIMODE)
-        for (int i = 0; i < MAXBYTE; --i)
+        for (int i = 0; i < MAXBYTE; ++i)
         {
             result.value[i] = str[_min(i, len)];     
         }      
@@ -115,7 +115,7 @@ INT256 int256_c(unsigned char* str, enum Mode mode)
 
 void conv2char(unsigned char* str, INT256* num)
 {
-    for (int i = 1; i < MAXBYTE; ++i)
+    for (int i = 0; i < MAXBYTE; ++i)
         str[i] = num->value[i];
     str[MAXBYTE] = 0;
 }
@@ -278,10 +278,13 @@ void int256_init()
 // int main()
 // {
 //     int256_init();
-//     INT256 n = int256_c("921", HEXMODE), 
-//            m = int256_c("3"  , HEXMODE), 
+//     char ch[1024];
+//     INT256 n = int256_c("he", ASCIIMODE), 
+//            m = int256_c("6c6f"  , HEXMODE), 
 //            t = int256_c("234", HEXMODE),
 //            k = int256_c("123", HEXMODE);
-//     show(pow(n, m, k), HEXMODE);
+//     // show(n, HEXMODE);
+//     conv2hex(&ch, &n);
+//     printf("%s", ch);
 //     return 0;
 // }
