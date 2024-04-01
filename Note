@@ -18,7 +18,10 @@ Task:
         (not need)
     Check lại tinh dung sai cau cac ham trong ctr 
         (int256: ok, )
-    Check 
+    Check lai cac kq khi so lon.
+
+Important:
+    khong duoc de out of range -> faltal error ve address and assembly 
 
 Check note:
     int256.c:

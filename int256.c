@@ -126,7 +126,7 @@ void conv2hex(unsigned char* hex, INT256* num)
         hex[2*i]     = _tohex(num->value[i] & 0x0f);
         hex[2*i + 1] = _tohex(num->value[i] >> 4 & 0x0f );
     }
-    hex[2*MAXBYTE] = 0;
+    hex[MAXHEX] = 0;
     _reverse(hex);
 }
 
@@ -260,15 +260,15 @@ INT256 pow(INT256 a, INT256 b, INT256 n)
 
 void show(INT256 n, enum Mode mode)
 {
+    char hex[MAXHEX + 1];
+    char str[MAXBYTE + 1];
     if (mode == HEXMODE)
     {
-        char hex[MAXHEX];
         conv2hex(hex, &n);
-        printf("%s", hex);
+        printf("0x%s", hex);
     }
     if (mode == ASCIIMODE)
     {
-        char str[MAXBYTE];
         conv2char(str, &n);
         printf("%s", str);
     }
@@ -281,17 +281,27 @@ void int256_init()
     one = int256_c("1", HEXMODE);
 }
 
-int main()
-{
-    int256_init();
-    char ch[1024];
-    INT256 n = int256_c("Re", ASCIIMODE), 
-           m = int256_c("6c6f"  , HEXMODE), 
-           t = int256_c("234", HEXMODE),
-           k = int256_c("123", HEXMODE);
-    // show(n, HEXMODE);
-    conv2hex(&ch, &n);
-    // printf("%s", ch);
-    show(int256_c(ch, HEXMODE), ASCIIMODE);
-    return 0;
-}
+// int main()
+// {
+//     int256_init();
+//     char ch[1024];
+//     INT256 n,m,t,k,a,b,p;
+//     n = int256_c("Re", ASCIIMODE), 
+//     m = int256_c("6f"  , HEXMODE), 
+//     t = int256_c("3", HEXMODE),
+//     k = int256_c("123", HEXMODE),
+//     a = int256_c("aaff541414514355145454514545fffaaff541414514355145454514545fff", HEXMODE),
+//     b = int256_c("fffee13466756453bbbc92347767677aaff541414514355145454514545fff", HEXMODE),
+//     p = int256_c("234134bcbcbbfbeba75346741326481aaff541414514355145454514545fff", HEXMODE);
+//     // show(n, HEXMODE);
+//     // conv2hex(&ch, &n);
+//     // printf("%s", ch);
+//     // printf("%d\n", &a);
+//     // INT256 re;
+//     // re = mul(a, b, p);
+//     show(pow(a, b, p), HEXMODE); printf("\n");
+//     // show(a, HEXMODE);
+//     // printf("\n%d\n", &a);
+//     // show(pow(m, t, k), HEXMODE);
+//     return 0;
+// }
