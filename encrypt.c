@@ -20,20 +20,21 @@ void encrypt() {
     en[i] = -1;
     printf("\nVan ban da ma hoa : ");
     for (i = 0; en[i] != -1; i++)
-        printf("%c", en[i]);
+        printf("%c", en[i] );
+        printf("\n");
 }
 
 #include <int256.h>
 
 void encrypt() {
-    // Khai báo các bi?n c?n thi?t
+    // Khai bï¿½o cï¿½c bi?n c?n thi?t
     INT256 plaintext, key, ciphertext;
 
-    // Kh?i t?o các giá tr? plaintext và key
+    // Kh?i t?o cï¿½c giï¿½ tr? plaintext vï¿½ key
     plaintext = int256_c("Hello", ASCIIMODE);
     key = int256_c("Key", ASCIIMODE);
 
-    // Th?c hi?n phép XOR gi?a plaintext và key d? mã hóa
+    // Th?c hi?n phï¿½p XOR gi?a plaintext vï¿½ key d? mï¿½ hï¿½a
     ciphertext = pls(plaintext, key, zero);
 
     // Hi?n th? ciphertext
