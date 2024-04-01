@@ -4,6 +4,8 @@
         "system_error": "c",
         "type_traits": "c",
         "xtr1common": "c",
-        "xutility": "c"
+        "xutility": "c",
+        "ios": "c",
+        "xiosbase": "c"
     }
 }

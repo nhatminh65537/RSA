@@ -266,6 +266,12 @@ void show(INT256 n, enum Mode mode)
         conv2hex(hex, &n);
         printf("%s", hex);
     }
+    if (mode == ASCIIMODE)
+    {
+        char str[MAXBYTE];
+        conv2char(str, &n);
+        printf("%s", str);
+    }
 }
 
 void int256_init()
@@ -275,16 +281,17 @@ void int256_init()
     one = int256_c("1", HEXMODE);
 }
 
-// int main()
-// {
-//     int256_init();
-//     char ch[1024];
-//     INT256 n = int256_c("he", ASCIIMODE), 
-//            m = int256_c("6c6f"  , HEXMODE), 
-//            t = int256_c("234", HEXMODE),
-//            k = int256_c("123", HEXMODE);
-//     // show(n, HEXMODE);
-//     conv2hex(&ch, &n);
-//     printf("%s", ch);
-//     return 0;
-// }
+int main()
+{
+    int256_init();
+    char ch[1024];
+    INT256 n = int256_c("Re", ASCIIMODE), 
+           m = int256_c("6c6f"  , HEXMODE), 
+           t = int256_c("234", HEXMODE),
+           k = int256_c("123", HEXMODE);
+    // show(n, HEXMODE);
+    conv2hex(&ch, &n);
+    // printf("%s", ch);
+    show(int256_c(ch, HEXMODE), ASCIIMODE);
+    return 0;
+}

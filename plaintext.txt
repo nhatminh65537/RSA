@@ -1,1 +1,8 @@
-hello
+Remote access
+    A host-to-network configuration is analogous to connecting a computer to a local area network. This type provides access to an enterprise[jargon] network, such as an intranet. This may be employed for remote workers, or to enable a mobile worker to access necessary tools without exposing them to the public Internet.
+
+Site-to-site
+    A site-to-site configuration connects two networks. This configuration expands a network across geographically disparate offices or connects a group of offices to a data center installation. The interconnecting link may run over a dissimilar intermediate network, such as two IPv6 networks connected over an IPv4 network.[5]
+
+Extranet-based site-to-site
+    In the context of site-to-site configurations, the terms intranet and extranet are used to describe two different use cases.[6] An intranet site-to-site VPN describes a configuration where the sites connected by the VPN belong to the same organization, whereas an extranet site-to-site VPN joins sites belonging to multiple organizations.
