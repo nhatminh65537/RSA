@@ -18,7 +18,8 @@ Task:
         (not need)
     Check lại tinh dung sai cau cac ham trong ctr 
         (int256: ok, )
-    Check lai cac kq khi so lon.
+    Check lai cac kq khi so lon. (ok)
+    Viet doc cho format tung file
 
 Important:
     khong duoc de out of range -> faltal error ve address and assembly 
