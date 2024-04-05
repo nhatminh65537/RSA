@@ -19,7 +19,7 @@ Task:
     Check lại tinh dung sai cau cac ham trong ctr 
         (int256: ok, )
     Check lai cac kq khi so lon. (ok)
-    Viet doc cho format tung file
+    Viet doc cho format tung file.
 
 Important:
     khong duoc de out of range -> faltal error ve address and assembly 
@@ -27,3 +27,14 @@ Important:
 Check note:
     int256.c:
         uncheck: conv2char, ANSCII mode, show (other mode), 
+
+Roll:
+    Minh:
+        int256.h int256.c
+        make
+        ui   
+    Phu:
+        decrypt.c
+        encrypt.c
+        genpara.c
+        
