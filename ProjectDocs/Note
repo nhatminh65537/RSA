@@ -20,6 +20,8 @@ Task:
         (int256: ok, )
     Check lai cac kq khi so lon. (ok)
     Viet doc cho format tung file.
+    Test lai chuong trinh tren cac may khac
+    Mo rong ho tro cho ca Window terminal command
 
 Important:
     khong duoc de out of range -> faltal error ve address and assembly 
@@ -37,4 +39,7 @@ Roll:
         decrypt.c
         encrypt.c
         genpara.c
-        
+
+trong tam ui:
+    ansi esc
+    unicode
