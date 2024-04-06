@@ -22,6 +22,7 @@ Task:
     Viet doc cho format tung file.
     Test lai chuong trinh tren cac may khac
     Mo rong ho tro cho ca Window terminal command
+    Note ve nhom cac box line
 
 Important:
     khong duoc de out of range -> faltal error ve address and assembly 
@@ -43,3 +44,6 @@ Roll:
 trong tam ui:
     ansi esc
     unicode
+
+ui:
+    ma mau 8bit color
