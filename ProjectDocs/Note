@@ -26,6 +26,7 @@ Task:
 
 Important:
     khong duoc de out of range -> faltal error ve address and assembly 
+    Bo khong mark khi ma hoa
 
 Check note:
     int256.c:

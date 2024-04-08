@@ -2,3 +2,4 @@ Font = Cascadia Mono
 ZoomShortcuts = No
 ZoomMouse = No
 Scrollbar = None
+AllowBlinking = Yes
