@@ -1,0 +1,15 @@
+Ima:
+    Hoc ve make
+    tach ra cac file: ui.c, ui.h, uilib.h, uilib.c, main.c, launch.c
+    tao cac bien trang thai cho chuong trinh.
+        (chuong trinh xu li don muc dich)     
+    kiem soat cac lenh
+    log file cho history (output result)
+    tao file cmd.h
+    kiem soat mau.
+    xay dung uilib tu ansi, unicode draw.
+
+Mirai:
+    nang cap he thong su dung utf-8, tao file header moi
+    mo rong luu trang thai
+    lich su section
