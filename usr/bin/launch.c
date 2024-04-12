@@ -4,8 +4,6 @@ int main()
 {
     system(
         "mintty"
-        " --title \"RSA Project\""
-        " --size 150x50"
         " --position center"
         // " --Border void"
         " --config ./config"

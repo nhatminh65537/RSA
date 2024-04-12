@@ -13,3 +13,8 @@ Mirai:
     nang cap he thong su dung utf-8, tao file header moi
     mo rong luu trang thai
     lich su section
+
+cmd:
+    unshow 
+    show
+    

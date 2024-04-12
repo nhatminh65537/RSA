@@ -1,5 +1,21 @@
-Font = Cascadia Mono
-ZoomShortcuts = No
-ZoomMouse = No
-Scrollbar = None
-AllowBlinking = Yes
+Transparency=Medium
+CursorType=Block
+
+; Font=Algerian
+; Font=Cascadia Code
+Font=Consolas
+AllowBlinking=Yes
+FontSmoothing=Full
+
+ZoomShortcuts=No
+ZoomMouse=No
+
+Columns=150
+Rows=50
+Scrollbar=None
+
+ConfirmExit=No
+
+Title=RSA Project
+
+DisplaySpeedup=9

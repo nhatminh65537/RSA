@@ -1,47 +1,29 @@
-#include <stdio.h>
 #include <string.h>
 #include <conio.h>
-#include "uilib.h"
-
-
-enum TextArea
-{
-    TEXTTOP    = 7,
-    TEXTBOTTOM = MAXY - 2,
-    TEXTLEFT   = 48,
-    TEXTRIGHT  = MAXX - 2
-};
+#include "ui.h"
+#include <stdio.h>
 
 void putText(char *);
-int textCursorX = TEXTLEFT, textCursorY = TEXTTOP;
+int textCursorX = OTPLEFT + 1, textCursorY = OPTTOP + 1;
 
 void loadToText(char *);
 void input(char*);
 int  runCmd(char*);
+char plaintext[2048];
 
 int main()
 {
     CLRSCR;
     char instr[256];
-    int i = 40;
     
-    // cputs("\x1b[20mHello");
-    // while (1);
-    printf("\x1b[38;2;121;144;169m");
-    drawBox(1, 1, MAXX, MAXY, 0, 3, "RSA-PROJECT");
-    drawBox(2, 2, MAXX - 1, 5, 2, 2, "COMMAND");
-    drawBox(2, 6, 46, MAXY - 1, 1, 1, "KEY");
-    drawBox(47, 6, MAXX - 1, MAXY - 1, 1, 1, "TEXT");
+    initUI();
+    
     do 
     {
         clearBlock(3, 3, MAXX - 2, 4);
         MOVEXY(3, 3); 
         printf("\x1b[38;5;10m $ \x1b[39m");
         input(instr);
-        // CSI(RESET);
-        printf("\x1b[%sm", instr);
-        putText("Hello, this is demo for ANSI CSI");
-        CSI(RESET);
     } while(runCmd(instr));
     return 0;
 }
@@ -106,8 +88,8 @@ int runCmd(char* cmd)
 
     if (strcmp(cmd, "cls") == 0)
     {
-        clearBlock(TEXTLEFT, TEXTTOP, TEXTRIGHT, TEXTBOTTOM);
-        textCursorY = TEXTTOP;
+        clearBlock(OTPLEFT + 1, OPTTOP + 1, OTPRIGHT - 1, OTPBOTTOM- 1);
+        textCursorY = OPTTOP + 1;
     }
     
     return TRUE;
@@ -116,14 +98,22 @@ int runCmd(char* cmd)
 void loadToText(char * fileName)
 {
     char buff[256];
+    int cnt;
+    char *c = plaintext;
     FILE *f = fopen(fileName, "r");
     if(f != NULL) 
-        while(fgets(buff, 256, f)){
-            putText(buff);
+        while(!feof(f)){
+            cnt = fread(buff, 1, 256, f);
+            // putText(buff);
+            strcpy(c, buff);
+            c += cnt;
         }
     else
         putText("File not Found!\n");
     fclose(f);
+    *c = 0;
+    optBox.text = plaintext;
+    showText(&optBox);
 }
 
 void putText(char* textString)
@@ -134,13 +124,13 @@ void putText(char* textString)
     ++textCursorX;
     while (*textString!=0) 
     {   
-        if (textCursorX > TEXTRIGHT || *textString == '\r' || *textString == '\n')
+        if (textCursorX > OTPRIGHT - 1 || *textString == '\r' || *textString == '\n')
         {
             ++textCursorY;
-            textCursorX = TEXTLEFT;
+            textCursorX = OTPLEFT + 1;
             if (!breakWord) ++textString; 
         }
-        if (textCursorX == TEXTRIGHT)
+        if (textCursorX == OTPRIGHT - 1)
         {
             if (*textString != ' ' & *(textString + 1) != ' ') 
             {
@@ -152,7 +142,7 @@ void putText(char* textString)
             }
             else breakWord = FALSE;
         }
-        if (textCursorY > TEXTBOTTOM)
+        if (textCursorY > OTPBOTTOM- 1)
             return;
         MOVEXY(textCursorX, textCursorY);
         if (32 <= *textString & *textString <= 126)
@@ -163,6 +153,6 @@ void putText(char* textString)
         }
         breakWord = FALSE;
     }
-    textCursorX = TEXTLEFT;
+    textCursorX = OTPLEFT + 1;
     ++textCursorY;
 }

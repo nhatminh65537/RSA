@@ -1,13 +1,18 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "ui.h"
+#include "uilib.h"
 
-int ui()
+BOX screen, rsaBox, cmdBox, keyBox, optBox;
+
+void initUI()
 {
+    initBox(&screen, "SCREEN"     , NULL   , FIX  , 0 , 0, MAXX, MAXY);
+    initBox(&rsaBox, "RSA-PROJECT", &screen, ABS  , 1 , 1, FULL, FULL);
+    initBox(&cmdBox, "COMMAND"    , &rsaBox, ABS  , 1 , 1, FULL, 4   );
+    initBox(&keyBox, "KEY"        , &rsaBox, GRID , 1 , 5, 48  , FULL);
+    initBox(&optBox, "OUTPUT"     , &rsaBox, FLEXX, 49, 5, FULL, FULL);
 
-}
-
-int main()
-{
-    system("bash.exe -c ./main");
-    return 0;
+    drawBox(&rsaBox, BCYAN, LIGHT , CURVE , BCYAN);
+    drawBox(&cmdBox, WHITE, DOUBLE, DOUBLE, WHITE);
+    drawBox(&keyBox, WHITE, HEAVY , HEAVY , WHITE);
+    drawBox(&optBox, WHITE, HEAVY , HEAVY , WHITE);
 }

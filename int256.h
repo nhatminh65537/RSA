@@ -19,9 +19,9 @@ struct Int256
 };
 typedef struct Int256 INT256;
 
-INT256 zero;
-INT256 maxval;
-INT256 one;
+extern INT256 zero;
+extern INT256 maxval;
+extern INT256 one;
 
 void conv2hex(unsigned char*, INT256*);
 void conv2char(unsigned char*, INT256*);
