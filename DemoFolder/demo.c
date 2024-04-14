@@ -8,7 +8,7 @@ int main()
     unsigned char x, y;
     x = 255 + 255;
     y = 0 - 255;
-    printf("%d %d", x, y);
+    printf("%d %s", '40', '40');
     return 0;
 }
 

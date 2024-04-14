@@ -1,6 +1,10 @@
 #include "int256.h"
 #include <stdio.h>
 
+INT256 zero;
+INT256 maxval;
+INT256 one;
+
 int _min(int a, int b) 
 {
     return a > b? b: a;
@@ -274,7 +278,7 @@ void show(INT256 n, enum Mode mode)
     }
 }
 
-void int256_init()
+void int256Init()
 {
     zero = int256_c("0", HEXMODE);
     for (int i = 0; i < MAXBYTE; ++i) maxval.value[i] = 0xff;

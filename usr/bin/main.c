@@ -1,15 +1,12 @@
 #include <string.h>
 #include <conio.h>
-#include "ui.h"
 #include <stdio.h>
-
-void putText(char *);
-int textCursorX = OTPLEFT + 1, textCursorY = OPTTOP + 1;
+#include "ui.h"
 
 void loadToText(char *);
 void input(char*);
 int  runCmd(char*);
-char plaintext[2048];
+char plaintext[2048], cmdOpt[2048];
 
 int main()
 {
@@ -86,12 +83,29 @@ int runCmd(char* cmd)
     if (strcmp(cmdArr[0], "load") == 0)
         loadToText(cmdArr[1]);
 
-    if (strcmp(cmd, "cls") == 0)
-    {
-        clearBlock(OTPLEFT + 1, OPTTOP + 1, OTPRIGHT - 1, OTPBOTTOM- 1);
-        textCursorY = OPTTOP + 1;
+    if (strcmp(cmd, "cls") == 0){
+        clearBox(&optBox);
     }
-    
+    if (strcmp(cmdArr[0], "disable") == 0){
+        if (strcmp(cmdArr[1], "plt") == 0){
+            cptBox.sx = FULL;
+            enableBox(&pltBox, FALSE);
+        }
+        if (strcmp(cmdArr[1], "cpt") == 0) enableBox(&cptBox, FALSE);
+        if (strcmp(cmdArr[1], "log") == 0) enableBox(&logBox, FALSE);
+        clearBox(&optBox);
+        show(&optBox);
+    }
+    if (strcmp(cmdArr[0], "enable") == 0){
+        if (strcmp(cmdArr[1], "plt") == 0){
+            cptBox.sx = OVER;
+            enableBox(&pltBox, TRUE);
+        } 
+        if (strcmp(cmdArr[1], "cpt") == 0) enableBox(&cptBox, TRUE);
+        if (strcmp(cmdArr[1], "log") == 0) enableBox(&logBox, TRUE);
+        clearBox(&optBox);
+        show(&optBox);
+    }
     return TRUE;
 }
 
@@ -104,55 +118,15 @@ void loadToText(char * fileName)
     if(f != NULL) 
         while(!feof(f)){
             cnt = fread(buff, 1, 256, f);
-            // putText(buff);
             strcpy(c, buff);
             c += cnt;
         }
     else
-        putText("File not Found!\n");
+        strcat(cmdOpt, "File not Found!\n");
     fclose(f);
     *c = 0;
-    optBox.text = plaintext;
-    showText(&optBox);
-}
 
-void putText(char* textString)
-{
-    int breakWord;
-    MOVEXY(textCursorX, textCursorY);
-    printf("\u2596");
-    ++textCursorX;
-    while (*textString!=0) 
-    {   
-        if (textCursorX > OTPRIGHT - 1 || *textString == '\r' || *textString == '\n')
-        {
-            ++textCursorY;
-            textCursorX = OTPLEFT + 1;
-            if (!breakWord) ++textString; 
-        }
-        if (textCursorX == OTPRIGHT - 1)
-        {
-            if (*textString != ' ' & *(textString + 1) != ' ') 
-            {
-                breakWord = TRUE;
-                if (*(textString - 1) != ' ')
-                    putch('-');
-                ++textCursorX;
-                continue;
-            }
-            else breakWord = FALSE;
-        }
-        if (textCursorY > OTPBOTTOM- 1)
-            return;
-        MOVEXY(textCursorX, textCursorY);
-        if (32 <= *textString & *textString <= 126)
-        {
-            ++textCursorX;
-            putch(*textString);
-            ++textString;
-        }
-        breakWord = FALSE;
-    }
-    textCursorX = OTPLEFT + 1;
-    ++textCursorY;
+    enableText(&pltBox, TRUE, plaintext);
+    // pltBox.text = plaintext;
+    showText(&pltBox);
 }

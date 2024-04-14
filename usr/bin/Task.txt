@@ -9,6 +9,10 @@ Ima:
     kiem soat mau.
     xay dung uilib tu ansi, unicode draw.
 
+    Toi uu code size over ...
+    Toi uu code cho resize khi cac ham long nhau ...
+    Kiem soat index cho grid layout ... tranh out of range
+
 Mirai:
     nang cap he thong su dung utf-8, tao file header moi
     mo rong luu trang thai

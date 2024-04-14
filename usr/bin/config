@@ -2,15 +2,15 @@ Transparency=Medium
 CursorType=Block
 
 ; Font=Algerian
-; Font=Cascadia Code
-Font=Consolas
+Font=Cascadia Code
+; Font=Consolas
 AllowBlinking=Yes
 FontSmoothing=Full
 
 ZoomShortcuts=No
 ZoomMouse=No
 
-Columns=150
+Columns=160
 Rows=50
 Scrollbar=None
 

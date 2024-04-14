@@ -3,36 +3,13 @@
 
 #include "uilib.h"
 
-#define MAXX      150
-#define MAXY      50
-#define CLRSCR    clearBlock(1, 1, MAXX, MAXY)
+#define MAXX       160
+#define MAXY       50
+#define CLRSCR     clearBlock(1, 1, MAXX, MAXY)
+#define KEYSIZE    42    
 
-enum CommandArea
-{
-    // Command screen
-    CMDTOP    = 2,
-    CMDBOTTOM = 5,
-    CMDLEFT   = 2,
-    CMDRIGHT  = 5,
-};
-enum KeyArea
-{
-    // Key screen
-    KEYTOP     = CMDBOTTOM + 1,
-    KEYBOTTOM  = MAXY - 1,
-    KEYLEFT    = 2,
-    KEYRIGHT   = 49,
-};
-enum TextArea
-{
-    // Ouput screen
-    OPTTOP    = CMDBOTTOM + 1,
-    OTPBOTTOM = MAXY - 1,
-    OTPLEFT   = KEYRIGHT + 1,
-    OTPRIGHT  = MAXX - 1
-};
-
-extern BOX screen, rsaBox, cmdBox, keyBox, optBox;
+extern BOX screen, rsaBox, cmdBox, keyBox, optBox, logBox, cptBox, pltBox,
+           aBox  , bBox  , qBox  , pBox  , nBox;
 void initUI();
 
 #endif

@@ -51,25 +51,46 @@ enum LayoutType{
     FLEXY,
     GRID,
     FIX,
-    ABS
+    ABS,
+};
+enum GridType{
+    INNER,
+    CONNECT,
+    SPLIT
 };
 
 typedef struct Box
 {
-    int state;
+    int enable;
     enum LayoutType layout;
     char name[NAMELEN];
+    
     unsigned top;
     unsigned left;
     unsigned bottom;
     unsigned right;
-    char *text;
+    int sx;
+    int sy;
+    
     struct Box *parent;
     struct Box *child[MAXCHILD];
     unsigned childCnt;
+    unsigned childEnableCnt;
+    
+    int textEnable;
+    char *text;
     unsigned xPoint;
     unsigned yPoint;
     unsigned tPoint;
+    
+    void (*show)();
+
+    // For grid
+    unsigned xBox;
+    unsigned yBox;
+    enum GridType gridType;
+    unsigned x;
+    unsigned y;
 } BOX;
 
 
@@ -77,7 +98,11 @@ void initBox(BOX* cur, char* name, BOX* parent, enum LayoutType layout,
              int x, int y, int sx, int sy);
 void clearBlock(int x1, int y1, int x2, int y2);
 void drawBox(BOX* box, int lineColor,
-             int lineType, int cornerType, int titleColor);
+             int lineType, int cornerType, int titleColor, int titleBold);
 void showText(BOX* box);
+void clearBox(BOX* box);
+void enableBox(BOX* box, int val);
+void enableText(BOX* box, int val, char* text);
+void show(BOX* box);
 
 #endif
