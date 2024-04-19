@@ -1,0 +1,58 @@
+hex: 0..9A..F (not a..f)
+tinh toan tren co so he 128 (8bit/1byte)
+Khong gan khi tao struct obj
+
+Exp:
+    Nen check ki tung ham trong moi tinh huong.
+
+Task:
+    Chu thich lai chuong trinh
+    Phan chia cac module
+    Chinh sua lai ten bien
+        (int256: ok, )
+    Chinh sua cac ham _func toi uu bo nho
+        (int256: ok, )
+    Tao init func de load tham so 
+        (int256: ok, )
+    Xem chu lai code
+        (not need)
+    Check lại tinh dung sai cau cac ham trong ctr 
+        (int256: ok, )
+    Check lai cac kq khi so lon. (ok)
+    Viet doc cho format tung file.
+    Test lai chuong trinh tren cac may khac
+    Mo rong ho tro cho ca Window terminal command
+    Note ve nhom cac box line
+
+Important:
+    khong duoc de out of range -> faltal error ve address and assembly 
+    Bo khong mark khi ma hoa
+
+Check note:
+    int256.c:
+        uncheck: conv2char, ANSCII mode, show (other mode), 
+
+Roll:
+    Minh:
+        int256.h int256.c
+        make
+        ui   
+    Phu:
+        decrypt.c
+        encrypt.c
+        genpara.c
+
+trong tam ui:
+    ansi esc
+    unicode
+
+ui:
+    ma mau 8bit color
+
+learn:
+    debug multiple file.
+    how to write a c lib
+
+ps:
+    chcp 65001
+    $OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding
