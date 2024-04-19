@@ -4,22 +4,12 @@
 		{
 			"type": "cppbuild",
 			"label": "C/C++: gcc.exe build active file",
-			"command": "C:\\mingw64\\bin\\gcc.exe",
-			"args": [
-				"-fdiagnostics-color=always",
-				"-g",
-				"${file}",
-				"-o",
-				"${fileDirname}\\${fileBasenameNoExtension}.exe"
-			],
+			"command": "make",
+			"args": [],
 			"options": {
-				"cwd": "${fileDirname}"
+				"cwd": "${workspaceRoot}"
 			},
-			"problemMatcher": [
-				"$gcc"
-			],
 			"group": "build",
-			"detail": "compiler: C:\\mingw64\\bin\\gcc.exe"
 		}
 	]
 }

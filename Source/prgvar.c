@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "prgvar.h"
+#include "../header/prgvar.h"
 
 TEXT cipherText, plainText, logText;
 

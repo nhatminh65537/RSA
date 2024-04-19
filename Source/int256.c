@@ -1,4 +1,4 @@
-#include "int256.h"
+#include "../header/int256.h"
 #include <stdio.h>
 
 INT256 zero;
@@ -271,7 +271,7 @@ void int256Init()
 
 // int main()
 // {
-//     int256_init();
+//     int256Init();
 //     char ch[1024];
 //     INT256 n,m,t,k,a,b,p;
 //     n = int256_c("Re", ASCIIMODE), 
@@ -287,7 +287,7 @@ void int256Init()
 //     // printf("%d\n", &a);
 //     // INT256 re;
 //     // re = mul(a, b, p);
-//     show(pow(a, b, p), HEXMODE); printf("\n");
+//     // show(pow(a, b, p), HEXMODE); printf("\n");
 //     // show(a, HEXMODE);
 //     // printf("\n%d\n", &a);
 //     // show(pow(m, t, k), HEXMODE);

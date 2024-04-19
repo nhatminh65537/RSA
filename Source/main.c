@@ -1,8 +1,8 @@
 #include <string.h>
 #include <conio.h>
 #include <stdio.h>
-#include "ui.h"
-#include "prgvar.h"
+#include "../header/ui.h"
+#include "../header/prgvar.h"
 
 void loadToText(char *);
 void input(char*);
@@ -11,17 +11,18 @@ char plaintext[2048], cmdOpt[2048];
 
 int main()
 {
+    printf("\x1b[2J");
     CLRSCR;
     char instr[256];
     
     initUI();
     initPrgVar();
-    
+    			
     do 
     {
         show(&logBox);
         clearBlock(3, 3, MAXX - 2, 4);
-        MOVEXY(3, 3); 
+        MOVEXY(3, 3); 			
         printf("\x1b[38;5;10m $ \x1b[39m");
         
         input(instr);

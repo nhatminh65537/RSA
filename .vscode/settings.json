@@ -6,6 +6,10 @@
         "xtr1common": "c",
         "xutility": "c",
         "ios": "c",
-        "xiosbase": "c"
+        "xiosbase": "c",
+        "ui.h": "c",
+        "prgvar.h": "c",
+        "uilib.h": "c",
+        "int256.h": "c"
     }
 }

@@ -3,11 +3,11 @@
 int main()
 {
     system(
+        "cd usr/bin &&"
         "mintty"
         " --position center"
-        // " --Border void"
         " --config ./config"
-        " --exec ./launch.sh"
+        " --exec ../../launch.sh"
     );
     return 0;
 }

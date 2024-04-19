@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "int256.h"
+#include "../header/int256.h"
 
 void encrypt() {
   

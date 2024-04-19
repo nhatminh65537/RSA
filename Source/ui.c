@@ -1,6 +1,6 @@
-#include "ui.h"
-#include "uilib.h"
-#include "prgvar.h"
+#include "../header/ui.h"
+#include "../header/uilib.h"
+#include "../header/prgvar.h"
 
 BOX screen, rsaBox, cmdBox, keyBox, optBox, logBox, cptBox, pltBox,
     eBox  , dBox  , qBox  , pBox  , nBox;

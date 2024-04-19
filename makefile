@@ -1,8 +1,32 @@
-CC=gcc
+CC = gcc
+FLAGS = -g
 
-main: 	
-	$(CC) -c main.c uilib.c ui.c prgvar.c cmd.c -g
-	$(CC) -o main.exe ui.o main.o uilib.o prgvar.o cmd.o
+BUILD_DIR = ./build
+SRC_DIR = ./source
+HDR_DIR = ./header
 
-launch:
-	$(CC) -o launch launch.c
+# SRCS = $(shell dir $(SRC_DIR))
+SRCS = main.c cmd.c int256.c prgvar.c ui.c uilib.c
+OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
+DEPS = $($(shell dir $(HDR_DIR)): %=$(HDR_DIR)/%)
+
+all: main launch
+	@echo $(TEST)
+
+main: $(OBJS)
+	$(CC) -o $@ $^
+
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS)
+	mkdir -p $(dir $@)
+	$(CC) $(FLAGS) -c $< -o $@
+
+launch: $(BUILD_DIR)/launch.o
+	$(CC) -o $@ $^
+
+$(BUILD_DIR)\launch.o: $(SRC_DIR)/launch.c
+	mkdir -p $(dir $@)
+	$(CC) $(FLAGS) -c $< -o $@
+
+# .PHONY: clean
+# clean:
+# 	rm -r $(BUILD_DIR)

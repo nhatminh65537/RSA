@@ -45,6 +45,6 @@ INT256 mul(INT256, INT256, INT256);
 
 INT256 pow(INT256, INT256, INT256);
 
-void int256_init();
+void int256Init();
 
 #endif
