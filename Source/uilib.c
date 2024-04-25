@@ -380,7 +380,6 @@ void showText(BOX* box)
         }
         breakWord = FALSE;
     }
-
     box->tPoint = c - box->text;
 }
 

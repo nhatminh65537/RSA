@@ -14,6 +14,7 @@ typedef struct Text
 } TEXT;
 
 extern TEXT cipherText, plainText, logText;
+extern char instr[];
 
 void setTextFile(TEXT* text, char* fileName);
 int readText(TEXT* text, int offset);

@@ -3,8 +3,10 @@
 
 #include "uilib.h"
 
-#define MAXX       160
-#define MAXY       50
+// #define MAXX       160
+// #define MAXY       50
+#define MAXX       155
+#define MAXY       45
 #define CLRSCR     clearBlock(1, 1, MAXX, MAXY)
 #define KEYSIZE    42    
 

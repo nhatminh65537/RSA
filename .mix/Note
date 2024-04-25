@@ -54,5 +54,4 @@ learn:
     how to write a c lib
 
 ps:
-    chcp 65001
     $OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding

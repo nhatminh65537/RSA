@@ -25,3 +25,7 @@ cmd:
     unshow 
     show
     
+kyou:
+    xay dung cmd cho en va de 
+    hoan chinh cho co che output
+    cai thien co che xuat Text

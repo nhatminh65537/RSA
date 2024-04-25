@@ -11,12 +11,12 @@ char plaintext[2048], cmdOpt[2048];
 
 int main()
 {
-    printf("\x1b[2J");
     CLRSCR;
-    char instr[256];
     
     initUI();
     initPrgVar();
+
+    // enableText(&optBox, TRUE, logText.text);
     			
     do 
     {
@@ -28,41 +28,6 @@ int main()
         input(instr);
     } while(runCmd(instr));
     return 0;
-}
-
-void input(char* instr)
-{
-    int count = 0;
-    char c;
-    for (char *temp = instr; *temp != 0; ++temp)
-        *temp = 0;
-    
-    while (TRUE)
-    {        
-        c = getch();
-        if (c == '\r')
-        {
-            instr[count] = 0;
-            return;
-        }
-        if (c == '\b')
-        {
-            if (count > 0)
-            {
-                --count;
-                instr[count] = c;
-                putch(c); putch(' '); putch(c);
-            }
-            continue;  
-        }
-        if (32 <= c & c <= 126)
-        {
-            instr[count] = c;
-            ++count;
-            putch(c);
-        }
-        
-    } 
 }
 
 int runCmd(char* cmd)

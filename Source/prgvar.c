@@ -3,6 +3,7 @@
 #include "../header/prgvar.h"
 
 TEXT cipherText, plainText, logText;
+char instr[256];
 
 void setTextFile(TEXT* text, char* fileName)
 {

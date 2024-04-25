@@ -141,3 +141,48 @@ void showNBox()
     drawBox(&nBox, GREEN, LIGHT , LIGHT , WHITE, TRUE); 
     CSI(RESET);
 }
+
+void input(char* instr)
+{
+    int count = 0;
+    char c;
+    for (char *temp = instr; *temp != 0; ++temp)
+        *temp = 0;
+    
+    while (TRUE)
+    {        
+        c = getch();
+        if (32 <= c & c <= 126){
+            instr[count] = c;
+            ++count;
+            putch(c);
+        }
+        else if (c == '\r' && count != 0 ){
+            instr[count] = 0;
+            strcat(logText.text, instr);
+            strcat(logText.text, "\n");
+            return;
+        }
+        else if (c == '\b'){
+            if (count > 0)
+            {
+                --count;
+                instr[count] = c;
+                putch(c); putch(' '); putch(c);
+            }
+            continue;  
+        }
+        else if ((unsigned) c > 126){
+            char buff[8];
+            while ((unsigned) c > 126){
+                sprintf(buff , "%d ", (int) c);
+                c = getch();
+                strcat(logText.text, buff);
+            }
+                sprintf(buff , "%d ", (int) c);
+                strcat(logText.text, buff);
+                strcat(logText.text, "\n");
+                show(&logBox);
+        }
+    } 
+}

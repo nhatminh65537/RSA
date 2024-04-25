@@ -8,10 +8,10 @@ HDR_DIR = ./header
 # SRCS = $(shell dir $(SRC_DIR))
 SRCS = main.c cmd.c int256.c prgvar.c ui.c uilib.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
-DEPS = $($(shell dir $(HDR_DIR)): %=$(HDR_DIR)/%)
+DEPS = = $(patsubst %,%(),)
 
 all: main launch
-	@echo $(TEST)
+	@echo $(DEPS)
 
 main: $(OBJS)
 	$(CC) -o $@ $^

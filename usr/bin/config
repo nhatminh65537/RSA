@@ -2,8 +2,8 @@ Transparency=Medium
 CursorType=Block
 
 ; Font=Algerian
-Font=Cascadia Code
-; Font=Consolas
+; Font=Cascadia Code
+Font=Consolas
 AllowBlinking=Yes
 FontSmoothing=Full
 
