@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include<stdlib.h>
 #include "../header/int256.h"
 
 void encrypt() {
@@ -104,4 +105,16 @@ void encrypt() {
   free(plaintext_blocks);
   free(ciphertext_blocks);
   fclose(plaintext_file);
+}
+int main(){
+    INT256 n, e;
+    e = int256_c("BB39", HEXMODE);
+    n = int256_c("EC4B" , HEXMODE);
+    INT256 p,q,d;
+    p = int256_c("F1", HEXMODE);
+    q = int256_c("FB", HEXMODE);
+    d = int256_c("39", HEXMODE);
+    char hn[MAXHEX+1];
+    conv2hex(hn,&e);
+    printf(hn);
 }
