@@ -55,3 +55,7 @@ learn:
 
 ps:
     $OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding
+    Set-ExecutionPolicy RemoteSigned
+    
+Support program:
+    
