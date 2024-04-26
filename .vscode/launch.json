@@ -6,7 +6,7 @@
             "name": "C/C++: gcc.exe build and debug active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/main",
+            "program": "${workspaceRoot}/main.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",

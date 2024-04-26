@@ -1,7 +1,7 @@
 #ifndef __UIRSA__
 #define __UIRSA__
 
-#include "uilib.h"
+#include "../header/uilib.h"
 
 #define MAXX       160
 #define MAXY       50
@@ -13,5 +13,7 @@
 extern BOX screen, rsaBox, cmdBox, keyBox, optBox, logBox, cptBox, pltBox,
            eBox  , dBox  , qBox  , pBox  , nBox;
 void initUI();
+void inputCmd();
+void clsInput();
 
 #endif

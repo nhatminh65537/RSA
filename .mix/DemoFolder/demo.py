@@ -12,8 +12,8 @@ p = 241
 q = 251
 n = p*q
 phi = (p-1)*(q-1)
-a = 169
-b = 47929
+e = 169
+d = 47929
 
 with open("privatekey", "wb") as f:
     f.write(a.to_bytes(2))

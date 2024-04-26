@@ -53,7 +53,7 @@ void decrypt() {
   }
 
   for (int i = 0; i < num_blocks; i++) {
-    plaintext_blocks[i] = pow(ciphertext_blocks[i], d, n);
+    plaintext_blocks[i] = ipow(ciphertext_blocks[i], d, n);
   }
 
   

@@ -13,6 +13,10 @@
 #define MAXCHILD     128
  
 #define MOVEXY(x, y)       printf("\x1b[%d;%dH", y, x)
+#define CUU(n)             printf("\x1b[%dA", n)
+#define CUD(n)             printf("\x1b[%dB", n)
+#define CUF(n)             printf("\x1b[%dC", n)
+#define CUB(n)             printf("\x1b[%dD", n)
 #define FILLXY(x, y, c)    MOVEXY(x, y); printf(c)
 #define FG_256(n)          printf("\x1b[38;5;%dm", n)
 #define FG_RGB(r, g, b)    printf("\x1b[38;2;%d;%d;%dm]", r, g, b)
@@ -57,6 +61,12 @@ enum GridType{
     INNER,
     CONNECT,
     SPLIT
+};
+enum Key{
+    BACKSPACE = 8, RETURN = 13, TAB = 9,
+    UP = 72, DOWN = 80, LEFT = 77, RIGHT = 75,    
+    HOME = 71, DEL = 83, PGUP = 73, PGDN = 72,
+    EXIT = 27, EXT = -32
 };
 
 typedef struct Box

@@ -72,7 +72,7 @@ void encrypt() {
   }
 
   for (int i = 0; i < num_blocks; i++) {
-    ciphertext_blocks[i] = pow(plaintext_blocks[i], e, n);
+    ciphertext_blocks[i] = ipow(plaintext_blocks[i], e, n);
   }
 
  char output_filename[] = "ciphertext.bin"; 

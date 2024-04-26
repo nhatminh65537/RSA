@@ -1,6 +1,7 @@
 #include "../header/ui.h"
 #include "../header/uilib.h"
 #include "../header/prgvar.h"
+#include <conio.h>
 
 BOX screen, rsaBox, cmdBox, keyBox, optBox, logBox, cptBox, pltBox,
     eBox  , dBox  , qBox  , pBox  , nBox;
@@ -142,47 +143,121 @@ void showNBox()
     CSI(RESET);
 }
 
-void input(char* instr)
+void clsInput()
 {
-    int count = 0;
+    clearBlock(3, 3, MAXX - 2, 4);
+    MOVEXY(3, 3); 			
+    printf("\x1b[38;5;10m $ \x1b[39m"); 
+}
+
+void inputCmd()
+{
     char c;
-    for (char *temp = instr; *temp != 0; ++temp)
-        *temp = 0;
+    int inHis = 0;
+    
+    resetCmd(&cmd);
     
     while (TRUE)
     {        
         c = getch();
-        if (32 <= c & c <= 126){
-            instr[count] = c;
-            ++count;
-            putch(c);
-        }
-        else if (c == '\r' && count != 0 ){
-            instr[count] = 0;
-            strcat(logText.text, instr);
-            strcat(logText.text, "\n");
-            return;
-        }
-        else if (c == '\b'){
-            if (count > 0)
-            {
-                --count;
-                instr[count] = c;
-                putch(c); putch(' '); putch(c);
-            }
-            continue;  
-        }
-        else if ((unsigned) c > 126){
-            char buff[8];
-            while ((unsigned) c > 126){
-                sprintf(buff , "%d ", (int) c);
+
+        switch (c){
+            case RETURN:
+                if (cmd.count != 0 ){
+                    recordCmd(&cmdHis, cmd.string, 1);
+                    return;
+                }
+                break;
+            case BACKSPACE:
+                if (cmd.count > 0){
+                    --cmd.pos;
+                    deleteChar(&cmd);
+
+                    putch(c); putch(' '); putch(c);
+                    for (int i = cmd.pos; i < cmd.count; ++i)
+                        putch(cmd.string[i]);
+                    if (cmd.count - cmd.pos > 0)
+                        CUB(cmd.count - cmd.pos);
+                }
+                break;
+            case TAB:
+                break;
+            case EXT:
                 c = getch();
-                strcat(logText.text, buff);
-            }
-                sprintf(buff , "%d ", (int) c);
-                strcat(logText.text, buff);
-                strcat(logText.text, "\n");
-                show(&logBox);
+                switch (c)
+                {
+                    case 71:
+                        break;
+                    case UP:
+                        clsInput();
+                        if (!inHis) {
+                            recordCmd(&cmdHis, cmd.string, 0);
+                            cmdHis.pos = cmdHis.cur;
+                        }
+                        retrievCmd(&cmd, preCmd(&cmdHis));
+                        printf(cmd.string);
+                        inHis = 1;
+                        continue;
+                    case 73:
+                        break;
+                    case LEFT:
+                        if (cmd.pos < cmd.count){
+                            ++cmd.pos;
+                            CUF(1);
+                        }
+                        break;
+                    case RIGHT:
+                    if (0 < cmd.pos){
+                            --cmd.pos;
+                            CUB(1);
+                        }
+                        break;
+                    case DOWN:
+                        clsInput();
+                        if (!inHis) {
+                            recordCmd(&cmdHis, cmd.string, 0);
+                            cmdHis.pos = cmdHis.cur;
+                        }
+                        retrievCmd(&cmd, sucCmd(&cmdHis));
+                        printf(cmd.string);
+                        inHis = 1;
+                        continue;
+                    case 81:
+                        break;
+                    case 83:
+                        break;
+                }
+                break;
+            default:
+                insertChar(&cmd, c);
+                putch(c);
+                for (int i = cmd.pos; i < cmd.count; ++i)
+                    putch(cmd.string[i]);
+                if (cmd.count - cmd.pos > 0)
+                    CUB(cmd.count - cmd.pos);
+                break;
         }
+        inHis = 0;
+        // if (32 <= c & c <= 126){
+            
+        // }
+        // else 
+        // }
+        // else if (c == '\b'){
+              
+        // }
+        // else if ((unsigned) c > 126 || c < 32){
+        //     char buff[8];
+        //     while ((unsigned) c > 126){
+        //         sprintf(buff , "%d ", (int) c);
+        //         c = getch();
+        //         strcat(logText.text, buff);
+        //     }
+        //         sprintf(buff , "%d ", (int) c);
+        //         strcat(logText.text, buff);
+        //         strcat(logText.text, "\n");
+        //         show(&logBox);
+        // }
     } 
 }
+

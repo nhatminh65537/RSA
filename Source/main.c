@@ -5,7 +5,6 @@
 #include "../header/prgvar.h"
 
 void loadToText(char *);
-void input(char*);
 int  runCmd(char*);
 char plaintext[2048], cmdOpt[2048];
 
@@ -21,62 +20,73 @@ int main()
     do 
     {
         show(&logBox);
-        clearBlock(3, 3, MAXX - 2, 4);
-        MOVEXY(3, 3); 			
-        printf("\x1b[38;5;10m $ \x1b[39m");
-        
-        input(instr);
-    } while(runCmd(instr));
+        clsInput();
+        inputCmd();
+        strcat(logText.text, cmd.string);
+        strcat(logText.text, "\n");
+    } while(runCmd(cmd.string));
+
+    writeCmdHis(&cmdHis, "data/cmdlog.txt");
     return 0;
 }
 
 int runCmd(char* cmd)
 {
     char cmdArr[16][64], *cur = *cmdArr;
-    int count = 0;
-    for (char *c = cmd; *c != 0; ++c){
-        if (*c == ' '){
-            *cur = 0;
-            ++count;
-            cur = *(cmdArr + count);
-            continue;
-        }
+    while (1)
+    {    
+        int count = 0;
         
-        *cur = *c;
-        ++cur;
-    }
-    *cur = 0;
+        if (*cmd ==  0 ) return 1;
+        while (*cmd == ' ' || *cmd == ';') ++cmd;
 
-    if (strcmp(cmd, "exit") == 0)
-        return FALSE;
-    
-    if (strcmp(cmdArr[0], "load") == 0)
-        loadToText(cmdArr[1]);
-
-    if (strcmp(cmd, "cls") == 0){
-        clearBox(&optBox);
-    }
-    if (strcmp(cmdArr[0], "disable") == 0){
-        if (strcmp(cmdArr[1], "plt") == 0){
-            cptBox.sx = FULL;
-            enableBox(&pltBox, FALSE);
+        while (*cmd != 0 && *cmd != ';'){
+            if (*cmd == ' '){
+                *cur = 0;
+                ++count;
+                cur = *(cmdArr + count);
+                while (*cmd == ' ') ++cmd;
+                continue;
+            }
+            *cur = *cmd;
+            ++cur; ++cmd;
         }
-        if (strcmp(cmdArr[1], "cpt") == 0) enableBox(&cptBox, FALSE);
-        if (strcmp(cmdArr[1], "log") == 0) enableBox(&logBox, FALSE);
-        clearBox(&optBox);
-        show(&optBox);
+        *cur = 0;
+        cur = *cmdArr;
+
+        if (strcmp(cmdArr[0], "exit") == 0)
+            return 0;
+
+        if (strcmp(cmdArr[0], "load") == 0)
+            loadToText(cmdArr[1]);
+
+        if (strcmp(cmdArr[0], "cls") == 0){
+            clearBox(&optBox);
+        }
+        if (strcmp(cmdArr[0], "disable") == 0){
+            if (strcmp(cmdArr[1], "plt") == 0){
+                cptBox.sx = FULL;
+                enableBox(&pltBox, FALSE);
+            }
+            if (strcmp(cmdArr[1], "cpt") == 0) 
+                enableBox(&cptBox, FALSE);
+            if (strcmp(cmdArr[1], "log") == 0) 
+                enableBox(&logBox, FALSE);
+            clearBox(&optBox);
+            show(&optBox);
+        }
+        if (strcmp(cmdArr[0], "enable") == 0){
+            if (strcmp(cmdArr[1], "plt") == 0){
+                cptBox.sx = OVER;
+                enableBox(&pltBox, TRUE);
+            } 
+            if (strcmp(cmdArr[1], "cpt") == 0) enableBox(&cptBox, TRUE);
+            if (strcmp(cmdArr[1], "log") == 0) enableBox(&logBox, TRUE);
+            clearBox(&optBox);
+            show(&optBox);
+        }
     }
-    if (strcmp(cmdArr[0], "enable") == 0){
-        if (strcmp(cmdArr[1], "plt") == 0){
-            cptBox.sx = OVER;
-            enableBox(&pltBox, TRUE);
-        } 
-        if (strcmp(cmdArr[1], "cpt") == 0) enableBox(&cptBox, TRUE);
-        if (strcmp(cmdArr[1], "log") == 0) enableBox(&logBox, TRUE);
-        clearBox(&optBox);
-        show(&optBox);
-    }
-    return TRUE;
+    return 1;
 }
 
 void loadToText(char * fileName)

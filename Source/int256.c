@@ -1,5 +1,5 @@
 #include "../header/int256.h"
-#include <stdio.h>
+// #include <stdio.h>
 
 INT256 zero;
 INT256 maxval;
@@ -134,7 +134,7 @@ void conv2hex(unsigned char* hex, INT256* num)
     _reverse(hex);
 }
 
-int le(INT256 a, INT256 b)
+int ile(INT256 a, INT256 b)
 {
     int i = MAXBYTE - 1, result = 0;
     while (i >= 0 && a.value[i] == b.value[i])
@@ -142,7 +142,7 @@ int le(INT256 a, INT256 b)
     if (i < 0 || a.value[i] > b.value[i]) return 0;
     else                                  return 1;
 }
-int eq(INT256 a, INT256 b)
+int ieq(INT256 a, INT256 b)
 {
     int i = MAXBYTE - 1, result = 0;
     while (i >= 0 && a.value[i] == b.value[i])
@@ -159,7 +159,7 @@ INT256 shiftleft(INT256 num, int times)
     return result;
 }
 
-INT256 mod(INT256 a, INT256 b)
+INT256 imod(INT256 a, INT256 b)
 {
     INT256 remainder;
     remainder = a;
@@ -168,12 +168,12 @@ INT256 mod(INT256 a, INT256 b)
 
     while (_index(&b, mostbit) == 0) --mostbit; 
     for (int i = MAXBIT - mostbit - 1; i >= 0; --i)
-        if (!le(remainder, shiftleft(b, i)))
+        if (!ile(remainder, shiftleft(b, i)))
             _sub(&remainder ,remainder, shiftleft(b, i));
     
     return remainder;
 }
-INT256 div(INT256 a, INT256 b)
+INT256 idiv(INT256 a, INT256 b)
 {
     INT256 result, remainder;
     remainder = a;
@@ -183,7 +183,7 @@ INT256 div(INT256 a, INT256 b)
     while (_index(&b, mostbit) == 0) --mostbit; 
     for (int i = MAXBIT - 1 - mostbit; i >= 0; --i)
     {
-        if (le(remainder, shiftleft(b, i)))
+        if (ile(remainder, shiftleft(b, i)))
             _set(&result, i, 0);
         else 
         {
@@ -194,45 +194,45 @@ INT256 div(INT256 a, INT256 b)
     return result;
 }
 
-INT256 pls(INT256 a, INT256 b, INT256 n)
+INT256 ipls(INT256 a, INT256 b, INT256 n)
 {
     INT256 result;
     int carry;
 
     carry = _pls(&result, a, b);
-    if (!eq(n, zero))
+    if (!ieq(n, zero))
     {
-        result = mod(result, n);
+        result = imod(result, n);
         if (carry == 1)
         {
-            _pls(&result, result, mod(maxval, n));
+            _pls(&result, result, imod(maxval, n));
             _pls(&result, one, result);
-            result = mod(result, n);
+            result = imod(result, n);
         }
     }
     return result;
 }
-INT256 sub(INT256 a, INT256 b, INT256 n)
+INT256 isub(INT256 a, INT256 b, INT256 n)
 {
     INT256 result;
     int carry;
     
     carry = _sub(&result, a, b);
-    if (!eq(n, zero))
+    if (!ieq(n, zero))
     {  
-        result = mod(result, n);
+        result = imod(result, n);
         if (carry == 1)
         {
             _sub(&result, maxval, result);
-            _pls(&result, mod(result, n), one);
-            result = mod(result, n);
-            if (!eq(result, zero)) _sub(&result, n, result);
+            _pls(&result, imod(result, n), one);
+            result = imod(result, n);
+            if (!ieq(result, zero)) _sub(&result, n, result);
         }
     }
     return result;
 }
 
-INT256 mul(INT256 a, INT256 b, INT256 n)
+INT256 imul(INT256 a, INT256 b, INT256 n)
 {
     INT256 result, temp;
     result = zero;
@@ -240,24 +240,24 @@ INT256 mul(INT256 a, INT256 b, INT256 n)
     for (int i = 0; i < MAXBIT; ++i)
     {  
         if (_index(&b, i) == 1)
-            result = pls(result, temp, n);
+            result = ipls(result, temp, n);
         if (_index(&temp, MAXBIT - 1) == 1) 
-            temp = pls(pls(shiftleft(temp, 1), one, n), mod(maxval, n), n);
+            temp = ipls(ipls(shiftleft(temp, 1), one, n), imod(maxval, n), n);
         else
-            temp = mod(shiftleft(temp, 1), n); 
+            temp = imod(shiftleft(temp, 1), n); 
     }
     return result;
 }
 
-INT256 pow(INT256 a, INT256 b, INT256 n)
+INT256 ipow(INT256 a, INT256 b, INT256 n)
 {
     INT256 result;
     result = one;
     for (int i = MAXBIT - 1; i>= 0; --i)
     {
-        result = mul(result, result, n);
+        result = imul(result, result, n);
         if (_index(&b, i) == 1) 
-            result = mul(result, a, n);
+            result = imul(result, a, n);
     }
     return result;
 }
@@ -286,10 +286,10 @@ void int256Init()
 //     // printf("%s", ch);
 //     // printf("%d\n", &a);
 //     // INT256 re;
-//     // re = mul(a, b, p);
-//     // show(pow(a, b, p), HEXMODE); printf("\n");
+//     // re = imul(a, b, p);
+//     // show(ipow(a, b, p), HEXMODE); printf("\n");
 //     // show(a, HEXMODE);
 //     // printf("\n%d\n", &a);
-//     // show(pow(m, t, k), HEXMODE);
+//     // show(ipow(m, t, k), HEXMODE);
 //     return 0;
 // }
