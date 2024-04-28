@@ -351,6 +351,18 @@ void showText(BOX* box)
     MOVEXY(box->xPoint, box->yPoint);
     while (*c!=0) 
     {   
+        if (*c == '\x1b'){
+            char esc[16], *i = esc;
+            while (*c != 'm'){
+                *i = *c;
+                ++i;
+                ++c;
+            }
+            *i++ = *c++;
+            *i = 0;
+            printf(esc);
+            continue;
+        }
         if (box->xPoint > box->right - 1 || *c == '\r' || *c == '\n')
         {
             ++box->yPoint;

@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include "../header/prgvar.h"
+#include "../header/ui.h"
 
-TEXT cipherText, plainText, logText, hisText;
+TEXT   cipherText, plainText, logText, hisText;
 CMDSTR cmd;
+char   cmdArr[16][64];
 CMDHIS cmdHis;
 
 void initPrgVar()
@@ -34,7 +36,38 @@ int readText(TEXT* text, int offset)
     fclose(f);
 }
 
+void loadToText(char * fileName)
+{
+    setTextFile(&plainText, fileName);
+    readText(&plainText, 0);
+    enableText(&pltBox, TRUE, plainText.text);
+    showText(&pltBox);
+}
+
 void writeText(TEXT* text);
+
+char* phraseCmd(char* c)
+{
+    char *cur = *cmdArr;
+    int count = 0;
+    
+    while (*c == ' ' || *c == ';') ++c;
+
+    while (*c != 0 && *c != ';'){
+        if (*c == ' '){
+            *cur = 0;
+            ++count;
+            cur = *(cmdArr + count);
+            while (*c == ' ') ++c;
+            continue;
+        }
+        *cur = *c;
+        ++cur; ++c;
+    }
+    *cur = 0;
+    cur = *cmdArr;
+    return c;
+}
 
 void insertChar(CMDSTR* cstr, char c)
 {
@@ -69,7 +102,7 @@ void retrievCmd(CMDSTR* cstr, char* cmd)
     cstr->count = strlen(cmd);
 }
 
-char *preCmd(CMDHIS* chis)
+char* preCmd(CMDHIS* chis)
 {
     int pre = (chis->pos - 1 + MAXHIS)%MAXHIS;
     if (pre != chis->cur) 
@@ -86,6 +119,8 @@ char* sucCmd(CMDHIS* chis)
 
 void recordCmd(CMDHIS* chis, char* cmd, int permanent)
 {
+    if (strcmp(chis->cmdHis[(chis->cur - 1 + MAXHIS)%MAXHIS], cmd) == 0) 
+        return;
     strcpy(chis->cmdHis[chis->cur], cmd);
     if (permanent) chis->cur = (chis->cur + 1)%MAXHIS;
 }
@@ -104,7 +139,7 @@ void readCmdHis(CMDHIS* chis, char* filename)
     fclose(f);
 }
 
-void  writeCmdHis(CMDHIS* chis, char* filename)
+void writeCmdHis(CMDHIS* chis, char* filename)
 {
     FILE* f = fopen(filename, "w");
     for (int i = 0; i < 20; ++i){
@@ -113,5 +148,3 @@ void  writeCmdHis(CMDHIS* chis, char* filename)
     }
     fclose(f);
 }
-
-

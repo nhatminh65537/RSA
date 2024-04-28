@@ -16,33 +16,34 @@ typedef struct Text
     char text[TEXTMAX];
     int  pos;
 } TEXT;
-
-
-extern TEXT cipherText, plainText, logText, hisText;
+extern TEXT cipherText, plainText, logText;
 
 void setTextFile(TEXT* text, char* fileName);
-int readText(TEXT* text, int offset);
+int  readText(TEXT* text, int offset);
+void loadToText(char *);
 void writeText(TEXT* text);
 
 typedef struct CmdString
 {
     char string[CMDLEN];
-    int count;
-    int pos;
+    int  count;
+    int  pos;
 } CMDSTR;
 extern CMDSTR cmd;
+extern char cmdArr[][64];
 
-void insertChar(CMDSTR*, char);
-void deleteChar(CMDSTR*);
-void resetCmd(CMDSTR*);
-void retrievCmd(CMDSTR*, char*);
-void assignString(CMDSTR*, char*);
+char* phraseCmd(char*);
+void  insertChar(CMDSTR*, char);
+void  deleteChar(CMDSTR*);
+void  resetCmd(CMDSTR*);
+void  retrievCmd(CMDSTR*, char*);
+void  assignString(CMDSTR*, char*);
 
 typedef struct CmdHistory
 {
     char cmdHis[MAXHIS][CMDLEN];
-    int cur;
-    int pos;
+    int  cur;
+    int  pos;
 } CMDHIS;
 extern CMDHIS cmdHis;
 
