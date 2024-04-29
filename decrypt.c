@@ -74,5 +74,5 @@ void decrypt() {
  
   free(ciphertext_blocks);
   free(plaintext_blocks);
-  fclose(ciphertext_file);make
+  fclose(ciphertext_file);
 }
