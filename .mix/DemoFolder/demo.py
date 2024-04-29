@@ -6,7 +6,7 @@ b = 0xfffee13466756453bbbc92347767677aaff541414514355145454514545fff
 p = 0x234134bcbcbbfbeba75346741326481aaff541414514355145454514545fff
 print(hex(pow(a,b,p)))
 
-# pow() faster then **
+# pow() faster then **git
 
 p = 241
 q = 251

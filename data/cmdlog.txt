@@ -1,20 +1,20 @@
 
-
-
-
-exit
-sdfgsgs
-exit
-asdfadfasdfa
+asdf
+adsf
 adf
-asdfadf
-qewr
-adfajklgui
-zbvn
-gfgs
-gaga
-afafga
-gaaaaaaaaa
-aaaaaaa
-aa
+aadfadfadfadfadf
+ad
+fa
+dfadf
+exit
+qwerty
+exit
+load data/plaintext.txt
+disable log
+enable log
+exit
+load data/plaintext.txt
+focus plt
+exit
+load data/plaintext.txt; focus plt
 exit

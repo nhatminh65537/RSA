@@ -65,7 +65,7 @@ enum GridType{
 enum Key{
     BACKSPACE = 8, RETURN = 13, TAB = 9,
     UP = 72, DOWN = 80, LEFT = 77, RIGHT = 75,    
-    HOME = 71, DEL = 83, PGUP = 73, PGDN = 72,
+    HOME = 71, DEL = 83, PGUP = 73, PGDN = 81,
     EXIT = 27, EXT = -32
 };
 
@@ -109,6 +109,7 @@ void initBox(BOX* cur, char* name, BOX* parent, enum LayoutType layout,
 void clearBlock(int x1, int y1, int x2, int y2);
 void drawBox(BOX* box, int lineColor,
              int lineType, int cornerType, int titleColor, int titleBold);
+void resetText(BOX* box);
 void showText(BOX* box);
 void clearBox(BOX* box);
 void enableBox(BOX* box, int val);

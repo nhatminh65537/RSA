@@ -2,6 +2,7 @@
 #include "../header/uilib.h"
 #include "../header/prgvar.h"
 #include <conio.h>
+#include <string.h>
 
 BOX screen, rsaBox, cmdBox, keyBox, optBox, logBox, cptBox, pltBox,
     eBox  , dBox  , qBox  , pBox  , nBox;
@@ -165,6 +166,9 @@ void inputCmd()
             case RETURN:
                 if (cmd.count != 0 ){
                     recordCmd(&cmdHis, cmd.string, 1);
+                    strcat(logText.text, "\x1b[38;5;42m$ \x1b[38;5;229m");
+                    strcat(logText.text, cmd.string);
+                    strcat(logText.text, "\x1b[39m\n");
                     return;
                 }
                 break;
@@ -260,4 +264,3 @@ void inputCmd()
         // }
     } 
 }
-
