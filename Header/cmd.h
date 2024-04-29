@@ -10,5 +10,6 @@ void showCmd();
 void unshowCmd();
 void exportCmd();
 void focusCmd();
+void focus(TEXT*);
 
 #endif

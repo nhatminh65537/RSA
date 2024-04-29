@@ -10,15 +10,17 @@ CMDHIS cmdHis;
 
 void initPrgVar()
 {
-    strcpy(logText.text, "");
+    // strcpy(logText.text, "");
     resetCmd(&cmd);
     readCmdHis(&cmdHis, "data/cmdlog.txt");
+
 }
 
-void setTextFile(TEXT* text, char* fileName)
+void initText(TEXT* text, char* fileName, BOX* box)
 {
     strcpy(text->file, fileName);
     text->pos      = 0;
+    text->box      = box;
 }
 
 int readText(TEXT* text, int offset)
@@ -27,21 +29,26 @@ int readText(TEXT* text, int offset)
     if(f != NULL) {
         fseek(f, 0, SEEK_END);
         if (text->pos + offset >= ftell(f)) return 0;
-        text->pos += offset;
+        if (text->pos + offset < 0){
+            text->pos = 0;
+        }
+        else{
+            text->pos += offset;
+        }
         fseek(f, text->pos, SEEK_SET);
-        fread(text->text, 1, TEXTMAX, f);
+        text->text[fread(text->text, 1, TEXTMAX, f)] = 0;
     }
     else
         strcat(logText.text, "File not Found!\n");
     fclose(f);
 }
 
-void loadToText(char * fileName)
+void loadToText(TEXT* text, char * fileName, BOX* box)
 {
-    setTextFile(&plainText, fileName);
-    readText(&plainText, 0);
-    enableText(&pltBox, TRUE, plainText.text);
-    showText(&pltBox);
+    initText(text, fileName, box);
+    readText(text, 0);
+    enableText(box, TRUE, text->text);
+    showText(box);
 }
 
 void writeText(TEXT* text);

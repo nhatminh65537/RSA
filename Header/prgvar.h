@@ -2,9 +2,10 @@
 #define __PRGVAR__
 
 // #include "int256.h"
+#include "../header/ui.h"
 
 #define NAMEMAX      128
-#define TEXTMAX      16384 //2^14 byte 
+#define TEXTMAX      1 << 12 //2^12 byte 
 #define CMDLEN       256
 #define MAXHIS       20
 
@@ -15,12 +16,13 @@ typedef struct Text
     char file[NAMEMAX];
     char text[TEXTMAX];
     int  pos;
+    BOX* box;
 } TEXT;
 extern TEXT cipherText, plainText, logText;
 
-void setTextFile(TEXT* text, char* fileName);
+void initText(TEXT* text, char* fileName, BOX* box);
 int  readText(TEXT* text, int offset);
-void loadToText(char *);
+void loadToText(TEXT* text, char * fileName, BOX* box);
 void writeText(TEXT* text);
 
 typedef struct CmdString
@@ -52,5 +54,8 @@ char* sucCmd(CMDHIS*);
 void  recordCmd(CMDHIS*, char*, int);
 void  writeCmdHis(CMDHIS*, char*);
 void  readCmdHis (CMDHIS*, char*);
+
+void appendStringToOutput(char*);
+void appendFileToOutput(char*);
 
 #endif

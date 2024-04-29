@@ -1,4 +1,5 @@
 #include <string.h>
+#include <conio.h>
 #include "../header/cmd.h"
 #include "../header/int256.h"
 #include "../header/ui.h"
@@ -15,8 +16,14 @@ int runCmd()
         if (strcmp(cmdArr[0], "exit") == 0)
             return 0;
 
+        if (strcmp(cmdArr[0], "focus") == 0){
+            printf("\x1b[?25l");
+            if (strcmp(cmdArr[1], "plt") == 0) focus(&plainText);
+            if (strcmp(cmdArr[1], "log") == 0) focus(&logText);
+            printf("\e[?25h");
+        }
         if (strcmp(cmdArr[0], "load") == 0)
-            loadToText(cmdArr[1]);
+            loadToText(&plainText, cmdArr[1], &pltBox);
 
         if (strcmp(cmdArr[0], "cls") == 0){
             clearBox(&optBox);
@@ -45,4 +52,38 @@ int runCmd()
         }
     }
     return 1;
+}
+
+void focus(TEXT* text)
+{
+    while (1){
+        BOX* box = text->box;
+        int linesize = box->right - box->left - 1;
+        int pagesize = box->top - box->bottom - 1; 
+        char c = getch();
+        if (c == EXT){
+            c = getch();
+            switch (c)
+            {
+            case UP:
+                readText(text, -linesize);
+                break;
+            case DOWN:
+                readText(text, linesize);
+                break;
+            case PGDN:
+                readText(text, -linesize*pagesize/2);
+                break;
+            case PGUP:
+                readText(text, linesize*pagesize/2);
+                break;
+            }
+        }
+        if (c == EXIT){
+            break;
+        }
+        resetText(&pltBox);
+        // clearBox(&pltBox);
+        showText(&pltBox);
+    }
 }

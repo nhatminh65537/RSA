@@ -1,13 +1,4 @@
-gfgs
-gaga
-afafga
-gaaaaaaaaa
-aaaaaaa
-aa
-exit
-asdf
-aa
-exit
+
 asdf
 adsf
 adf
@@ -17,4 +8,13 @@ fa
 dfadf
 exit
 qwerty
+exit
+load data/plaintext.txt
+disable log
+enable log
+exit
+load data/plaintext.txt
+focus plt
+exit
+load data/plaintext.txt; focus plt
 exit

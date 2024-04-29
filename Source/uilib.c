@@ -341,6 +341,13 @@ void enableBox(BOX* box, int val)
     }
 }
 
+void resetText(BOX* box)
+{
+    box->tPoint  = 0;
+    box->xPoint  = box->left + 1;
+    box->yPoint  = box->top  + 1;
+}
+
 void showText(BOX* box)
 {
     if (!box->textEnable || !box->enable) return;
@@ -365,6 +372,7 @@ void showText(BOX* box)
         }
         if (box->xPoint > box->right - 1 || *c == '\r' || *c == '\n')
         {
+            for (int i = box->xPoint; i < box->right; ++i) putch(' ');
             ++box->yPoint;
             box->xPoint = box->left + 1;
             if (!breakWord) ++c; 
@@ -393,6 +401,9 @@ void showText(BOX* box)
         breakWord = FALSE;
     }
     box->tPoint = c - box->text;
+
+    for (int i = box->xPoint; i < box->right; ++i) putch(' ');
+    clearBlock(box->left + 1, box->yPoint + 1, box->right - 1, box->bottom - 1);
 }
 
 void clearBox(BOX* box)
