@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include<stdlib.h>
+#include<math.h>
 #include "../header/int256.h"
 
 void encrypt() {
@@ -73,7 +74,7 @@ void encrypt() {
   }
 
   for (int i = 0; i < num_blocks; i++) {
-    ciphertext_blocks[i] = ipow(plaintext_blocks[i], e, n);
+    ciphertext_blocks[i] = modExp(plaintext_blocks[i], e, n);
   }
 
  char output_filename[] = "ciphertext.bin"; 
