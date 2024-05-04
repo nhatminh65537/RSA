@@ -1,4 +1,4 @@
-entest: encrypt.c
+entest: encrypt.c 
 	gcc -c encrypt.c -g
 	gcc -o entest encrypt.o ../build/int256.o
 

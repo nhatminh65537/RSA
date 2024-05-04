@@ -262,6 +262,11 @@ INT256 ipow(INT256 a, INT256 b, INT256 n)
     return result;
 }
 
+INT256 imulInverse(INT256 a, INT256 n)
+{
+    
+}
+
 void int256Init()
 {
     zero = int256_c("0", HEXMODE);
