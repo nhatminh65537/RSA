@@ -6,7 +6,7 @@
 
 #define BITS 255
 char charRand(){
-
+    
 }
 
 INT256 randint256()
