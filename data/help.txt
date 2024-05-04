@@ -1,0 +1,5 @@
+About program:
+    RSA is a public cryptosystem.
+    there 2 type of key:
+        public  key: n, e
+        private key: p, q, d

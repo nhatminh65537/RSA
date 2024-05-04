@@ -5,6 +5,7 @@
 #include "../header/ui.h"
 #include "../header/prgvar.h"
 #include "../header/uilib.h"
+#include "../header/outlog.h"
 
 int runCmd()
 {
@@ -19,8 +20,8 @@ int runCmd()
         if (strcmp(cmdArr[0], "focus") == 0){
             printf("\x1b[?25l");
             if (strcmp(cmdArr[1], "plt") == 0) focus(&plainText);
-            if (strcmp(cmdArr[1], "log") == 0) focus(&logText);
-            printf("\e[?25h");
+            if (strcmp(cmdArr[1], "log") == 0) focusOutText(&outText);
+            printf("\x1b[?25h");
         }
         if (strcmp(cmdArr[0], "load") == 0)
             loadToText(&plainText, cmdArr[1], &pltBox);
@@ -50,8 +51,17 @@ int runCmd()
             clearBox(&optBox);
             show(&optBox);
         }
+        if (strcmp(cmdArr[0], "help") == 0){
+            helpCmd();
+        }
     }
+
     return 1;
+}
+
+void helpCmd()
+{
+    addFile(&outText, "data/help.txt");
 }
 
 void focus(TEXT* text)
@@ -85,5 +95,33 @@ void focus(TEXT* text)
         resetText(&pltBox);
         // clearBox(&pltBox);
         showText(&pltBox);
+    }
+}
+
+void focusOutText(OUTTEXT* out)
+{
+    while (1){
+        char c = getch();
+        if (c == EXT){
+            c = getch();
+            switch (c)
+            {
+            case UP:
+                reassignText(out, prevLine(out, out->pos));
+                break;
+            case DOWN:
+                reassignText(out, nextLine(out, out->pos));
+                break;
+            case PGDN:
+                break;
+            case PGUP:
+                break;
+            }
+        }
+        if (c == EXIT){
+            break;
+        }
+        resetText(out->box);
+        showOutText(out);
     }
 }

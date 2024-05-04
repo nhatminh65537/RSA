@@ -356,6 +356,7 @@ void showText(BOX* box)
     char *c = &box->text[box->tPoint];
 
     MOVEXY(box->xPoint, box->yPoint);
+    CSI(RESET);
     while (*c!=0) 
     {   
         if (*c == '\x1b'){
