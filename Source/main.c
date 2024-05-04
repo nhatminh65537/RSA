@@ -18,9 +18,13 @@ int main()
     			
     do 
     {
-        show(&logBox);
+        showOutText(&outText);
         clsInput();
+       
+        printf("\x1b[?25h");
         inputCmd();
+        printf("\x1b[?25l");
+    
     } while(runCmd());
 
     writeCmdHis(&cmdHis, "data/cmdlog.txt");

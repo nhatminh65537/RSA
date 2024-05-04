@@ -2,7 +2,7 @@
 #define __PRGVAR__
 
 // #include "int256.h"
-#include "../header/ui.h"
+#include "ui.h"
 
 #define NAMEMAX      128
 #define TEXTMAX      1 << 12 //2^12 byte 

@@ -1,14 +1,3 @@
-
-asdf
-adsf
-adf
-aadfadfadfadfadf
-ad
-fa
-dfadf
-exit
-qwerty
-exit
 load data/plaintext.txt
 disable log
 enable log
@@ -17,4 +6,15 @@ load data/plaintext.txt
 focus plt
 exit
 load data/plaintext.txt; focus plt
+exit
+watashi ............. watashitashi no yume wa kaizoku ni naru.
+exit
+hello
+watashi ............. watashitashi no yume wa kaizoku ni naru.
+load data/plaintext.txt; focus plt
+focus
+focus log
+disable plt
+focus log
+cuongsan
 exit

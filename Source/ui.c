@@ -1,6 +1,7 @@
 #include "../header/ui.h"
 #include "../header/uilib.h"
 #include "../header/prgvar.h"
+#include "../header/outlog.h"
 #include <conio.h>
 #include <string.h>
 
@@ -51,7 +52,9 @@ void initUI()
     qBox.show = showQBox;
     nBox.show = showNBox;
 
-    enableText(&logBox, TRUE, logText.text);
+    enableText(&logBox, TRUE, NULL);
+    initOutText(&outText, &logBox);
+    reassignText(&outText, outText.pos);
 
     show(&rsaBox);
 }
@@ -166,9 +169,11 @@ void inputCmd()
             case RETURN:
                 if (cmd.count != 0 ){
                     recordCmd(&cmdHis, cmd.string, 1);
-                    strcat(logText.text, "\x1b[38;5;42m$ \x1b[38;5;229m");
-                    strcat(logText.text, cmd.string);
-                    strcat(logText.text, "\x1b[39m\n");
+                    addText(&outText, "\x1b[38;5;42m$ \x1b[38;5;229m");
+                    addText(&outText, cmd.string);
+                    resetText(outText.box);
+                    reassignText(&outText, startLine(&outText));
+                    addText(&outText, "\x1b[39m\n");
                     return;
                 }
                 break;

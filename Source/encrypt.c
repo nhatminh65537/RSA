@@ -3,7 +3,7 @@
 #include<math.h>
 #include "../header/int256.h"
 
-void encrypt() {
+void encrypt(char* pltname) {
   
   FILE* key_file = fopen("key.txt", "r");
   if (key_file == NULL) {
@@ -11,7 +11,7 @@ void encrypt() {
     return;
   }
 
-  FILE* plaintext_file = fopen("plaintext.txt", "rb"); 
+  FILE* plaintext_file = fopen(pltname, "rb"); 
   if (plaintext_file == NULL) {
     printf("Error opening plaintext file.\n");
     fclose(key_file);

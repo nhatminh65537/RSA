@@ -12,5 +12,6 @@
         "uilib.h": "c",
         "int256.h": "c",
         "stdio.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
