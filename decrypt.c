@@ -1,11 +1,10 @@
+#include <stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include "../header/int256.h"
+
 void decrypt() {
  
-  FILE* key_file = fopen("key.txt", "r");
-  if (key_file == NULL) {
-    printf("Error opening key file.\n");
-    return;
-  }
-
   FILE* ciphertext_file = fopen("ciphertext.bin", "rb"); 
   if (ciphertext_file == NULL) {
     printf("Error opening ciphertext file.\n");

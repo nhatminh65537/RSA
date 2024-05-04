@@ -45,6 +45,8 @@ INT256 imul(INT256, INT256, INT256);
 
 INT256 ipow(INT256, INT256, INT256);
 
+INT256 imulInverse(INT256, INT256);
+
 void int256Init();
 
 #endif
