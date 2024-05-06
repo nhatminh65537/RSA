@@ -15,8 +15,17 @@ void decrypt(INT256 n , INT256 a , char* cpt, char* plt2)
   }
 
   INT256 y,d,p,q;
-char hex[MAXHEX + 1], buff[MAXBYTE + 1];
+char ascii[MAXBYTE + 1], buff2[MAXBYTE + 1];
 while(feof(ciphertextFile)){
+  fread(buff2, 1, MAXBYTE, ciphertextFile);
+  buff2[MAXBYTE] = '\0';
+  d_p = int256_c(buff2,ASCIIMODE);
+  d_q = int256_c(buff2,ASCIIMODE);
+  M_p = int256_c(buff2,ASCIIMODE);
+  M_q = int256_c(buff2,ASCIIMODE);
+  x_p = int256_c(buff2,ASCIIMODE);
+  x_q = int256_c(buff2,ASCIIMODE);
+
   INT256 d_p = imod(d, isub(p, one));
   INT256 d_q = imod(d, isub(q, one));
     
@@ -25,7 +34,24 @@ while(feof(ciphertextFile)){
 
   INT256 x_p = ipow(y , d_p , p);
   INT256 x_q = ipow(y , d_q , q);
-  INT256 x = 
+
+  INT256 x = ipls(imul(imul(M_p , q , maxval) , x_p , maxval) , imul(imul(M_q , p , maxval) , x_q , maxval) , n);
+  conv2char(ascii, &x);
+
+  fwrite( ascii, 1, MAXBYTE , plaintextFile2);
 }
 
+  fclose(ciphertextFile);
+  fclose(plaintextFile2);
+}
+int main(){
+    INT256 n, e;
+    int256Init();
+    e = int256_c("BB39", HEXMODE);
+    n = int256_c("EC4B" , HEXMODE);
+    INT256 p,q,d;
+    p = int256_c("F1", HEXMODE);
+    q = int256_c("FB", HEXMODE);
+    d = int256_c("39", HEXMODE);
+    decrypt(n, a, "ciphertext.txt", "plaintext2.txt");
 }
