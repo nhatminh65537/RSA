@@ -24,7 +24,8 @@ INT256 randint256()
 
 
 
-void printInt256(INT256 num) {
+void printInt256(INT256 num) 
+{
     for (int i = MAXBYTE - 1; i >= 0; i--) {
         printf("%02x", num.value[i]);
     }
