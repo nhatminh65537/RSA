@@ -3,43 +3,40 @@
 #include<math.h>
 #include "../header/int256.h"
 
-void decrypt(INT256 n , INT256 a , char* cpt, char* plt2) 
+void decrypt(INT256 n , INT256 d, Int256 p , INT256 q , char* cpt, char* plt2) 
 {
-  FILE* cyphertext = fopen(cpt, "r"); 
+  FILE* cyphertextFile = fopen(cpt, "r"); 
   if (ciphertextFile == NULL) {
     return;
   }
+  
   FILE* plaintextFile2 = fopen(cpt, "w"); 
   if (plaintextFile2 == NULL) {
     return;
   }
-
-  INT256 y,d,p,q;
-char ascii[MAXBYTE + 1], buff2[MAXBYTE + 1];
-while(feof(ciphertextFile)){
-  fread(buff2, 1, MAXBYTE, ciphertextFile);
-  buff2[MAXBYTE] = '\0';
-  d_p = int256_c(buff2,ASCIIMODE);
-  d_q = int256_c(buff2,ASCIIMODE);
-  M_p = int256_c(buff2,ASCIIMODE);
-  M_q = int256_c(buff2,ASCIIMODE);
-  x_p = int256_c(buff2,ASCIIMODE);
-  x_q = int256_c(buff2,ASCIIMODE);
-
+  
   INT256 d_p = imod(d, isub(p, one));
   INT256 d_q = imod(d, isub(q, one));
     
   INT256 M_p = imulInverse(q, p);
   INT256 M_q = imulInverse(p, q);
 
-  INT256 x_p = ipow(y , d_p , p);
-  INT256 x_q = ipow(y , d_q , q);
-
-  INT256 x = ipls(imul(imul(M_p , q , maxval) , x_p , maxval) , imul(imul(M_q , p , maxval) , x_q , maxval) , n);
-  conv2char(ascii, &x);
-
-  fwrite( ascii, 1, MAXBYTE , plaintextFile2);
-}
+  INT256 y
+buff2[MAXBYTE + 1];
+while(!feof(ciphertextFile)){
+    fread(buff, 1, MAXHEX, ciphertextFile);
+    buff[MAXHEX] = '\0';
+    x = int256_c(buff, HEXMODE);
+    INT256 m_p = ipow(x, d_p, p);
+    INT256 m_q = ipow(x, d_q, q);
+    INT256 h = isub(m_p, m_q);
+    if (icmp(h, zero) < 0) {
+      h = iadd(h, p);
+    }
+    INT256 m = iadd(m_q, imul(h, M_q));
+    conv2ascii(buff2, &m);
+    fwrite(buff2, 1, MAXBYTE, plaintextFile2);
+  }
 
   fclose(ciphertextFile);
   fclose(plaintextFile2);
