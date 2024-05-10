@@ -32,9 +32,7 @@ typedef struct CmdString
     int  pos;
 } CMDSTR;
 extern CMDSTR cmd;
-extern char cmdArr[][64];
 
-char* phraseCmd(char*);
 void  insertChar(CMDSTR*, char);
 void  deleteChar(CMDSTR*);
 void  resetCmd(CMDSTR*);

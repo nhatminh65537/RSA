@@ -158,7 +158,7 @@ void  addError(OUTTEXT* out, char* str)
 void  showOutText(OUTTEXT* out)
 {
     BOX* box = out->box;
-    if (!box->textEnable || !box->enable) return;
+    if (!box->enable) return;
 
     char *c = out->pos;
 

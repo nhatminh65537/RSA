@@ -5,7 +5,6 @@
 
 TEXT   cipherText, plainText, logText, hisText;
 CMDSTR cmd;
-char   cmdArr[16][64];
 CMDHIS cmdHis;
 
 void initPrgVar()
@@ -52,29 +51,6 @@ void loadToText(TEXT* text, char * fileName, BOX* box)
 }
 
 void writeText(TEXT* text);
-
-char* phraseCmd(char* c)
-{
-    char *cur = *cmdArr;
-    int count = 0;
-    
-    while (*c == ' ' || *c == ';') ++c;
-
-    while (*c != 0 && *c != ';'){
-        if (*c == ' '){
-            *cur = 0;
-            ++count;
-            cur = *(cmdArr + count);
-            while (*c == ' ') ++c;
-            continue;
-        }
-        *cur = *c;
-        ++cur; ++c;
-    }
-    *cur = 0;
-    cur = *cmdArr;
-    return c;
-}
 
 void insertChar(CMDSTR* cstr, char c)
 {

@@ -4,11 +4,16 @@
 #include "../header/prgvar.h"
 #include "../header/outlog.h"
 
+#define CMDLEN     32
+#define CMDARRLEN     16
+#define CMDARRCLEN    64
+
+extern char cmdList[][CMDLEN];
+int searchCmd(char*, int, int);
 int runCmd();
+char* phraseCmd(char*,char[][CMDARRCLEN]);
 
 void loadCmd();
-void showCmd();
-void unshowCmd();
 void exportCmd();
 void focusCmd();
 void helpCmd();

@@ -13,7 +13,6 @@ OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(patsubst %,$(HDR_DIR)/%,$(shell $(SPATH)/dir $(HDR_DIR)))
 
 all: main launch
-	@$(SPATH)/echo $(DEPS)
 
 main: $(OBJS)
 	$(CC) -o $@ $^

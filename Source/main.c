@@ -14,7 +14,7 @@ int main()
     initUI();
     initPrgVar();
 
-    // enableText(&optBox, TRUE, logText.text);
+    // enableText(&wrkBox, TRUE, logText.text);
     			
     do 
     {

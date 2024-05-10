@@ -7,13 +7,104 @@
 #include "../header/uilib.h"
 #include "../header/outlog.h"
 
+char cmdList[][CMDLEN] = {
+    "show-plt", // show plaintext
+    "show-cpt", // show ciphertext
+    "show-log", // show outputlog
+    "unshow-plt", 
+    "unshow-cpt", 
+
+    "unshow-log",
+    "info-program",
+    "info-pbl",
+    "help",
+    "unload-plt",
+
+    "unload-cpt",
+    "unload-key",
+    "focus-plt",
+    "focus-cpt",
+    "focus-log",
+
+    "edit-plt",
+    "edit-cpt",
+    "exit",
+    "load-plt",
+    "load-cpt",
+
+    "load-key",
+    "save-plt",
+    "save-cpt",
+    "save-key",
+    "where-key",
+    
+    "where-cpt",
+    "where-plt",
+    "gene-key",
+    "clear-log"
+};
+int cmdListLen = 29;
+
+int searchCmd(char* cmd, int s, int fullflag) 
+{
+    for (int i = 0; i < cmdListLen; ++i){
+        int index = (s+i)%cmdListLen;
+            if (strcmp(cmd, cmdList[index])           == 0 )             return index;
+        if (strncmp(cmd, cmdList[index], strlen(cmd)) == 0 && !fullflag) return index;
+    }
+    return -1;
+}
+
 int runCmd()
 {
     char *c = cmd.string;
+    char  cmdArr[CMDARRLEN][CMDARRCLEN];
     
     while (*c)
     {    
-        c = phraseCmd(c);
+        c = phraseCmd(c, cmdArr);
+        switch (searchCmd(cmdArr[0], 0, 1)){
+            case 0:
+                cptBox.sx = OVER;
+                enableBox(&pltBox, TRUE);
+                clearBox(&wrkBox);
+                show(&wrkBox);
+                break;
+            case 1:
+                enableBox(&cptBox, TRUE);
+                clearBox(&wrkBox);
+                show(&wrkBox);
+                break;
+            case 2:
+                enableBox(&logBox, TRUE);
+                clearBox(&wrkBox);
+                show(&wrkBox);
+                break;
+            case 3:
+                cptBox.sx = FULL;
+                enableBox(&pltBox, FALSE);
+                clearBox(&wrkBox);
+                show(&wrkBox);
+                break;
+            case 4:
+                enableBox(&cptBox, FALSE);
+                clearBox(&wrkBox);
+                show(&wrkBox);
+                break;
+            case 5:
+                enableBox(&logBox, FALSE);
+                clearBox(&wrkBox);
+                show(&wrkBox);
+                break; 
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                helpCmd(cmdArr + 1);
+                break;    
+        }
+
         if (strcmp(cmdArr[0], "exit") == 0)
             return 0;
 
@@ -25,43 +116,16 @@ int runCmd()
         }
         if (strcmp(cmdArr[0], "load") == 0)
             loadToText(&plainText, cmdArr[1], &pltBox);
-
-        if (strcmp(cmdArr[0], "cls") == 0){
-            clearBox(&optBox);
-        }
-        if (strcmp(cmdArr[0], "disable") == 0){
-            if (strcmp(cmdArr[1], "plt") == 0){
-                cptBox.sx = FULL;
-                enableBox(&pltBox, FALSE);
-            }
-            if (strcmp(cmdArr[1], "cpt") == 0) 
-                enableBox(&cptBox, FALSE);
-            if (strcmp(cmdArr[1], "log") == 0) 
-                enableBox(&logBox, FALSE);
-            clearBox(&optBox);
-            show(&optBox);
-        }
-        if (strcmp(cmdArr[0], "enable") == 0){
-            if (strcmp(cmdArr[1], "plt") == 0){
-                cptBox.sx = OVER;
-                enableBox(&pltBox, TRUE);
-            } 
-            if (strcmp(cmdArr[1], "cpt") == 0) enableBox(&cptBox, TRUE);
-            if (strcmp(cmdArr[1], "log") == 0) enableBox(&logBox, TRUE);
-            clearBox(&optBox);
-            show(&optBox);
-        }
-        if (strcmp(cmdArr[0], "help") == 0){
-            helpCmd();
-        }
     }
 
     return 1;
 }
 
-void helpCmd()
+void helpCmd(char para[][CMDARRCLEN])
 {
-    addFile(&outText, "data/help.txt");
+    if (strcmp(para[0], "") == 0)
+        addFile(&outText, "data/help.txt");
+
 }
 
 void focus(TEXT* text)
@@ -124,4 +188,28 @@ void focusOutText(OUTTEXT* out)
         resetText(out->box);
         showOutText(out);
     }
+}
+
+char* phraseCmd(char* c,char cmdArr[][CMDARRCLEN])
+{
+    char *cur = *cmdArr;
+    int count = 0;
+    
+    while (*c == ' ' || *c == ';') ++c;
+
+    while (*c != 0 && *c != ';'){
+        if (*c == ' '){
+            *cur = 0;
+            ++count;
+            cur = *(cmdArr + count);
+            while (*c == ' ') ++c;
+            continue;
+        }
+        *cur = *c;
+        ++cur; ++c;
+    }
+    **(cmdArr + count + 1) = 0;
+    *cur = 0;
+    cur = *cmdArr;
+    return c;
 }

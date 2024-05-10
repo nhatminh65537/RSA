@@ -1,5 +1,3 @@
-load data/plaintext.txt
-disable log
 enable log
 exit
 load data/plaintext.txt
@@ -16,5 +14,7 @@ focus
 focus log
 disable plt
 focus log
+cuongsan
+exit
 cuongsan
 exit
