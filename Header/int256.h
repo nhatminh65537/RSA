@@ -23,8 +23,9 @@ extern INT256 zero;
 extern INT256 maxval;
 extern INT256 one;
 
-void conv2hex(unsigned char*, INT256*);
+void conv2hex (unsigned char*, INT256*);
 void conv2char(unsigned char*, INT256*);
+void conv2dec (unsigned char*, INT256*);
 
 void assign(INT256*, INT256*);
 
@@ -32,6 +33,7 @@ INT256 int256_c(unsigned char*, enum Mode);
 
 int ile(INT256, INT256);
 int ieq(INT256, INT256);
+int igt(INT256, INT256);
 
 INT256 shiftleft(INT256, int);
 
@@ -47,6 +49,6 @@ INT256 ipow(INT256, INT256, INT256);
 
 INT256 imulInverse(INT256, INT256);
 
-void int256Init();
+void initInt();
 
 #endif

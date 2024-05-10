@@ -10,11 +10,10 @@ char plaintext[2048], cmdOpt[2048];
 int main()
 {
     CLRSCR;
-    
-    initUI();
-    initPrgVar();
 
-    // enableText(&wrkBox, TRUE, logText.text);
+    initInt();
+    initPrgVar();  
+    initUI();
     			
     do 
     {

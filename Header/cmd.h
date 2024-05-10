@@ -8,7 +8,7 @@
 #define CMDARRLEN     16
 #define CMDARRCLEN    64
 
-extern char cmdList[][CMDLEN];
+extern char cmdList[][FULLCMDLEN];
 int searchCmd(char*, int, int);
 int runCmd();
 char* phraseCmd(char*,char[][CMDARRCLEN]);

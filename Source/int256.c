@@ -130,8 +130,23 @@ void conv2hex(unsigned char* hex, INT256* num)
         hex[2*i]     = _tohex(num->value[i] & 0x0f);
         hex[2*i + 1] = _tohex(num->value[i] >> 4 & 0x0f );
     }
-    hex[MAXHEX] = 0;
+    hex[MAXHEX] =  0 ;
     _reverse(hex);
+}
+void conv2dec(unsigned char* dec, INT256* num)
+{
+    int i = 0;
+    INT256 ten, re, dig;
+    dig = one;
+    ten = int256_c("A", HEXMODE);
+    do{
+        re = imod(idiv(*num, dig), imul(ten, dig, NON));
+        dec[i] = '0' + re.value[0];
+        dig = imul(dig, ten, NON);
+        ++i;
+    }while(igt(*num, dig));
+    dec[i] = 0;
+    _reverse(dec);
 }
 
 int ile(INT256 a, INT256 b)
@@ -149,6 +164,10 @@ int ieq(INT256 a, INT256 b)
         --i;
     if (i < 0) return 1;
     else       return 0;
+}
+int igt(INT256 a, INT256 b)
+{
+    return !ieq(a, b) && !ile(a, b);
 }
 
 INT256 shiftleft(INT256 num, int times)
@@ -288,7 +307,7 @@ INT256 imulInverse(INT256 a, INT256 n)
     return t;
 }
 
-void int256Init()
+void initInt()
 {
     zero = int256_c("0", HEXMODE);
     for (int i = 0; i < MAXBYTE; ++i) maxval.value[i] = 0xff;
@@ -297,7 +316,7 @@ void int256Init()
 
 // int main()
 // {
-//     int256Init();
+//     initInt();
 //     char ch[1024];
 //     INT256 n,m,t,k,a,b,p;
 //     n = int256_c("Re", ASCIIMODE), 

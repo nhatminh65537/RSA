@@ -42,22 +42,35 @@ void initUI()
     keyBox.xBox = 1;
     keyBox.yBox = 6;
     keyBox.gridType = INNER;
-    initBox(&eBox, "E", &keyBox, ABS, 1, 1, 1, 1); enableBox(&eBox, TRUE);
-    initBox(&dBox, "D", &keyBox, ABS, 1, 4, 1, 1); enableBox(&dBox, TRUE);
-    initBox(&pBox, "P", &keyBox, ABS, 1, 5, 1, 1); enableBox(&pBox, TRUE);
-    initBox(&qBox, "Q", &keyBox, ABS, 1, 6, 1, 1); enableBox(&qBox, TRUE);
-    initBox(&nBox, "N", &keyBox, ABS, 1, 2, 1, 1); enableBox(&nBox, TRUE);
+    initBox(&eBox, "E", &keyBox, ABS, 1, 1, 1, 1); 
+    initBox(&dBox, "D", &keyBox, ABS, 1, 4, 1, 1); 
+    initBox(&pBox, "P", &keyBox, ABS, 1, 5, 1, 1); 
+    initBox(&qBox, "Q", &keyBox, ABS, 1, 6, 1, 1); 
+    initBox(&nBox, "N", &keyBox, ABS, 1, 2, 1, 1); 
+    
     eBox.show = showEBox;
     dBox.show = showDBox;
     pBox.show = showPBox;
     qBox.show = showQBox;
     nBox.show = showNBox;
 
+    enableText(&eBox, TRUE, e.dec);
+    enableText(&dBox, TRUE, d.dec);
+    enableText(&pBox, TRUE, p.dec);
+    enableText(&qBox, TRUE, q.dec);
+    enableText(&nBox, TRUE, n.dec);
+
+    enableBox(&eBox, TRUE);
+    enableBox(&dBox, TRUE);
+    enableBox(&pBox, TRUE);
+    enableBox(&nBox, TRUE);
+    enableBox(&qBox, TRUE);
+    
     enableText(&logBox, FALSE, NULL);
     initOutText(&outText, &logBox);
     reassignText(&outText, outText.pos);
 
-    show(&rsaBox);
+    // show(&rsaBox);
 }
 
 void showRsaBox()
@@ -101,6 +114,7 @@ void showCptBox()
     // CSI(DIM); 
     // clearBox(&cptBox);
     drawBox(&cptBox, WHITE, LIGHT , LIGHT , WHITE, TRUE);
+    resetText(&cptBox);
     showText(&cptBox); 
     CSI(RESET);
 }
@@ -109,14 +123,17 @@ void showPltBox()
     // CSI(DIM); 
     // clearBox(&pltBox);
     drawBox(&pltBox, WHITE, LIGHT , LIGHT , WHITE, TRUE); 
-    CSI(RESET);
+    resetText(&pltBox);
     showText(&pltBox);
+    CSI(RESET);
 }
 void showEBox()
 {
     // CSI(DIM); 
     // clearBox(&eBox);
     drawBox(&eBox, GREEN, LIGHT , LIGHT , WHITE, TRUE); 
+    resetText(&eBox);
+    showText(&eBox);
     CSI(RESET);
 }
 void showDBox()
@@ -124,6 +141,8 @@ void showDBox()
     // CSI(DIM); 
     // clearBox(&dBox);
     drawBox(&dBox, RED, LIGHT , LIGHT , WHITE, TRUE); 
+    resetText(&dBox);
+    showText(&dBox);
     CSI(RESET);
 }
 void showPBox()
@@ -131,6 +150,8 @@ void showPBox()
     // CSI(DIM); 
     // clearBox(&pBox);
     drawBox(&pBox, RED, LIGHT , LIGHT , WHITE, TRUE); 
+    resetText(&pBox);
+    showText(&pBox);
     CSI(RESET);
 }
 void showQBox()
@@ -138,6 +159,8 @@ void showQBox()
     // CSI(DIM); 
     // clearBox(&qBox);
     drawBox(&qBox, RED, LIGHT , LIGHT , WHITE, TRUE); 
+    resetText(&qBox);
+    showText(&qBox);
     CSI(RESET);
 }
 void showNBox()
@@ -145,6 +168,8 @@ void showNBox()
     // CSI(DIM); 
     // clearBox(&nBox);
     drawBox(&nBox, GREEN, LIGHT , LIGHT , WHITE, TRUE); 
+    resetText(&nBox);
+    showText(&nBox);
     CSI(RESET);
 }
 

@@ -1,15 +1,38 @@
 #ifndef __PRGVAR__
 #define __PRGVAR__
 
-// #include "int256.h"
+#include "int256.h"
 #include "ui.h"
 
-#define NAMEMAX      128
-#define TEXTMAX      1 << 12 //2^12 byte 
-#define CMDLEN       256
-#define MAXHIS       20
+#define NAMEMAX       128
+#define TEXTMAX       1 << 12 //2^12 byte 
+#define FULLCMDLEN    256
+#define MAXHIS        30
 
 void initPrgVar();
+
+// program flag
+extern int spu, spr, splt, scpt,
+           hpu, hpr, hplt, hcpt;
+extern const char defaultPlaintextFile [],
+                  defaultCiphertextFile[];
+
+typedef struct KeyElement 
+{
+    INT256 val;
+    char hex[MAXHEX+3];
+    char dec[2*MAXHEX];
+
+} KEYELE;
+extern KEYELE p, q, n, e, d;
+
+void fulfillKey(KEYELE*);
+
+void resetDefaultPuKey();
+void resetDefaultPrKey();
+
+void resetDefaultPlaintext ();
+void resetDefaultCiphertext();
 
 typedef struct Text
 {
@@ -18,16 +41,16 @@ typedef struct Text
     int  pos;
     BOX* box;
 } TEXT;
-extern TEXT cipherText, plainText, logText;
+extern TEXT cipherText, plainText;
 
-void initText(TEXT* text, char* fileName, BOX* box);
+void initText(TEXT* text, const char* fileName, BOX* box);
 int  readText(TEXT* text, int offset);
-void loadToText(TEXT* text, char * fileName, BOX* box);
+void loadToText(TEXT* text, const char * fileName, BOX* box);
 void writeText(TEXT* text);
 
 typedef struct CmdString
 {
-    char string[CMDLEN];
+    char string[FULLCMDLEN];
     int  count;
     int  pos;
 } CMDSTR;
@@ -41,7 +64,7 @@ void  assignString(CMDSTR*, char*);
 
 typedef struct CmdHistory
 {
-    char cmdHis[MAXHIS][CMDLEN];
+    char cmdHis[MAXHIS][FULLCMDLEN];
     int  cur;
     int  pos;
 } CMDHIS;
@@ -52,8 +75,5 @@ char* sucCmd(CMDHIS*);
 void  recordCmd(CMDHIS*, char*, int);
 void  writeCmdHis(CMDHIS*, char*);
 void  readCmdHis (CMDHIS*, char*);
-
-void appendStringToOutput(char*);
-void appendFileToOutput(char*);
 
 #endif

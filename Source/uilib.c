@@ -339,6 +339,8 @@ void enableBox(BOX* box, int val)
     //         }     
         
     }
+    clearBox(parent);
+    show(parent);
 }
 
 void resetText(BOX* box)
@@ -417,6 +419,7 @@ void clearBox(BOX* box)
 
 void show(BOX* box)
 {
+    if (box->show == NULL) return;
     box->show();
     for (BOX** child = box->child; child - box->child < MAXCHILD; ++child){
         if (*child == NULL) continue;

@@ -2,24 +2,80 @@
 #include <string.h>
 #include "../header/prgvar.h"
 #include "../header/ui.h"
+#include "../header/outlog.h"
 
-TEXT   cipherText, plainText, logText, hisText;
+int spu, spr, splt, scpt,
+    hpu, hpr, hplt, hcpt;
+const char defaultPlaintextFile [] = "data/plaintext" ,
+           defaultCiphertextFile[] = "data/ciphertext";
+KEYELE p, q, n, e, d;
+TEXT cipherText, plainText;
 CMDSTR cmd;
 CMDHIS cmdHis;
 
-void initPrgVar()
+void fulfillKey(KEYELE* kel)
 {
-    // strcpy(logText.text, "");
-    resetCmd(&cmd);
-    readCmdHis(&cmdHis, "data/cmdlog.txt");
+    conv2dec(kel->dec, &kel->val);
+    strcpy(kel->hex, "0x");
+    conv2hex(kel->hex + 2, &kel->val);
 
 }
 
-void initText(TEXT* text, char* fileName, BOX* box)
+void resetDefaultPuKey()
+{
+    n.val = zero;
+    e.val = zero; 
+    spu = 0;   
+    hpu = 0;
+    fulfillKey(&n);
+    fulfillKey(&e);
+}
+void resetDefaultPrKey()
+{
+    p.val = zero; 
+    q.val = zero;
+    d.val = zero; 
+    spr = 0;
+    hpr = 0;
+    fulfillKey(&p);
+    fulfillKey(&q);
+    fulfillKey(&d);
+}
+
+void resetDefaultPlaintext ()
+{
+    FILE* f = fopen(defaultPlaintextFile, "w"); fclose(f);
+    splt = 0;
+    hplt = 0;
+    loadToText(&plainText , defaultPlaintextFile , &pltBox);
+}
+void resetDefaultCiphertext()
+{
+    FILE* f = fopen(defaultCiphertextFile, "w"); fclose(f);
+    scpt = 0;
+    hcpt = 0;
+    loadToText(&cipherText, defaultCiphertextFile, &cptBox);
+}
+
+
+void initPrgVar()
+{
+    resetCmd(&cmd);
+    readCmdHis(&cmdHis, "data/cmdlog.txt");
+
+    resetDefaultPlaintext ();
+    resetDefaultCiphertext();
+
+    resetDefaultPuKey();
+    resetDefaultPrKey();
+}
+
+void initText(TEXT* text, const char* fileName, BOX* box)
 {
     strcpy(text->file, fileName);
     text->pos      = 0;
     text->box      = box;
+    *text->text    = '\0';
 }
 
 int readText(TEXT* text, int offset)
@@ -38,11 +94,11 @@ int readText(TEXT* text, int offset)
         text->text[fread(text->text, 1, TEXTMAX, f)] = 0;
     }
     else
-        strcat(logText.text, "File not Found!\n");
+        addError(&outText, "File not Found!\n");
     fclose(f);
 }
 
-void loadToText(TEXT* text, char * fileName, BOX* box)
+void loadToText(TEXT* text, const char *fileName, BOX* box)
 {
     initText(text, fileName, box);
     readText(text, 0);
@@ -111,21 +167,21 @@ void recordCmd(CMDHIS* chis, char* cmd, int permanent)
 void readCmdHis(CMDHIS* chis, char* filename)
 {
     FILE* f = fopen(filename, "r");
-    for (int i = 0; i < 20; ++i){
+    for (int i = 0; i < MAXHIS; ++i){
         char *str = chis->cmdHis[i];
         if (feof(f)) break;
-        fgets(str, CMDLEN, f);
+        fgets(str, FULLCMDLEN, f);
         str[strlen(str) - 1] = 0;
     }
-    chis->cur = 0;
-    chis->pos = 0;
+    chis->cur = MAXHIS - 1;
+    chis->pos = MAXHIS - 1;
     fclose(f);
 }
 
 void writeCmdHis(CMDHIS* chis, char* filename)
 {
     FILE* f = fopen(filename, "w");
-    for (int i = 0; i < 20; ++i){
+    for (int i = 0; i < MAXHIS; ++i){
         fputs(chis->cmdHis[(i + chis->cur)%MAXHIS], f);
         fputs("\n", f);
     }

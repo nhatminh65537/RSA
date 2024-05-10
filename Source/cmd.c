@@ -7,7 +7,7 @@
 #include "../header/uilib.h"
 #include "../header/outlog.h"
 
-char cmdList[][CMDLEN] = {
+char cmdList[][FULLCMDLEN] = {
     "show-plt", // show plaintext
     "show-cpt", // show ciphertext
     "show-log", // show outputlog
@@ -37,7 +37,7 @@ char cmdList[][CMDLEN] = {
     "save-cpt",
     "save-key",
     "where-key",
-    
+
     "where-cpt",
     "where-plt",
     "gene-key",
@@ -67,34 +67,22 @@ int runCmd()
             case 0:
                 cptBox.sx = OVER;
                 enableBox(&pltBox, TRUE);
-                clearBox(&wrkBox);
-                show(&wrkBox);
                 break;
             case 1:
                 enableBox(&cptBox, TRUE);
-                clearBox(&wrkBox);
-                show(&wrkBox);
                 break;
             case 2:
                 enableBox(&logBox, TRUE);
-                clearBox(&wrkBox);
-                show(&wrkBox);
                 break;
             case 3:
                 cptBox.sx = FULL;
                 enableBox(&pltBox, FALSE);
-                clearBox(&wrkBox);
-                show(&wrkBox);
                 break;
             case 4:
                 enableBox(&cptBox, FALSE);
-                clearBox(&wrkBox);
-                show(&wrkBox);
                 break;
             case 5:
                 enableBox(&logBox, FALSE);
-                clearBox(&wrkBox);
-                show(&wrkBox);
                 break; 
             case 6:
                 break;
@@ -102,10 +90,27 @@ int runCmd()
                 break;
             case 8:
                 helpCmd(cmdArr + 1);
-                break;    
+                break;
+            case 9:
+                resetDefaultPlaintext();
+                break; 
+            case 12:
+                focus(&plainText);
+                break;
+            case 18:
+                loadToText(&plainText, cmdArr[1], &pltBox);
+                break;  
+            case 19:
+                break;
+            default:
+                char message[128] = "rsa: ";
+                strcat(strcat(message, cmdArr[0]), ": command not found!\n");
+                addError(&outText, message);
+                 
         }
 
         if (strcmp(cmdArr[0], "exit") == 0)
+            
             return 0;
 
         if (strcmp(cmdArr[0], "focus") == 0){
@@ -114,8 +119,6 @@ int runCmd()
             if (strcmp(cmdArr[1], "log") == 0) focusOutText(&outText);
             printf("\x1b[?25h");
         }
-        if (strcmp(cmdArr[0], "load") == 0)
-            loadToText(&plainText, cmdArr[1], &pltBox);
     }
 
     return 1;
@@ -156,9 +159,9 @@ void focus(TEXT* text)
         if (c == EXIT){
             break;
         }
-        resetText(&pltBox);
+        resetText(text->box);
         // clearBox(&pltBox);
-        showText(&pltBox);
+        showText(text->box);
     }
 }
 

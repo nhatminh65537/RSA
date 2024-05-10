@@ -43,7 +43,7 @@ while(!feof(ciphertextFile)){
 }
 int main(){
     INT256 n, e;
-    int256Init();
+    initInt();
     e = int256_c("BB39", HEXMODE);
     n = int256_c("EC4B" , HEXMODE);
     INT256 p,q,d;
