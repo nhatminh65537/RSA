@@ -28,7 +28,7 @@ void encrypt(INT256 e, INT256 n, char* plt, char* cpt) {
     fwrite(hex, 1, MAXHEX, ciphertextFile);
   }
   
-  fclose(plaintextFile);
+  fclose( plaintextFile);
   fclose(ciphertextFile);
 }
 int main(){
@@ -39,6 +39,6 @@ int main(){
     INT256 p,q,d;
     p = int256_c("F1", HEXMODE);
     q = int256_c("FB", HEXMODE);
-    d = int256_c("39", HEXMODE);
+    d = int256_c("a9", HEXMODE);
     encrypt(e, n, "plaintext.txt", "ciphertext.txt");
 }
