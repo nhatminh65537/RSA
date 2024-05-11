@@ -5,8 +5,9 @@
 #include "../Header/int256.h"
 
 #define BITS 255
-char charRand(){
+void genkey(INT256* p, INT256* q, INT256* n, INT256* e, INT256* d)
     
+}
 }
 
 INT256 randint256()
