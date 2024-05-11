@@ -279,6 +279,32 @@ INT256 ipow(INT256 a, INT256 b, INT256 n)
             result = imul(result, a, n);
     }
     return result;
+}
+INT256 imulInverse(INT256 n, INT256 a)
+{
+    INT256 a0 = n, b0 = a;
+    INT256 t0 = zero, t = one;
+    INT256 q, r, temp;
+ 
+    q = idiv(a0, b0);
+    r = isub(a0, imul(q, b0, NON), NON);
+
+    while (igt(r, zero)) {
+        temp = isub(t0, imul(q, t, NON), n);
+        t0 = t;
+        t = temp;
+        a0 = b0;
+        b0 = r;
+        q = idiv(a0, b0);
+        r = isub(a0, imul(q, b0, NON), NON);
+    }
+
+    if (!ieq(b0, one)) {
+        printf("Cannot calculate inverse with module other than 1 \n");
+        return zero;
+    }
+    return t;
+}
 
 void initInt()
 {
