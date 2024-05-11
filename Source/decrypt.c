@@ -3,14 +3,15 @@
 #include<math.h>
 #include "../header/int256.h"
 
-void decrypt( INT256 d ,INT256 p , INT256 q, char* cpt, char* plt2) 
+void decrypt( INT256 d ,INT256 p , INT256 q, char* cpt, char* plt) 
 {
+  INT256 n = imul(p,q,NON);
   FILE* ciphertextFile = fopen(cpt, "r"); 
   if (ciphertextFile == NULL) {
     return;
   }
   
-  FILE* plaintextFile2 = fopen(cpt, "w"); 
+  FILE* plaintextFile2 = fopen(plt, "w"); 
   if (plaintextFile2 == NULL) {
     return;
   }
@@ -28,7 +29,7 @@ void decrypt( INT256 d ,INT256 p , INT256 q, char* cpt, char* plt2)
     INT256 x_p = ipow(y , d_p , p);
     INT256 x_q = ipow(y , d_q , q);
 
-    INT256 x = ipls(imul(imul(M_p , q , NON) , x_p , NON) , imul(imul(M_q , p , NON) , x_q , NON) , imul(p,q,NON));
+    INT256 x = ipls( imul(imul(M_p , q , n) , x_p , n), imul(imul(M_q , p , n) , x_q , n), imul(p,q,NON));
     conv2char(ascii, &x);
 
     fwrite( ascii, 1, MAXBYTE , plaintextFile2);
@@ -45,6 +46,6 @@ int main(){
     INT256 p,q,d;
     p = int256_c("F1", HEXMODE);
     q = int256_c("FB", HEXMODE);
-    d = int256_c("39", HEXMODE);
+    d = int256_c("a9", HEXMODE);
     decrypt( d , p , q , "ciphertext.txt", "plaintext2.txt");
 }
