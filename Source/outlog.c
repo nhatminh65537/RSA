@@ -107,6 +107,7 @@ void addText(OUTTEXT* out, char* str)
         ++out->end;
         ++str;
     } while (*str != 0);
+    *out->end = 0;
 }
 
 void addFile(OUTTEXT* out, char* name)

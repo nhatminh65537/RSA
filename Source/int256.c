@@ -280,6 +280,8 @@ INT256 ipow(INT256 a, INT256 b, INT256 n)
     }
     return result;
 }
+<<<<<<< HEAD
+=======
 INT256 imulInverse(INT256 n, INT256 a)
 {
     INT256 a0 = n, b0 = a;
@@ -305,6 +307,7 @@ INT256 imulInverse(INT256 n, INT256 a)
     }
     return t;
 }
+>>>>>>> 489fb0f417408f66d8361104167f103c2bb95da9
 
 void initInt()
 {

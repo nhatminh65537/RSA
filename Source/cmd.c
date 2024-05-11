@@ -105,6 +105,10 @@ int runCmd()
                 break;
             case 14:
                 focusOutText(&outText);
+                break;
+            case 17:
+                return 0;
+                break;
             case 18:
                 loadToText(&plainText , cmdArr[1], &pltBox);
                 break;  
@@ -112,8 +116,10 @@ int runCmd()
                 loadToText(&cipherText, cmdArr[1], &cptBox);
                 break;
             case 21:
-                saveText(&plainText, cmdArr[1]);
+                saveText(& plainText, cmdArr[1]);
                 break;
+            case 22:
+                saveText(&cipherText, cmdArr[1]);
             case 25:
                 strcpy(message, "Plaintext  path: ");
                 strcat(strcat(message,  plainText.file), "\n");
@@ -124,17 +130,17 @@ int runCmd()
                 strcat(strcat(message, cipherText.file), "\n");
                 addText(&outText, message);
                 break;
+            case 28:
+                *outText.text = '\0';
+                outText.pos = outText.text;
+                outText.end = outText.text;
+                break;
             default:
                 strcpy(message, "rsa: ");
                 strcat(strcat(message, cmdArr[0]), ": command not found!\n");
                 addError(&outText, message);
                 break;
-                 
-        }
-
-        if (strcmp(cmdArr[0], "exit") == 0)
-            
-            return 0;
+        }            
 
         if (strcmp(cmdArr[0], "focus") == 0){
             printf("\x1b[?25l");
