@@ -21,8 +21,7 @@ void encrypt(INT256 e, INT256 n, char* plt, char* cpt) {
   INT256 x, y;
   char hex[MAXHEX + 1], buff[MAXBYTE + 1];
   while(!feof(plaintextFile)){
-    fread(buff, 1, MAXBYTE, plaintextFile);
-    buff[MAXBYTE] = '\0';
+    buff[fread(buff, 1, MAXBYTE, plaintextFile)] = '\0';
     x = int256_c(buff, ASCIIMODE);
     y = ipow(x, e, n);
     conv2hex(hex, &y);
