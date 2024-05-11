@@ -279,6 +279,7 @@ INT256 ipow(INT256 a, INT256 b, INT256 n)
             result = imul(result, a, n);
     }
     return result;
+}
 
 void initInt()
 {
