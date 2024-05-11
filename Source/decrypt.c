@@ -17,21 +17,21 @@ void decrypt( INT256 d ,INT256 p , INT256 q, char* cpt, char* plt2)
   INT256 d_p = imod(d, isub(p, one,NON));
   INT256 d_q = imod(d, isub(q, one,NON));
 
-  INT256 M_p = imulInverse(q, p);
-  INT256 M_q = imulInverse(p, q);
+  INT256 M_q = imulInverse(q, p);
+  INT256 M_p = imulInverse(p, q);
   
   char ascii[MAXBYTE + 1], buff2[MAXBYTE + 1];
   size_t bytesRead;
   while((bytesRead = fread(buff2, 1, MAXHEX, ciphertextFile)) > 0){
     buff2[bytesRead] = '\0';
-  INT256 y;
-   INT256 x_p = ipow(y , d_p , p);
-   INT256 x_q = ipow(y , d_q , q);
+    INT256 y;
+    INT256 x_p = ipow(y , d_p , p);
+    INT256 x_q = ipow(y , d_q , q);
 
     INT256 x = ipls(imul(imul(M_p , q , NON) , x_p , NON) , imul(imul(M_q , p , NON) , x_q , NON) , imul(p,q,NON));
     conv2char(ascii, &x);
 
-   fwrite( ascii, 1, MAXBYTE , plaintextFile2);
+    fwrite( ascii, 1, MAXBYTE , plaintextFile2);
   }
 
   fclose(ciphertextFile);
