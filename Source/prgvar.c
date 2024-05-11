@@ -106,7 +106,12 @@ void loadToText(TEXT* text, const char *fileName, BOX* box)
     showText(box);
 }
 
-void writeText(TEXT* text);
+void saveText(TEXT* text, const char * fileName)
+{
+    FILE *f = fopen(fileName, "w");
+    fprintf(f, text->text);
+    fclose(f);
+}
 
 void insertChar(CMDSTR* cstr, char c)
 {

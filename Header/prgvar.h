@@ -46,7 +46,7 @@ extern TEXT cipherText, plainText;
 void initText(TEXT* text, const char* fileName, BOX* box);
 int  readText(TEXT* text, int offset);
 void loadToText(TEXT* text, const char * fileName, BOX* box);
-void writeText(TEXT* text);
+void saveText(TEXT* text, const char * fileName);
 
 typedef struct CmdString
 {

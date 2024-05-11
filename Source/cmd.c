@@ -7,6 +7,8 @@
 #include "../header/uilib.h"
 #include "../header/outlog.h"
 
+// Task: Ket hop flag kiem soat chuong trinh
+
 char cmdList[][FULLCMDLEN] = {
     "show-plt", // show plaintext
     "show-cpt", // show ciphertext
@@ -59,6 +61,7 @@ int runCmd()
 {
     char *c = cmd.string;
     char  cmdArr[CMDARRLEN][CMDARRCLEN];
+    char message[128];
     
     while (*c)
     {    
@@ -95,17 +98,37 @@ int runCmd()
                 resetDefaultPlaintext();
                 break; 
             case 12:
-                focus(&plainText);
+                focus(&plainText );
                 break;
+            case 13:
+                focus(&cipherText);
+                break;
+            case 14:
+                focusOutText(&outText);
             case 18:
-                loadToText(&plainText, cmdArr[1], &pltBox);
+                loadToText(&plainText , cmdArr[1], &pltBox);
                 break;  
             case 19:
+                loadToText(&cipherText, cmdArr[1], &cptBox);
+                break;
+            case 21:
+                saveText(&plainText, cmdArr[1]);
+                break;
+            case 25:
+                strcpy(message, "Plaintext  path: ");
+                strcat(strcat(message,  plainText.file), "\n");
+                addText(&outText, message);
+                break;
+            case 26:
+                strcpy(message, "Ciphertext path: ");
+                strcat(strcat(message, cipherText.file), "\n");
+                addText(&outText, message);
                 break;
             default:
-                char message[128] = "rsa: ";
+                strcpy(message, "rsa: ");
                 strcat(strcat(message, cmdArr[0]), ": command not found!\n");
                 addError(&outText, message);
+                break;
                  
         }
 
