@@ -30,3 +30,11 @@ kyou:
     xay dung cmd cho en va de 
     hoan chinh cho co che output ...
     cai thien co che xuat Text
+
+Phai lam tuan nay:
+    xay dung cac cmd
+    hoan thien cho co che text moi voi buff va out moi. ok
+    doc va lai code.
+
+gogatsu:
+    dong kinh cac ham

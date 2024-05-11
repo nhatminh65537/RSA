@@ -1,20 +1,30 @@
-
-
-
-
+focus log
+cuongsan
 exit
-sdfgsgs
+cuongsan
 exit
-asdfadfasdfa
-adf
-asdfadf
-qewr
-adfajklgui
-zbvn
-gfgs
-gaga
-afafga
-gaaaaaaaaa
-aaaaaaa
-aa
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+load-plt data/plaintext.txt
+focus-plt
+load-plt data/plaintext.txt
+focus-plt
 exit

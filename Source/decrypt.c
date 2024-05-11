@@ -3,7 +3,7 @@
 #include<math.h>
 #include "../header/int256.h"
 
-void decrypt(INT256 n , INT256 y, char* cpt, char* plt2) 
+void decrypt(INT256 n , INT256 d ,INT256 p , INT256 q, char* cpt, char* plt2) 
 {
   FILE* ciphertextFile = fopen(cpt, "r"); 
   if (ciphertextFile == NULL) {
@@ -24,7 +24,7 @@ void decrypt(INT256 n , INT256 y, char* cpt, char* plt2)
   size_t bytesRead;
   while((bytesRead = fread(buff2, 1, MAXBYTE, ciphertextFile)) > 0){
     buff2[bytesRead] = '\0';
-  
+  INT256 y;
    INT256 x_p = ipow(y , d_p , p);
    INT256 x_q = ipow(y , d_q , q);
 
@@ -46,5 +46,5 @@ int main(){
     p = int256_c("F1", HEXMODE);
     q = int256_c("FB", HEXMODE);
     d = int256_c("39", HEXMODE);
-    decrypt(n, a, "ciphertext.txt", "plaintext2.txt");
+    decrypt(n , d , p , q , "ciphertext.txt", "plaintext2.txt");
 }

@@ -34,7 +34,7 @@ void encrypt(INT256 e, INT256 n, char* plt, char* cpt) {
 }
 int main(){
     INT256 n, e;
-    int256Init();
+    initInt();
     e = int256_c("BB39", HEXMODE);
     n = int256_c("EC4B" , HEXMODE);
     INT256 p,q,d;

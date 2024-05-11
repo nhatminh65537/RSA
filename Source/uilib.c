@@ -339,6 +339,15 @@ void enableBox(BOX* box, int val)
     //         }     
         
     }
+    clearBox(parent);
+    show(parent);
+}
+
+void resetText(BOX* box)
+{
+    box->tPoint  = 0;
+    box->xPoint  = box->left + 1;
+    box->yPoint  = box->top  + 1;
 }
 
 void showText(BOX* box)
@@ -349,10 +358,24 @@ void showText(BOX* box)
     char *c = &box->text[box->tPoint];
 
     MOVEXY(box->xPoint, box->yPoint);
+    CSI(RESET);
     while (*c!=0) 
     {   
+        if (*c == '\x1b'){
+            char esc[16], *i = esc;
+            while (*c != 'm'){
+                *i = *c;
+                ++i;
+                ++c;
+            }
+            *i++ = *c++;
+            *i = 0;
+            printf(esc);
+            continue;
+        }
         if (box->xPoint > box->right - 1 || *c == '\r' || *c == '\n')
         {
+            for (int i = box->xPoint; i < box->right; ++i) putch(' ');
             ++box->yPoint;
             box->xPoint = box->left + 1;
             if (!breakWord) ++c; 
@@ -381,6 +404,9 @@ void showText(BOX* box)
         breakWord = FALSE;
     }
     box->tPoint = c - box->text;
+
+    for (int i = box->xPoint; i < box->right; ++i) putch(' ');
+    clearBlock(box->left + 1, box->yPoint + 1, box->right - 1, box->bottom - 1);
 }
 
 void clearBox(BOX* box)
@@ -393,6 +419,7 @@ void clearBox(BOX* box)
 
 void show(BOX* box)
 {
+    if (box->show == NULL) return;
     box->show();
     for (BOX** child = box->child; child - box->child < MAXCHILD; ++child){
         if (*child == NULL) continue;

@@ -8,12 +8,11 @@ SRC_DIR = ./source
 HDR_DIR = ./header
 
 # SRCS = $(shell dir $(SRC_DIR))
-SRCS = main.c cmd.c int256.c prgvar.c ui.c uilib.c
+SRCS = main.c cmd.c int256.c prgvar.c ui.c uilib.c outlog.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(patsubst %,$(HDR_DIR)/%,$(shell $(SPATH)/dir $(HDR_DIR)))
 
 all: main launch
-	@$(SPATH)/echo $(DEPS)
 
 main: $(OBJS)
 	$(CC) -o $@ $^

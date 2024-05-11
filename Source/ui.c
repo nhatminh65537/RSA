@@ -1,9 +1,12 @@
 #include "../header/ui.h"
 #include "../header/uilib.h"
 #include "../header/prgvar.h"
+#include "../header/outlog.h"
+#include "../header/cmd.h"
 #include <conio.h>
+#include <string.h>
 
-BOX screen, rsaBox, cmdBox, keyBox, optBox, logBox, cptBox, pltBox,
+BOX screen, rsaBox, cmdBox, keyBox, wrkBox, logBox, cptBox, pltBox,
     eBox  , dBox  , qBox  , pBox  , nBox;
 void showRsaBox(), showCmdBox(), showKeyBox(), showOptBox(), showLogBox(),
      showCptBox(), showPltBox(), showEBox()  , showDBox()  , showPBox()  ,
@@ -15,15 +18,15 @@ void initUI()
     initBox(&rsaBox, "RSA-PROJECT", &screen, ABS  , 1          , 1  , FULL   , FULL);
     initBox(&cmdBox, "COMMAND"    , &rsaBox, ABS  , 1          , 1  , FULL   , 4   );
     initBox(&keyBox, "KEY"        , &rsaBox, GRID , 1          , 5  , KEYSIZE, FULL);
-    initBox(&optBox, "OUTPUT"     , &rsaBox, FLEXX, KEYSIZE + 1, 5  , FULL   , FULL);
-    initBox(&cptBox, "CIPHERTEXT" , &optBox, ABS  , NAN        , NAN, OVER   , FULL);
-    initBox(&pltBox, "PLAINTEXT"  , &optBox, ABS  , NAN        , NAN, FULL   , FULL);
-    initBox(&logBox, "LOG"        , &optBox, ABS  , NAN        , NAN, FULL   , FULL);
+    initBox(&wrkBox, "WORKSPACE"  , &rsaBox, FLEXX, KEYSIZE + 1, 5  , FULL   , FULL);
+    initBox(&cptBox, "CIPHERTEXT" , &wrkBox, ABS  , NAN        , NAN, OVER   , FULL);
+    initBox(&pltBox, "PLAINTEXT"  , &wrkBox, ABS  , NAN        , NAN, FULL   , FULL);
+    initBox(&logBox, "LOG"        , &wrkBox, ABS  , NAN        , NAN, FULL   , FULL);
 
     rsaBox.show = showRsaBox;
     cmdBox.show = showCmdBox;
     keyBox.show = showKeyBox;
-    optBox.show = showOptBox;
+    wrkBox.show = showOptBox;
     logBox.show = showLogBox;
     cptBox.show = showCptBox;
     pltBox.show = showPltBox;
@@ -31,7 +34,7 @@ void initUI()
     enableBox(&rsaBox, TRUE);
     enableBox(&cmdBox, TRUE);
     enableBox(&keyBox, TRUE);
-    enableBox(&optBox, TRUE);
+    enableBox(&wrkBox, TRUE);
     enableBox(&logBox, TRUE);
     enableBox(&cptBox, TRUE);
     enableBox(&pltBox, TRUE);
@@ -39,20 +42,35 @@ void initUI()
     keyBox.xBox = 1;
     keyBox.yBox = 6;
     keyBox.gridType = INNER;
-    initBox(&eBox, "E", &keyBox, ABS, 1, 1, 1, 1); enableBox(&eBox, TRUE);
-    initBox(&dBox, "D", &keyBox, ABS, 1, 4, 1, 1); enableBox(&dBox, TRUE);
-    initBox(&pBox, "P", &keyBox, ABS, 1, 5, 1, 1); enableBox(&pBox, TRUE);
-    initBox(&qBox, "Q", &keyBox, ABS, 1, 6, 1, 1); enableBox(&qBox, TRUE);
-    initBox(&nBox, "N", &keyBox, ABS, 1, 2, 1, 1); enableBox(&nBox, TRUE);
+    initBox(&eBox, "E", &keyBox, ABS, 1, 1, 1, 1); 
+    initBox(&dBox, "D", &keyBox, ABS, 1, 4, 1, 1); 
+    initBox(&pBox, "P", &keyBox, ABS, 1, 5, 1, 1); 
+    initBox(&qBox, "Q", &keyBox, ABS, 1, 6, 1, 1); 
+    initBox(&nBox, "N", &keyBox, ABS, 1, 2, 1, 1); 
+    
     eBox.show = showEBox;
     dBox.show = showDBox;
     pBox.show = showPBox;
     qBox.show = showQBox;
     nBox.show = showNBox;
 
-    enableText(&logBox, TRUE, logText.text);
+    enableText(&eBox, TRUE, e.dec);
+    enableText(&dBox, TRUE, d.dec);
+    enableText(&pBox, TRUE, p.dec);
+    enableText(&qBox, TRUE, q.dec);
+    enableText(&nBox, TRUE, n.dec);
 
-    show(&rsaBox);
+    enableBox(&eBox, TRUE);
+    enableBox(&dBox, TRUE);
+    enableBox(&pBox, TRUE);
+    enableBox(&nBox, TRUE);
+    enableBox(&qBox, TRUE);
+    
+    enableText(&logBox, FALSE, NULL);
+    initOutText(&outText, &logBox);
+    reassignText(&outText, outText.pos);
+
+    // show(&rsaBox);
 }
 
 void showRsaBox()
@@ -79,8 +97,8 @@ void showKeyBox()
 void showOptBox()
 {
     // CSI(DIM); 
-    // clearBox(&optBox);
-    drawBox(&optBox, WHITE, HEAVY , HEAVY , WHITE, TRUE); 
+    // clearBox(&wrkBox);
+    drawBox(&wrkBox, WHITE, HEAVY , HEAVY , WHITE, TRUE); 
     CSI(RESET);
 }
 void showLogBox()
@@ -96,6 +114,7 @@ void showCptBox()
     // CSI(DIM); 
     // clearBox(&cptBox);
     drawBox(&cptBox, WHITE, LIGHT , LIGHT , WHITE, TRUE);
+    resetText(&cptBox);
     showText(&cptBox); 
     CSI(RESET);
 }
@@ -104,14 +123,17 @@ void showPltBox()
     // CSI(DIM); 
     // clearBox(&pltBox);
     drawBox(&pltBox, WHITE, LIGHT , LIGHT , WHITE, TRUE); 
-    CSI(RESET);
+    resetText(&pltBox);
     showText(&pltBox);
+    CSI(RESET);
 }
 void showEBox()
 {
     // CSI(DIM); 
     // clearBox(&eBox);
     drawBox(&eBox, GREEN, LIGHT , LIGHT , WHITE, TRUE); 
+    resetText(&eBox);
+    showText(&eBox);
     CSI(RESET);
 }
 void showDBox()
@@ -119,6 +141,8 @@ void showDBox()
     // CSI(DIM); 
     // clearBox(&dBox);
     drawBox(&dBox, RED, LIGHT , LIGHT , WHITE, TRUE); 
+    resetText(&dBox);
+    showText(&dBox);
     CSI(RESET);
 }
 void showPBox()
@@ -126,6 +150,8 @@ void showPBox()
     // CSI(DIM); 
     // clearBox(&pBox);
     drawBox(&pBox, RED, LIGHT , LIGHT , WHITE, TRUE); 
+    resetText(&pBox);
+    showText(&pBox);
     CSI(RESET);
 }
 void showQBox()
@@ -133,6 +159,8 @@ void showQBox()
     // CSI(DIM); 
     // clearBox(&qBox);
     drawBox(&qBox, RED, LIGHT , LIGHT , WHITE, TRUE); 
+    resetText(&qBox);
+    showText(&qBox);
     CSI(RESET);
 }
 void showNBox()
@@ -140,6 +168,8 @@ void showNBox()
     // CSI(DIM); 
     // clearBox(&nBox);
     drawBox(&nBox, GREEN, LIGHT , LIGHT , WHITE, TRUE); 
+    resetText(&nBox);
+    showText(&nBox);
     CSI(RESET);
 }
 
@@ -153,7 +183,7 @@ void clsInput()
 void inputCmd()
 {
     char c;
-    int inHis = 0;
+    int inHis = 0, tabCnt = 0, inTab = 0;
     
     resetCmd(&cmd);
     
@@ -165,6 +195,11 @@ void inputCmd()
             case RETURN:
                 if (cmd.count != 0 ){
                     recordCmd(&cmdHis, cmd.string, 1);
+                    addText(&outText, "\x1b[38;5;42m$ \x1b[38;5;229m");
+                    addText(&outText, cmd.string);
+                    resetText(outText.box);
+                    reassignText(&outText, startLine(&outText));
+                    addText(&outText, "\x1b[39m\n");
                     return;
                 }
                 break;
@@ -181,7 +216,18 @@ void inputCmd()
                 }
                 break;
             case TAB:
-                break;
+                if (!inTab){
+                    recordCmd(&cmdHis, cmd.string, 0);
+                }
+                tabCnt = searchCmd(cmdHis.cmdHis[cmdHis.cur], tabCnt, 0);
+                if (tabCnt == -1) break;
+                clsInput();
+                retrievCmd(&cmd, cmdList[tabCnt]);
+                printf(cmd.string);
+                ++tabCnt;
+                inTab = 1;
+                inHis = 0;
+                continue;
             case EXT:
                 c = getch();
                 switch (c)
@@ -197,6 +243,8 @@ void inputCmd()
                         retrievCmd(&cmd, preCmd(&cmdHis));
                         printf(cmd.string);
                         inHis = 1;
+                        tabCnt = 0;
+                        inTab = 0;
                         continue;
                     case 73:
                         break;
@@ -220,6 +268,8 @@ void inputCmd()
                         }
                         retrievCmd(&cmd, sucCmd(&cmdHis));
                         printf(cmd.string);
+                        tabCnt = 0;
+                        inTab = 0;  
                         inHis = 1;
                         continue;
                     case 81:
@@ -238,6 +288,8 @@ void inputCmd()
                 break;
         }
         inHis = 0;
+        tabCnt = 0;
+        inTab = 0;
         // if (32 <= c & c <= 126){
             
         // }
@@ -260,4 +312,3 @@ void inputCmd()
         // }
     } 
 }
-

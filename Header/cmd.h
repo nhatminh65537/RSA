@@ -1,11 +1,23 @@
 #ifndef __CMD__
 #define __CMD__
 
-void runCmd();
+#include "../header/prgvar.h"
+#include "../header/outlog.h"
+
+#define CMDLEN     32
+#define CMDARRLEN     16
+#define CMDARRCLEN    64
+
+extern char cmdList[][FULLCMDLEN];
+int searchCmd(char*, int, int);
+int runCmd();
+char* phraseCmd(char*,char[][CMDARRCLEN]);
 
 void loadCmd();
-void showCmd();
-void unshowCmd();
 void exportCmd();
+void focusCmd();
+void helpCmd();
+void focus(TEXT*);
+void focusOutText(OUTTEXT*);
 
 #endif
