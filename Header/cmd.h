@@ -20,4 +20,9 @@ void helpCmd();
 void focus(TEXT*);
 void focusOutText(OUTTEXT*);
 
+// decrypt.c
+void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt);
+// encrypt.c
+
+
 #endif
