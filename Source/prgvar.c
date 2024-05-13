@@ -5,7 +5,8 @@
 #include "../header/outlog.h"
 
 int spu, spr, splt, scpt,
-    hpu, hpr, hplt, hcpt;
+    hpu, hpr, hplt, hcpt,
+              cplt, ccpt;
 const char defaultPlaintextFile [] = "data/plaintext" ,
            defaultCiphertextFile[] = "data/ciphertext";
 KEYELE p, q, n, e, d;
@@ -18,7 +19,6 @@ void fulfillKey(KEYELE* kel)
     conv2dec(kel->dec, &kel->val);
     strcpy(kel->hex, "0x");
     conv2hex(kel->hex + 2, &kel->val);
-
 }
 
 void resetDefaultPuKey()
@@ -45,14 +45,16 @@ void resetDefaultPrKey()
 void resetDefaultPlaintext ()
 {
     FILE* f = fopen(defaultPlaintextFile, "w"); fclose(f);
-    splt = 0;
+    cplt = 1;
+    splt = 1;
     hplt = 0;
     loadToText(&plainText , defaultPlaintextFile , &pltBox);
 }
 void resetDefaultCiphertext()
 {
     FILE* f = fopen(defaultCiphertextFile, "w"); fclose(f);
-    scpt = 0;
+    ccpt = 1;
+    scpt = 1;
     hcpt = 0;
     loadToText(&cipherText, defaultCiphertextFile, &cptBox);
 }
@@ -63,8 +65,8 @@ void initPrgVar()
     resetCmd(&cmd);
     readCmdHis(&cmdHis, "data/cmdlog.txt");
 
-    resetDefaultPlaintext ();
-    resetDefaultCiphertext();
+    // resetDefaultPlaintext ();
+    // resetDefaultCiphertext();
 
     resetDefaultPuKey();
     resetDefaultPrKey();
@@ -94,7 +96,7 @@ int readText(TEXT* text, int offset)
         text->text[fread(text->text, 1, TEXTMAX, f)] = 0;
     }
     else
-        addError(&outText, "File not Found!\n");
+        addError(&outText, "File not Found!");
     fclose(f);
 }
 

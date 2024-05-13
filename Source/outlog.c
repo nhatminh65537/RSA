@@ -151,9 +151,23 @@ void initOutText(OUTTEXT* out, BOX* box)
 
 void  addError(OUTTEXT* out, char* str)
 {
-    addText(out, "\x1b[38;5;1m");
+    addText(out, "\x1b[38;5;1mError: ");
     addText(out, str);
-    addText(out, "\x1b[39m");
+    addText(out, "\x1b[39m\n");
+}
+
+void  addWarning(OUTTEXT* out, char* str)
+{
+    addText(out, "\x1b[38;5;3mWarning: ");
+    addText(out, str);
+    addText(out, "\x1b[39m\n");    
+}
+
+void  addSuccess(OUTTEXT* out, char* str)
+{
+    addText(out, "\x1b[38;5;2mSuccess: ");
+    addText(out, str);
+    addText(out, "\x1b[39m\n");   
 }
 
 void  showOutText(OUTTEXT* out)

@@ -43,9 +43,12 @@ char cmdList[][FULLCMDLEN] = {
     "where-cpt",
     "where-plt",
     "gene-key",
-    "clear-log"
+    "clear-log",
+    "encrypt",
+
+    "decrypt"
 };
-int cmdListLen = 29;
+int cmdListLen = 31;
 
 int searchCmd(char* cmd, int s, int fullflag) 
 {
@@ -60,13 +63,13 @@ int searchCmd(char* cmd, int s, int fullflag)
 int runCmd()
 {
     char *c = cmd.string;
-    char  cmdArr[CMDARRLEN][CMDARRCLEN];
+    char  args[CMDARRLEN][CMDARRCLEN];
     char message[128];
     
     while (*c)
     {    
-        c = phraseCmd(c, cmdArr);
-        switch (searchCmd(cmdArr[0], 0, 1)){
+        c = phraseCmd(c, args);
+        switch (searchCmd(args[0], 0, 1)){
             case 0:
                 cptBox.sx = OVER;
                 enableBox(&pltBox, TRUE);
@@ -92,7 +95,7 @@ int runCmd()
             case 7:
                 break;
             case 8:
-                helpCmd(cmdArr + 1);
+                helpCmd(args + 1);
                 break;
             case 9:
                 resetDefaultPlaintext();
@@ -110,16 +113,19 @@ int runCmd()
                 return 0;
                 break;
             case 18:
-                loadToText(&plainText , cmdArr[1], &pltBox);
+                hplt = 1;
+                loadToText(&plainText , args[1], &pltBox);
                 break;  
             case 19:
-                loadToText(&cipherText, cmdArr[1], &cptBox);
+                hcpt = 1;
+                loadToText(&cipherText, args[1], &cptBox);
                 break;
             case 21:
-                saveText(& plainText, cmdArr[1]);
+                saveText(& plainText, args[1]);
                 break;
             case 22:
-                saveText(&cipherText, cmdArr[1]);
+                saveText(&cipherText, args[1]);
+                break;
             case 25:
                 strcpy(message, "Plaintext  path: ");
                 strcat(strcat(message,  plainText.file), "\n");
@@ -135,19 +141,14 @@ int runCmd()
                 outText.pos = outText.text;
                 outText.end = outText.text;
                 break;
+            case 29: encryptCmd(args); break;
+            case 30: decryptCmd(args); break;
             default:
                 strcpy(message, "rsa: ");
-                strcat(strcat(message, cmdArr[0]), ": command not found!\n");
+                strcat(strcat(message, args[0]), ": command not found!");
                 addError(&outText, message);
                 break;
         }            
-
-        if (strcmp(cmdArr[0], "focus") == 0){
-            printf("\x1b[?25l");
-            if (strcmp(cmdArr[1], "plt") == 0) focus(&plainText);
-            if (strcmp(cmdArr[1], "log") == 0) focusOutText(&outText);
-            printf("\x1b[?25h");
-        }
     }
 
     return 1;
@@ -222,9 +223,9 @@ void focusOutText(OUTTEXT* out)
     }
 }
 
-char* phraseCmd(char* c,char cmdArr[][CMDARRCLEN])
+char* phraseCmd(char* c, char args[][CMDARRCLEN])
 {
-    char *cur = *cmdArr;
+    char *cur = *args;
     int count = 0;
     
     while (*c == ' ' || *c == ';') ++c;
@@ -233,15 +234,93 @@ char* phraseCmd(char* c,char cmdArr[][CMDARRCLEN])
         if (*c == ' '){
             *cur = 0;
             ++count;
-            cur = *(cmdArr + count);
+            cur = *(args + count);
             while (*c == ' ') ++c;
             continue;
         }
         *cur = *c;
         ++cur; ++c;
     }
-    **(cmdArr + count + 1) = 0;
+    **(args + count + 1) = 0;
     *cur = 0;
-    cur = *cmdArr;
+    cur = *args;
     return c;
+}
+
+char* getParaVal(char* para, char args[][CMDARRCLEN])
+{
+    int onPara = 0;
+    char (*arg)[CMDARRCLEN] = (args + 1);
+    while (**arg != 0){
+        if (strcmp(para, *arg) == 0)                          return *++arg;
+        if (**arg != '-' && !onPara && strcmp(para, "") == 0) return *arg;
+        if (**arg == '-') onPara = 1;
+        else              onPara = 0;
+        ++arg;
+    }
+    return NULL; 
+}
+
+void encryptCmd(char args[][CMDARRCLEN])
+{
+    char *input, *output;
+
+    if (getParaVal("", args) != NULL) input = getParaVal("", args);
+    else if (hplt || !splt)           input = plainText.file;
+    else {
+        addError(&outText, "Can't find plaintext");
+        return;
+    }
+
+    if (getParaVal("-o", args) != NULL) output = getParaVal("-o", args);
+    else if (hcpt || !scpt){
+        if (getParaVal("-f", args) == NULL){
+            addWarning(&outText, "This action can be change your current content of ciphertext file. Please add output file or put flag -f to force action.");
+            return;
+        } else {
+            output = cipherText.file;
+            ccpt = 0;
+        }
+    } else {
+        output = cipherText.file;
+        ccpt = 0;
+    }
+
+    encrypt(e.val, n.val, input, output);
+    addSuccess(&outText, "Encryption finished successly.");
+    readText(&cipherText, 0);
+    resetText(&cptBox);
+    showText(&cptBox);
+}
+
+void decryptCmd(char args[][CMDARRCLEN])
+{
+        char *input, *output;
+
+    if (getParaVal("", args) != NULL) input = getParaVal("", args);
+    else if (hcpt || !scpt)           input = cipherText.file;
+    else {
+        addError(&outText, "Can't find ciphertext");
+        return;
+    }
+
+    if (getParaVal("-o", args) != NULL) output = getParaVal("-o", args);
+    else if (hplt || !splt){
+        if (getParaVal("-f", args) == NULL){
+            addWarning(&outText, "This action can be change your current content of plaintext file. Please add output file or put flag -f to force action.");
+            return;
+        } else {
+            output = plainText.file;
+            cplt = 0;
+        }
+    } else {
+        output = plainText.file;
+        cplt = 0;
+    }
+
+    decrypt(d.val, p.val, q.val, input, output);
+    addSuccess(&outText, "Decryption finished successly.");
+    readText(&plainText, 0);
+    resetText(&pltBox);
+    showText(&pltBox);
 }

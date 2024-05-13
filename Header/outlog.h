@@ -24,6 +24,8 @@ void  addFile(OUTTEXT*, char*);
 char* startLine(OUTTEXT*);
 void  reassignText(OUTTEXT*, char*);
 void  addError(OUTTEXT*, char*);
+void  addWarning(OUTTEXT*, char*);
+void  addSuccess(OUTTEXT*, char*);
 void  showOutText(OUTTEXT*);
 
 #endif

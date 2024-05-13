@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <pthread.h>
 #include "../header/int256.h"
+
 
 void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt) 
 {
@@ -21,11 +23,11 @@ void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt)
   INT256 M_q = imulInverse(q, p);
   INT256 M_p = imulInverse(p, q);
   
-  char ascii[MAXBYTE + 1], buff2[MAXBYTE + 1];
-  size_t bytesRead;
-  while((bytesRead = fread(buff2, 1, MAXHEX, ciphertextFile)) > 0){
-    buff2[bytesRead] = '\0';
-    INT256 y;
+  char ascii[MAXBYTE + 1], buff[MAXBYTE + 1];
+  int bytesRead;
+  while((bytesRead = fread(buff, 1, MAXHEX, ciphertextFile)) > 0){
+    buff[bytesRead] = '\0';
+    INT256 y = int256_c(buff, HEXMODE);
     INT256 x_p = ipow(y , d_p , p);
     INT256 x_q = ipow(y , d_q , q);
 

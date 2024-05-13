@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<math.h>
 #include "../header/int256.h"
-// đọc file nhị phân rồi trả về n,e ??
+// đọc file nhị phân rồi trả về n,e ?? Ok, good job.
 void readfilebin(char* filename, INT256* n, INT256* e)
 {
     FILE* file = fopen(filename, "rb");

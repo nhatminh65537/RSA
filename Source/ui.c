@@ -39,6 +39,9 @@ void initUI()
     enableBox(&cptBox, TRUE);
     enableBox(&pltBox, TRUE);
 
+    resetDefaultPlaintext ();
+    resetDefaultCiphertext();
+
     keyBox.xBox = 1;
     keyBox.yBox = 6;
     keyBox.gridType = INNER;
@@ -211,6 +214,7 @@ void inputCmd()
                     putch(c); putch(' '); putch(c);
                     for (int i = cmd.pos; i < cmd.count; ++i)
                         putch(cmd.string[i]);
+                    putch(' '); putch('\b');
                     if (cmd.count - cmd.pos > 0)
                         CUB(cmd.count - cmd.pos);
                 }

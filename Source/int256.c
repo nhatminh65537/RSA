@@ -136,15 +136,14 @@ void conv2hex(unsigned char* hex, INT256* num)
 void conv2dec(unsigned char* dec, INT256* num)
 {
     int i = 0;
-    INT256 ten, re, dig;
-    dig = one;
+    INT256 ten, dig;
+    dig = *num;
     ten = int256_c("A", HEXMODE);
     do{
-        re = imod(idiv(*num, dig), imul(ten, dig, NON));
-        dec[i] = '0' + re.value[0];
-        dig = imul(dig, ten, NON);
+        dec[i] = '0' + imod(dig, ten).value[0];
+        dig = idiv(dig, ten);
         ++i;
-    }while(igt(*num, dig));
+    }while(igt(dig, zero));
     dec[i] = 0;
     _reverse(dec);
 }
@@ -300,7 +299,6 @@ INT256 imulInverse(INT256 n, INT256 a)
     }
 
     if (!ieq(b0, one)) {
-        printf("Cannot calculate inverse with module other than 1 \n");
         return zero;
     }
     return t;

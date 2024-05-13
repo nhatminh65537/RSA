@@ -13,7 +13,8 @@ void initPrgVar();
 
 // program flag
 extern int spu, spr, splt, scpt,
-           hpu, hpr, hplt, hcpt;
+           hpu, hpr, hplt, hcpt,
+                     cplt, ccpt;
 extern const char defaultPlaintextFile [],
                   defaultCiphertextFile[];
 
