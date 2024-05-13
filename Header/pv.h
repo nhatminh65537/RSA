@@ -17,6 +17,7 @@ extern int spu, spr, splt, scpt,
                      cplt, ccpt;
 extern const char defaultPlaintextFile [],
                   defaultCiphertextFile[];
+extern char publicKeyFile[], privateKeyFile[];
 
 typedef struct KeyElement 
 {

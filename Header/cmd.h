@@ -1,10 +1,10 @@
 #ifndef __CMD__
 #define __CMD__
 
-#include "../header/prgvar.h"
+#include "../header/pv.h"
 #include "../header/outlog.h"
 
-#define CMDLEN     32
+#define CMDLEN        32
 #define CMDARRLEN     16
 #define CMDARRCLEN    64
 
@@ -19,9 +19,21 @@ char* getParaVal(char* para,  char args[][CMDARRCLEN]);
 void loadCmd();
 void exportCmd();
 void focusCmd();
-void helpCmd();
-void focus(TEXT*);
-void focusOutText(OUTTEXT*);
+void unloadPltCmd(char [][CMDARRCLEN]);
+void unloadCptCmd(char [][CMDARRCLEN]);
+void unloadKeyCmd(char [][CMDARRCLEN]);
+void loadPltCmd(char [][CMDARRCLEN]);
+void loadCptCmd(char [][CMDARRCLEN]);
+void helpCmd(char [][CMDARRCLEN]);
+void loadKeyCmd(char [][CMDARRCLEN]);
+void saveTextCmd(TEXT* , char [][CMDARRCLEN]);
+void saveKeyCmd(char [][CMDARRCLEN]);
+void focusCmd(TEXT*);
+void focusLogCmd(OUTTEXT*);
+void whereKeyCmd();
+void wherePltCmd();
+void whereCptCmd();
+void clearLogCmd();
 void encryptCmd(char[][CMDARRCLEN]);
 void decryptCmd(char[][CMDARRCLEN]);
 

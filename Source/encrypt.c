@@ -36,7 +36,7 @@ void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
   pthread_t threads[NUM_THREADS];
   while (!feof(plaintextFile)){
     int threadCnt = 0;
-    for (int i = 0; i < NUM_THREADS && !feof(plaintextFile); ++i){
+    for (int i = 0; (i < NUM_THREADS) && !feof(plaintextFile); ++i){
       INT256 *x, *y;
       x = malloc(sizeof(INT256));
       y = malloc(sizeof(INT256));
@@ -58,8 +58,6 @@ void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
       free(argsThreadList[i].y);
       free(argsThreadList[i].x);
     }
-    // y = ipow(x, e, n);
-    
   }
 
   fclose(plaintextFile);
