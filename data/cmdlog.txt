@@ -1,11 +1,3 @@
-exit
-cuongsan
-exit
-
-
-
-
-
 
 
 
@@ -27,4 +19,12 @@ load-plt data/plaintext.txt
 focus-plt
 load-plt data/plaintext.txt
 save-plt .mytest/plaintext.txt
+help
+cuu
+cuu tao
+help help
+n
+rsa
+help
+qquit
 exit
