@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "../header/prgvar.h"
+#include "../header/pv.h"
 #include "../header/ui.h"
 #include "../header/outlog.h"
 
@@ -9,6 +9,7 @@ int spu, spr, splt, scpt,
               cplt, ccpt;
 const char defaultPlaintextFile [] = "data/plaintext" ,
            defaultCiphertextFile[] = "data/ciphertext";
+char publicKeyFile[NAMEMAX], privateKeyFile[NAMEMAX];
 KEYELE p, q, n, e, d;
 TEXT cipherText, plainText;
 CMDSTR cmd;
@@ -96,7 +97,7 @@ int readText(TEXT* text, int offset)
         text->text[fread(text->text, 1, TEXTMAX, f)] = 0;
     }
     else
-        addError(&outText, "File not Found!");
+        addError(&logText, "File not Found!");
     fclose(f);
 }
 
@@ -108,6 +109,7 @@ void loadToText(TEXT* text, const char *fileName, BOX* box)
     showText(box);
 }
 
+// need update copy text to text
 void saveText(TEXT* text, const char * fileName)
 {
     FILE *f = fopen(fileName, "w");

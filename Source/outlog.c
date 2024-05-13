@@ -5,7 +5,7 @@
 #define CHECKRANGE 16
 #define PREPRINT   256
 
-OUTTEXT outText;
+OUTTEXT logText;
 
 int fstrlen(char* fstr, char end)
 {

@@ -1,7 +1,7 @@
 #ifndef __OUTLOG__
 #define __OUTLOG__
 
-#include "prgvar.h"
+#include "pv.h"
 #include "uilib.h"
 
 #define OUTLEN 1<<15 // 2^15 
@@ -13,7 +13,7 @@ typedef struct OutputText
     char *end;
     char *pos;
 } OUTTEXT;
-extern OUTTEXT outText;
+extern OUTTEXT logText;
 
 void  initOutText(OUTTEXT* ,BOX*);
 int   fstrlen(char*, char);
