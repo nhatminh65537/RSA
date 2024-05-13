@@ -11,7 +11,8 @@
         "prgvar.h": "c",
         "uilib.h": "c",
         "int256.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "cmd.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

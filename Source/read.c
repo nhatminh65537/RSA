@@ -11,4 +11,5 @@ void readfilebin(char* filename, INT256* n, INT256* e)
     }
     fread(n->value, 1, MAXBYTE, file);
     fread(e->value, 1, MAXBYTE, file);
+    fclose(file);
 }

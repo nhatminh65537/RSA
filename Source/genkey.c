@@ -44,6 +44,15 @@ bool millerRabin(INT256 n, int iterations) {
 }
 
 void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename){
+    if(p == NULL || q == NULL || n == NULL || e == NULL || d == NULL){
+        mode = 0;
+    else if(p == NULL || q == NULL || n == NULL || e == NULL){
+        mode = 1;
+    else if(p == NULL || q == NULL || n == NULL || d == NULL){
+        mode = 2;
+    else{
+        mode = 3;
+    }
     switch(mode){
         case 0:
             srand(time(NULL));
