@@ -109,21 +109,17 @@ int runCmd()
     {    
         c = phraseCmd(c, args);
         switch (searchCmd(args[0], 0, 1)){
-            case 0: cptBox.sx = OVER;
-                    enableBox(&pltBox, TRUE); break;
-            case 1: enableBox(&cptBox, TRUE); break;
-            case 2: enableBox(&logBox, TRUE); break;
-            case 3: cptBox.sx = FULL;
-                    enableBox(&pltBox, FALSE); break;
-            case 4: enableBox(&cptBox, FALSE); break;
-            case 5: enableBox(&logBox, FALSE); break; 
-            case 6:
-                break;
-            case 7:
-                break;
-            case 8:
-                helpCmd(args + 1);
-                break;
+            case 0 : cptBox.sx = OVER;
+                     enableBox(&pltBox, TRUE); break;
+            case 1 : enableBox(&cptBox, TRUE); break;
+            case 2 : enableBox(&logBox, TRUE); break;
+            case 3 : cptBox.sx = FULL;
+                     enableBox(&pltBox, FALSE); break;
+            case 4 : enableBox(&cptBox, FALSE); break;
+            case 5 : enableBox(&logBox, FALSE); break; 
+            case 6 : addFile(&logText, "data/info-program.txt"); break;
+            case 7 : addFile(&logText, "data/info-pbl.txt")    ; break;
+            case 8 : helpCmd(args + 1) ; break;
             case 9 : unloadPltCmd(args); break;
             case 10: unloadCptCmd(args); break;
             case 11: unloadKeyCmd(args); break;

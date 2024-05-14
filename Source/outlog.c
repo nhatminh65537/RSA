@@ -113,12 +113,17 @@ void addText(OUTTEXT* out, char* str)
 void addFile(OUTTEXT* out, char* name)
 {
     char buff[128];
+    int cnt = (out->box->bottom - out->box->top - 1)*(out->box->right - out->box->left - 1) - (out->end - out->pos);
     FILE *f = fopen(name, "r");
     int pos = 0;
     while (!feof(f)){
         pos = fread(buff, 1, 127, f);
         buff[pos] = 0;
+        cnt -= pos;
         addText(out, buff);
+    }
+    if (pos < 0){
+        reassignText(out, startLine(out));
     }
     fclose(f);
 }
