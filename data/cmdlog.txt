@@ -1,10 +1,3 @@
-load-plt plaintext.txt
-encrypt
-save-cpt ciphertextDemo.txt
-load-plt plaintext.txt
-encrypt
-save-cpt ciphertextDemo.txt
-encrypt plaintext.txt -o ciphertextDemo2.txt
 encrypt 
 load-cpt ciphertextDemo2.txt
 load-plt plaintext.txt
@@ -27,4 +20,11 @@ encrypt
 where-key
 load-key key
 where-key
+load-plt plt.txt
+encrypt
+load-key key
+encrypt
+unload-plt
+decrypt
+save-plt .mytest.txt
 exit

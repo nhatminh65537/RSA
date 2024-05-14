@@ -508,15 +508,32 @@ void focusLogCmd(OUTTEXT* out)
     }
 }
 
-// Bo sung voi hpu, hpr
 void encryptCmd(char args[][CMDARRCLEN])
 {
     char *input, *output;
+    INT256 ek, nk;
 
     if (getParaVal("", args) != NULL) input = getParaVal("", args);
     else if (hplt || !splt)           input = plainText.file;
     else {
         addError(&logText, "Can't find plaintext");
+        return;
+    }
+
+    if (getParaVal("-k", args) != NULL) {
+        FILE* f = fopen(getParaVal("-k", args), "rb");
+        if (f == NULL){
+            addError(&logText, "The public  key file doesn't exist.");
+            return;
+        }
+        fread(nk.value, 1, MAXBYTE, f);
+        fread(ek.value, 1, MAXBYTE, f);
+        fclose(f);
+    } else if (hpu){
+        nk = n.val;
+        ek = e.val;
+    } else{
+        addError(&logText, "Don't have public key for encryption");
         return;
     }
 
@@ -544,12 +561,32 @@ void encryptCmd(char args[][CMDARRCLEN])
 
 void decryptCmd(char args[][CMDARRCLEN])
 {
-        char *input, *output;
+    char *input, *output;
+    INT256 dk, pk, qk;
 
     if (getParaVal("", args) != NULL) input = getParaVal("", args);
     else if (hcpt || !scpt)           input = cipherText.file;
     else {
         addError(&logText, "Can't find ciphertext");
+        return;
+    }
+
+    if (getParaVal("-k", args) != NULL) {
+        FILE* f = fopen(getParaVal("-k", args), "rb");
+        if (f == NULL){
+            addError(&logText, "The prinvate key file doesn't exist.");
+            return;
+        }
+        fread(pk.value, 1, MAXBYTE, f);
+        fread(qk.value, 1, MAXBYTE, f);
+        fread(dk.value, 1, MAXBYTE, f);
+        fclose(f);
+    } else if (hpr){
+        dk = d.val;
+        pk = p.val;
+        qk = q.val;
+    } else{
+        addError(&logText, "Don't have private key for encryption");
         return;
     }
 
