@@ -1,8 +1,3 @@
-encrypt 
-load-cpt ciphertextDemo2.txt
-load-plt plaintext.txt
-encrypt
-load-plt plaintext.txt
 encrypt
 focus-cpt
 decrypt ciphertextDemo2.txt
@@ -27,4 +22,9 @@ encrypt
 unload-plt
 decrypt
 save-plt .mytest.txt
+load-key key
+load-plt plt.txt
+encrypt
+unload-plt
+decrypt
 exit

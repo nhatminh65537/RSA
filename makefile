@@ -8,7 +8,7 @@ SRC_DIR = ./source
 HDR_DIR = ./header
 
 # SRCS = $(shell dir $(SRC_DIR))
-SRCS = main.c cmd.c int256.c pv.c ui.c uilib.c outlog.c encrypt.c decrypt.c
+SRCS = main.c cmd.c int256.c pv.c ui.c uilib.c outlog.c rsa.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(patsubst %,$(HDR_DIR)/%,$(shell $(SPATH)/dir $(HDR_DIR)))
 

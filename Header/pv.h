@@ -8,6 +8,7 @@
 #define TEXTMAX       1 << 12 //2^12 byte 
 #define FULLCMDLEN    256
 #define MAXHIS        30
+#define EDITSIZE      1 << 15
 
 void initPrgVar();
 
@@ -77,5 +78,20 @@ char* sucCmd(CMDHIS*);
 void  recordCmd(CMDHIS*, char*, int);
 void  writeCmdHis(CMDHIS*, char*);
 void  readCmdHis (CMDHIS*, char*);
+
+typedef struct EditText
+{
+    char text[EDITSIZE];
+    char *pos;
+    char *end;
+    BOX* box;
+} EDITTEXT;
+extern EDITTEXT pltEditText, cptEditText;
+
+void  edit(EDITTEXT*);
+void  initEditText(EDITTEXT*, BOX*);
+void  showEditText(EDITTEXT*);
+char* nextEditLine(EDITTEXT* etext, char* pos);
+char* prevEditLine(EDITTEXT* etext, char* pos);
 
 #endif

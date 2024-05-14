@@ -122,7 +122,7 @@ void addFile(OUTTEXT* out, char* name)
         cnt -= pos;
         addText(out, buff);
     }
-    if (pos < 0){
+    if (cnt < 0){
         reassignText(out, startLine(out));
     }
     fclose(f);
@@ -178,7 +178,7 @@ void  addSuccess(OUTTEXT* out, char* str)
 void  showOutText(OUTTEXT* out)
 {
     BOX* box = out->box;
-    if (!box->enable) return;
+    if (box == NULL || !box->enable) return;
 
     char *c = out->pos;
 
@@ -223,6 +223,8 @@ void  showOutText(OUTTEXT* out)
             box->xPoint = box->left + 1;
             if (*c == '\r' || *c == '\n') ++c; 
         }
+        if (box->yPoint >= box->bottom) return;
+
         MOVEXY(box->xPoint, box->yPoint);
         if (32 <= *c & *c <= 126)
         {

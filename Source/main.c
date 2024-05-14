@@ -18,6 +18,8 @@ int main()
 	
     do 
     {
+        resetText(&logBox);
+        reassignText(&logText, startLine(&logText));
         showOutText(&logText);
         clsInput();
        

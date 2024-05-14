@@ -271,8 +271,12 @@ INT256 ipow(INT256 a, INT256 b, INT256 n)
 {
     INT256 result;
     result = one;
+    int next = 1;
     for (int i = MAXBIT - 1; i>= 0; --i)
     {
+        if (_index(&b, i) == 0 && next) continue;
+        next = 0; 
+        
         result = imul(result, result, n);
         if (_index(&b, i) == 1) 
             result = imul(result, a, n);

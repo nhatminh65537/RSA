@@ -64,7 +64,7 @@ enum GridType{
 };
 enum Key{
     BACKSPACE = 8, RETURN = 13, TAB = 9,
-    UP = 72, DOWN = 80, LEFT = 77, RIGHT = 75,    
+    UP = 72, DOWN = 80, LEFT = 75, RIGHT = 77,    
     HOME = 71, DEL = 83, PGUP = 73, PGDN = 81,
     EXIT = 27, EXT = -32
 };

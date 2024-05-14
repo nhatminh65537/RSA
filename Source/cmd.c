@@ -126,7 +126,8 @@ int runCmd()
             case 12: focusCmd(& plainText); break;
             case 13: focusCmd(&cipherText); break;
             case 14: focusLogCmd(&logText); break;
-
+            case 15: editPltCmd()         ; break;
+            case 16: editPltCmd()         ; break;
             case 17: return 0             ; break;
             case 18: loadPltCmd(args)              ; break;  
             case 19: loadCptCmd(args)              ; break;
@@ -150,6 +151,38 @@ int runCmd()
     }
     return 1;
 } 
+
+void editPltCmd()
+{
+    if (!cplt){
+        addError(&logText, "Can't edit this plaintext . Please reset file.");
+        return;
+    }
+    splt = 0;
+    enableText(&pltBox, FALSE, pltBox.text);
+    printf("\x1b[?25h");
+    edit(&pltEditText);
+    printf("\x1b[?25l");
+    FILE *f = fopen(defaultPlaintextFile, "w");
+    fprintf(f, pltEditText.text);
+    fclose(f);
+} 
+
+void editCptCmd()
+{
+    if (!scpt){
+        addError(&logText, "Can't edit this ciphertext. Please reset file.");
+        return;
+    }
+    scpt = 0;
+    enableText(&cptBox, FALSE, cptBox.text);
+    printf("\x1b[?25h");
+    edit(&cptEditText);
+    printf("\x1b[?25l");
+    FILE *f = fopen(defaultCiphertextFile, "w");
+    fprintf(f, cptEditText.text);
+    fclose(f);   
+}
 
 void whereKeyCmd()
 {
@@ -198,7 +231,7 @@ void whereCptCmd()
 
 void unloadPltCmd(char args[][CMDARRCLEN])
 {
-    if (!splt && getParaVal("-f", args) != NULL){
+    if (!splt && getParaVal("-f", args) == NULL){
         addWarning(&logText, "The plaintext  haven't saved yet. Phease save it or add flag -f to force action.");
         return;
     }
@@ -209,7 +242,7 @@ void unloadPltCmd(char args[][CMDARRCLEN])
 
 void unloadCptCmd(char args[][CMDARRCLEN])
 {
-    if (!scpt && getParaVal("-f", args) != NULL){
+    if (!scpt && getParaVal("-f", args) == NULL){
         addWarning(&logText, "The ciphertext haven't saved yet. Phease save it or add flag -f to force action.");
         return;
     }
@@ -221,25 +254,25 @@ void unloadCptCmd(char args[][CMDARRCLEN])
 void unloadKeyCmd(char args[][CMDARRCLEN])
 {
     if (getParaVal("-pu", args) != NULL && getParaVal("-pr", args) == NULL){
-        if (!spu && getParaVal("-f", args) != NULL) {
+        if (!spu && getParaVal("-f", args) == NULL) {
             addWarning(&logText, "This public key haven't saved yet. Phease save it or add flag -f to force action.");
             return;
         }
         resetDefaultPuKey();
     } else if (getParaVal("-pr", args) != NULL && getParaVal("-pu", args) == NULL){
-        if (!spr && getParaVal("-f", args) != NULL) {
+        if (!spr && getParaVal("-f", args) == NULL) {
             addWarning(&logText, "This private key haven't saved yet. Phease save it or add flag -f to force action.");
             return;
         }
         resetDefaultPrKey;
     } else{
-        if (!spu && getParaVal("-f", args) != NULL) {
+        if (!spu && getParaVal("-f", args) == NULL) {
             addWarning(&logText, "This public key haven't saved yet. Phease save it or add flag -f to force action.");
             return;
         }
         resetDefaultPuKey();
 
-        if (!spr && getParaVal("-f", args) != NULL) {
+        if (!spr && getParaVal("-f", args) == NULL) {
             addWarning(&logText, "This private key haven't saved yet. Phease save it or add flag -f to force action.");
             return;
         }
@@ -250,7 +283,7 @@ void unloadKeyCmd(char args[][CMDARRCLEN])
 
 void loadPltCmd(char args[][CMDARRCLEN])
 {
-    if (!splt && getParaVal("-f", args) != NULL){
+    if (!splt && getParaVal("-f", args) == NULL){
         addWarning(&logText, "The plaintext  haven't saved yet. Phease save it or add flag -f to force action.");
         return;
     }
@@ -262,7 +295,7 @@ void loadPltCmd(char args[][CMDARRCLEN])
 
 void loadCptCmd(char args[][CMDARRCLEN])
 {
-    if (!scpt && getParaVal("-f", args) != NULL){
+    if (!scpt && getParaVal("-f", args) == NULL){
         addWarning(&logText, "The ciphertext haven't saved yet. Phease save it or add flag -f to force action.");
         return;
     }
@@ -281,7 +314,7 @@ void loadKeyCmd(char args[][CMDARRCLEN])
     char *file = getParaVal("", args);
     FILE *f;
     if (getParaVal("-pu", args) != NULL && getParaVal("-pr", args) == NULL){
-        if (!spu && getParaVal("-f", args) != NULL) {
+        if (!spu && getParaVal("-f", args) == NULL) {
             addWarning(&logText, "This public key haven't saved yet. Phease save it or add flag -f to force action.");
             return;
         }
@@ -297,7 +330,7 @@ void loadKeyCmd(char args[][CMDARRCLEN])
         hpu = 1;
         spu = 1;
     } else if (getParaVal("-pr", args) != NULL && getParaVal("-pu", args) == NULL){
-        if (!spr && getParaVal("-f", args) != NULL) {
+        if (!spr && getParaVal("-f", args) == NULL) {
             addWarning(&logText, "This private key haven't saved yet. Phease save it or add flag -f to force action.");
             return;
         }
@@ -316,7 +349,7 @@ void loadKeyCmd(char args[][CMDARRCLEN])
     } else{
         char name[64];
         
-        if (!spu && getParaVal("-f", args) != NULL) {
+        if (!spu && getParaVal("-f", args) == NULL) {
             addWarning(&logText, "This public key haven't saved yet. Phease save it or add flag -f to force action.");
             return;
         }
@@ -332,7 +365,7 @@ void loadKeyCmd(char args[][CMDARRCLEN])
         hpu = 1;
         spu = 1;
 
-        if (!spr && getParaVal("-f", args) != NULL) {
+        if (!spr && getParaVal("-f", args) == NULL) {
             addWarning(&logText, "This private key haven't saved yet. Phease save it or add flag -f to force action.");
             return;
         }
@@ -515,6 +548,13 @@ void encryptCmd(char args[][CMDARRCLEN])
         addError(&logText, "Can't find plaintext");
         return;
     }
+    FILE *f = fopen(input, "r");
+    if (f == NULL) {
+        addError(&logText, "The plaintext  doesn't exist");
+        fclose(f);
+        return;
+    }
+    fclose(f);
 
     if (getParaVal("-k", args) != NULL) {
         FILE* f = fopen(getParaVal("-k", args), "rb");
@@ -566,6 +606,13 @@ void decryptCmd(char args[][CMDARRCLEN])
         addError(&logText, "Can't find ciphertext");
         return;
     }
+        FILE *f = fopen(input, "r");
+    if (f == NULL) {
+        addError(&logText, "The ciphertext doesn't exist");
+        fclose(f);
+        return;
+    }
+    fclose(f);
 
     if (getParaVal("-k", args) != NULL) {
         FILE* f = fopen(getParaVal("-k", args), "rb");

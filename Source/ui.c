@@ -42,6 +42,9 @@ void initUI()
     resetDefaultPlaintext ();
     resetDefaultCiphertext();
 
+    initEditText(&pltEditText, &pltBox);
+    initEditText(&cptEditText, &cptBox);
+
     keyBox.xBox = 1;
     keyBox.yBox = 6;
     keyBox.gridType = INNER;
@@ -109,7 +112,7 @@ void showLogBox()
     // CSI(DIM); 
     // clearBox(&logBox);
     drawBox(&logBox, WHITE, LIGHT , LIGHT , WHITE, TRUE); 
-    showText(&logBox);
+    showOutText(&logText);
     CSI(RESET);   
 }
 void showCptBox()
@@ -283,6 +286,7 @@ void inputCmd()
                 }
                 break;
             default:
+                if (32 > c || c > 126) break;
                 insertChar(&cmd, c);
                 putch(c);
                 for (int i = cmd.pos; i < cmd.count; ++i)

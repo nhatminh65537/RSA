@@ -34,6 +34,8 @@ void whereKeyCmd();
 void wherePltCmd();
 void whereCptCmd();
 void clearLogCmd();
+void editPltCmd();
+
 void encryptCmd(char[][CMDARRCLEN]);
 void decryptCmd(char[][CMDARRCLEN]);
 
