@@ -138,3 +138,22 @@ void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt)
   fclose(ciphertextFile);
   fclose(plaintextFile);
 }
+
+INT256 isub(INT256 a, INT256 b, INT256 n)
+{
+    INT256 result;
+    int carry;
+    
+    carry = _sub(&result, a, b);
+    if (!ieq(n, zero))
+    {  
+        result = imod(result, n);
+        if (carry == 1)
+        {
+            _sub(&result, b, a);
+            result = imod(result, n);
+            if (!ieq(result, zero))_sub(&result, n, result);
+        }
+    }
+    return result;
+}

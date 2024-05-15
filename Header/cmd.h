@@ -1,8 +1,7 @@
 #ifndef __CMD__
 #define __CMD__
 
-#include "../header/pv.h"
-#include "../header/outlog.h"
+#include "pv.h"
 
 #define CMDLEN        32
 #define CMDARRLEN     16
@@ -35,13 +34,13 @@ void wherePltCmd();
 void whereCptCmd();
 void clearLogCmd();
 void editPltCmd();
-
+void genkeyCmd(char [][CMDARRCLEN]);
 void encryptCmd(char[][CMDARRCLEN]);
 void decryptCmd(char[][CMDARRCLEN]);
 
-// decrypt.c
+// rsa.c
 void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt);
-// encrypt.c
 void encrypt(INT256 e, INT256 n, char *plt, char *cpt);
+void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename);
 
 #endif

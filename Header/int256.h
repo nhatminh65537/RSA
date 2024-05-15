@@ -1,7 +1,8 @@
 #ifndef __INT256__
 #define __INT256__
 
-#define MAXBYTE 2
+#define MAXBYTE  32
+
 #define MAXHEX MAXBYTE*2
 #define MAXBIT MAXBYTE*8
 #define NON zero
@@ -48,6 +49,10 @@ INT256 imul(INT256, INT256, INT256);
 INT256 ipow(INT256, INT256, INT256);
 
 INT256 imulInverse(INT256, INT256);
+
+INT256 irand(int, int);
+
+INT256 igcd(INT256 a, INT256 b); 
 
 void initInt();
 

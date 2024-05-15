@@ -7,5 +7,5 @@ detest: decrypt.c
 	gcc -o detest decrypt.o ../build/int256.o
 
 gktest: genkey.c
-	gcc -c genkey.c -g
-	gcc -o gktest genkey.o ../build/int256.o
+	gcc -c genkey.c -Ofast
+	gcc -lpthread -o gktest genkey.o ../build/int256.o 

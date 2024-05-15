@@ -1,20 +1,3 @@
-encrypt
-focus-cpt
-decrypt ciphertextDemo2.txt
-load-plt plaintext.txt
-encrypt
-save-cpt ciphertext.txt
-unshow-plt
-show-plt
-unload-plt
-decrypt
-decrypt ciphertext.txt
-save-plt plt.txt
-load-plt plaintext.txt
-encrypt
-where-key
-load-key key
-where-key
 load-plt plt.txt
 encrypt
 load-key key
@@ -27,4 +10,21 @@ load-plt plt.txt
 encrypt
 unload-plt
 decrypt
+load-cpt cptk2.txt; load-key key/2
+load-plt plt.txt; load-key k; encrypt; unload-plt
+gene-key
+load-plt .mytest/plaintext.txt
+encrypt
+focus-plt
+focus-cpt
+focus-plt
+unshow-plt
+unshow-cpt
+unshow-log
+show-cpt
+show-plt
+unload-plt
+decrypt
+save-key key/3
+save-cpt .mytest/cpt.txt
 exit

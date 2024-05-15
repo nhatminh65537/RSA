@@ -1,7 +1,6 @@
 #include "../header/ui.h"
 #include "../header/uilib.h"
 #include "../header/pv.h"
-#include "../header/outlog.h"
 #include "../header/cmd.h"
 #include <conio.h>
 #include <string.h>
@@ -196,6 +195,7 @@ void inputCmd()
     while (TRUE)
     {        
         c = getch();
+        int tempCnt;
 
         switch (c){
             case RETURN:
@@ -210,7 +210,7 @@ void inputCmd()
                 }
                 break;
             case BACKSPACE:
-                if (cmd.count > 0){
+                if (cmd.count > 0 && cmd.pos > 0){
                     --cmd.pos;
                     deleteChar(&cmd);
 
@@ -255,13 +255,13 @@ void inputCmd()
                         continue;
                     case 73:
                         break;
-                    case LEFT:
+                    case RIGHT:
                         if (cmd.pos < cmd.count){
                             ++cmd.pos;
                             CUF(1);
                         }
                         break;
-                    case RIGHT:
+                    case LEFT:
                     if (0 < cmd.pos){
                             --cmd.pos;
                             CUB(1);

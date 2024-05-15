@@ -5,7 +5,6 @@
 #include "../header/ui.h"
 #include "../header/pv.h"
 #include "../header/uilib.h"
-#include "../header/outlog.h"
 
 // Task: Ket hop flag kiem soat chuong trinh
 
@@ -138,7 +137,7 @@ int runCmd()
             case 24: whereKeyCmd()                 ; break;
             case 25: whereCptCmd()                 ; break;
             case 26: wherePltCmd()                 ; break;
-
+            case 27: genkeyCmd(args) ; break;
             case 28: clearLogCmd()   ; break;
             case 29: encryptCmd(args); break;
             case 30: decryptCmd(args); break;
@@ -151,6 +150,27 @@ int runCmd()
     }
     return 1;
 } 
+
+void genkeyCmd(char args[][CMDARRCLEN])
+{
+    if (!spu && getParaVal("-f", args) == NULL) {
+        addWarning(&logText, "This public key haven't saved yet. Phease save it or add flag -f to force action.");
+        return;
+    }
+    if (!spr && getParaVal("-f", args) == NULL) {
+        addWarning(&logText, "This private key haven't saved yet. Phease save it or add flag -f to force action.");
+        return;
+    }
+    spr = 0; hpr = 1; 
+    spu = 0; hpu = 1;
+    genkey(0 , &p.val, &q.val, &n.val, &e.val, &d.val, "");
+    fulfillKey(&e);
+    fulfillKey(&n);
+    fulfillKey(&p);
+    fulfillKey(&q);
+    fulfillKey(&d);
+    show(&keyBox);
+}
 
 void editPltCmd()
 {

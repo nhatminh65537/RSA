@@ -1,5 +1,5 @@
 CC = gcc
-FLAGS = -g
+FLAGS = -Ofast
 SPATH = ./usr/bin
 SHELL = $(SPATH)/sh.exe
 
@@ -7,8 +7,8 @@ BUILD_DIR = ./build
 SRC_DIR = ./source
 HDR_DIR = ./header
 
-# SRCS = $(shell dir $(SRC_DIR))
-SRCS = main.c cmd.c int256.c pv.c ui.c uilib.c outlog.c rsa.c
+SRCS = $(shell $(SPATH)/dir $(SRC_DIR))
+# SRCS = main.c cmd.c int256.c pv.c ui.c uilib.c rsa.c
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(patsubst %,$(HDR_DIR)/%,$(shell $(SPATH)/dir $(HDR_DIR)))
 
@@ -24,7 +24,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS)
 launch: $(BUILD_DIR)/launch.o
 	$(CC) -o $@ $^
 
-$(BUILD_DIR)\launch.o: $(SRC_DIR)/launch.c
+$(BUILD_DIR)\launch.o: launch.c
 	mkdir -p $(dir $@)
 	$(CC) $(FLAGS) -c $< -o $@
 

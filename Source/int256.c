@@ -1,5 +1,6 @@
 #include "../header/int256.h"
-// #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 INT256 zero;
 INT256 maxval;
@@ -241,10 +242,9 @@ INT256 isub(INT256 a, INT256 b, INT256 n)
         result = imod(result, n);
         if (carry == 1)
         {
-            _sub(&result, maxval, result);
-            _pls(&result, imod(result, n), one);
+            _sub(&result, b, a);
             result = imod(result, n);
-            if (!ieq(result, zero)) _sub(&result, n, result);
+            if (!ieq(result, zero))_sub(&result, n, result);
         }
     }
     return result;
@@ -283,6 +283,7 @@ INT256 ipow(INT256 a, INT256 b, INT256 n)
     }
     return result;
 }
+
 INT256 imulInverse(INT256 n, INT256 a)
 {
     INT256 a0 = n, b0 = a;
@@ -290,16 +291,17 @@ INT256 imulInverse(INT256 n, INT256 a)
     INT256 q, r, temp;
  
     q = idiv(a0, b0);
-    r = isub(a0, imul(q, b0, NON), NON);
+    r = imod(a0, b0);
 
     while (igt(r, zero)) {
-        temp = isub(t0, imul(q, t, NON), n);
+        
+        temp = isub(t0, imul(q, t, n), n);
         t0 = t;
         t = temp;
         a0 = b0;
         b0 = r;
         q = idiv(a0, b0);
-        r = isub(a0, imul(q, b0, NON), NON);
+        r = imod(a0, b0);
     }
 
     if (!ieq(b0, one)) {
@@ -308,8 +310,31 @@ INT256 imulInverse(INT256 n, INT256 a)
     return t;
 }
 
+INT256 irand(int minByte, int maxByte)
+{
+    INT256 result = zero;
+    for (int i = 0; i < maxByte; i++) {
+        result.value[i] = rand() % 256*sizeof(result.value[i]);
+    }
+    int check = 0;
+    for (int i = minByte; i < maxByte; ++i) if (result.value[i] != 0) check = 1;
+    if (!check) result = irand(minByte, maxByte);
+    return result;
+}
+
+INT256 igcd(INT256 a, INT256 b) 
+{
+    while (!ieq(b, zero)) {
+        INT256 r = imod(a, b);
+        a = b;
+        b = r;
+    }
+    return a;
+}
+
 void initInt()
 {
+    srand(time(NULL));
     zero = int256_c("0", HEXMODE);
     for (int i = 0; i < MAXBYTE; ++i) maxval.value[i] = 0xff;
     one = int256_c("1", HEXMODE);

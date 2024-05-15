@@ -1,0 +1,77 @@
+Date : 2024-05-16 00:11:31
+Directory : d:\OneDrive - The University of Technology\PBL\PBL1\RSA
+Total : 42 files,  863 codes, 58 comments, 82 blanks, all 1003 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |          5 |        490 |          5 |         50 |        545 |
+| C        |         33 |        364 |         21 |         25 |        410 |
+| Python   |          2 |          9 |         32 |          7 |         48 |
+| Makefile |          2 |          0 |          0 |          0 |          0 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                            | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                               |         42 |        863 |         58 |         82 |      1,003 |
+| . (Files)                                                                       |          2 |        -36 |          0 |         -4 |        -40 |
+| .mix                                                                            |          1 |        -10 |         32 |          4 |         26 |
+| .mix\DemoFolder                                                                 |          1 |        -10 |         32 |          4 |         26 |
+| .trash                                                                          |          8 |      1,040 |         45 |        124 |      1,209 |
+| Header                                                                          |          6 |       -295 |         -6 |        -66 |       -367 |
+| Source                                                                          |         13 |     -2,473 |       -163 |       -292 |     -2,928 |
+| header                                                                          |          5 |        294 |          5 |         64 |        363 |
+| source                                                                          |          7 |      2,343 |        145 |        252 |      2,740 |
++---------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                        | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\.mix\DemoFolder\demo.py | Python   |        -10 |         32 |          4 |         26 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\.trash\decrypt.c        | C        |         48 |          0 |          6 |         54 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\.trash\encrypt.c        | C        |        132 |          0 |         27 |        159 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\.trash\genkey.c         | C        |        160 |          0 |         11 |        171 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\.trash\genkey.h         | C++      |        468 |          5 |         49 |        522 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\.trash\makefile         | Makefile |          9 |          0 |          2 |         11 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\.trash\outlog.c         | C        |        178 |         40 |         21 |        239 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\.trash\outlog.h         | C++      |         26 |          0 |          5 |         31 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\.trash\pythonTest.py    | Python   |         19 |          0 |          3 |         22 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Header\cmd.h            | C        |        -36 |         -2 |         -9 |        -47 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Header\int256.h         | C        |        -38 |          0 |        -16 |        -54 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Header\outlog.h         | C++      |        -26 |          0 |         -5 |        -31 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Header\pv.h             | C++      |        -78 |         -1 |        -18 |        -97 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Header\ui.h             | C        |        -13 |         -2 |         -4 |        -19 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Header\uilib.h          | C        |       -104 |         -1 |        -14 |       -119 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\cmd.c            | C        |       -603 |         -2 |        -52 |       -657 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\decrypt.c        | C        |        -32 |        -11 |        -10 |        -53 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\encrypt.c        | C        |       -115 |          0 |        -25 |       -140 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\genkey.c         | C        |       -145 |         -7 |        -12 |       -164 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\int256.c         | C        |       -281 |        -29 |        -31 |       -341 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\launch.c         | C        |        -12 |          0 |         -2 |        -14 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\main.c           | C        |        -26 |          0 |         -9 |        -35 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\makefile         | Makefile |         -9 |          0 |         -2 |        -11 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\outlog.c         | C        |       -178 |        -40 |        -21 |       -239 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\pv.c             | C        |       -330 |        -10 |        -34 |       -374 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\rsa.c            | C        |       -115 |          0 |        -25 |       -140 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\ui.c             | C        |       -258 |        -43 |        -22 |       -323 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\Source\uilib.c          | C        |       -369 |        -21 |        -47 |       -437 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\decrypt.c               | C        |        -48 |          0 |         -6 |        -54 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\header\cmd.h            | C        |         37 |          1 |          8 |         46 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\header\int256.h         | C        |         40 |          0 |         19 |         59 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\header\pv.h             | C++      |        100 |          1 |         19 |        120 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\header\ui.h             | C        |         13 |          2 |          4 |         19 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\header\uilib.h          | C        |        104 |          1 |         14 |        119 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\launch.c                | C        |         12 |          0 |          2 |         14 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\source\cmd.c            | C        |        623 |          2 |         52 |        677 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\source\int256.c         | C        |        303 |         28 |         35 |        366 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\source\main.c           | C        |         26 |          0 |          8 |         34 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\source\pv.c             | C        |        505 |         50 |         54 |        609 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\source\rsa.c            | C        |        259 |          1 |         34 |        294 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\source\ui.c             | C        |        258 |         43 |         22 |        323 |
+| d:\OneDrive - The University of Technology\PBL\PBL1\RSA\source\uilib.c          | C        |        369 |         21 |         47 |        437 |
+| Total                                                                           |          |        863 |         58 |         82 |      1,003 |
++---------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

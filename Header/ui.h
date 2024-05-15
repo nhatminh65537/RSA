@@ -1,7 +1,7 @@
 #ifndef __UIRSA__
 #define __UIRSA__
 
-#include "../header/uilib.h"
+#include "uilib.h"
 
 #define MAXX       160
 #define MAXY       50

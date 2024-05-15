@@ -3,17 +3,16 @@
 #include <stdio.h>
 #include "../header/ui.h"
 #include "../header/pv.h"
-#include "../header./cmd.h"
+#include "../header/cmd.h"
 
 char plaintext[2048], cmdOpt[2048];
-
 
 int main()
 {
     CLRSCR;
 
     initInt();
-    initPrgVar();  
+    initPV();  
     initUI();
 	
     do 

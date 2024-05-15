@@ -3,14 +3,16 @@
 
 #include "int256.h"
 #include "ui.h"
+#include "uilib.h"
 
+#define OUTLEN        1<<15
 #define NAMEMAX       128
-#define TEXTMAX       1 << 12 //2^12 byte 
+#define TEXTMAX       1<<12 
 #define FULLCMDLEN    256
 #define MAXHIS        30
-#define EDITSIZE      1 << 15
+#define EDITSIZE      1<<15
 
-void initPrgVar();
+void initPV();
 
 // program flag
 extern int spu, spr, splt, scpt,
@@ -94,4 +96,25 @@ void  showEditText(EDITTEXT*);
 char* nextEditLine(EDITTEXT* etext, char* pos);
 char* prevEditLine(EDITTEXT* etext, char* pos);
 
+typedef struct OutputText
+{
+    char text[OUTLEN + 1];
+    BOX* box;
+    char *end;
+    char *pos;
+} OUTTEXT;
+extern OUTTEXT logText;
+
+void  initOutText(OUTTEXT* ,BOX*);
+int   fstrlen(char*, char);
+char* nextLine(OUTTEXT*, char*);
+char* prevLine(OUTTEXT*, char*);
+void  addText(OUTTEXT*, char*);
+void  addFile(OUTTEXT*, char*);
+char* startLine(OUTTEXT*);
+void  reassignText(OUTTEXT*, char*);
+void  addError(OUTTEXT*, char*);
+void  addWarning(OUTTEXT*, char*);
+void  addSuccess(OUTTEXT*, char*);
+void  showOutText(OUTTEXT*);
 #endif
