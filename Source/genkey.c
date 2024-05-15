@@ -9,7 +9,7 @@ INT256 randint256(int N, int M)
     INT256 min = zero ;
     INT256 max = zero;
     for (int i = 0; i < N; i++) {
-        min.value[i/64] |= one << (i%64);
+        min.value[i/64] |= 1 << (i%64);
     }
     for (int i = 0; i < M; i++) {
         max.value[i/64] |= 1 << (i%64);
@@ -23,6 +23,7 @@ INT256 randint256(int N, int M)
 }
 
 int millerRabin(INT256 n, int iterations) {
+    int N,M;
     if (ieq(n, one) || ieq(n, int256_c("2", ASCIIMODE))) {
         return 1;
     }
@@ -38,7 +39,7 @@ int millerRabin(INT256 n, int iterations) {
     }
 
     for (int i = 0; i < iterations; i++) {
-        INT256 a = ipls(randint256(), one, NON);
+        INT256 a = randint256(N,M);
         INT256 x = ipow(a, d, n);
         if (ieq(x, one) || ieq(x, isub(n, one, NON))) {
             continue;
@@ -70,6 +71,7 @@ INT256 igcd_INT256(INT256 a, INT256 b) {
 }
 
 void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename){
+    int N,M;
     switch(mode){
         case 0:
             *p = randint256(N,M);
@@ -80,7 +82,7 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
                 *q = randint256(N,M);
             }
             *n = imul(*p, *q, NON);
-            INT256 phi0 = imul(isub(p0, one, NON), isub(q0, one, NON), NON);
+            INT256 phi0 = imul(isub(*p, one, NON), isub(*q, one, NON), NON);
             INT256 e0 = int256_c("65537", ASCIIMODE);
             while (!ieq(igcd_INT256(e0, phi0) , one))
             {
@@ -133,12 +135,11 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
                 return;
             }
             fread(n->value, 1, MAXBYTE, file);
-            fread(e->value, 1, MAXBYTE, file);
+            fread(e.value, 1, MAXBYTE, file);
             fclose(file);
             *n = imul(*p, *q, NON);
             INT256 phi = imul(isub(*p, one, NON), isub(*q, one, NON), NON);
             e = imulInverse(phi, *d);
-            }
             break;
     }
 }
