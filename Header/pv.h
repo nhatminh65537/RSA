@@ -14,7 +14,6 @@
 
 void initPV();
 
-// program flag
 extern int spu, spr, splt, scpt,
            hpu, hpr, hplt, hcpt,
                      cplt, ccpt;

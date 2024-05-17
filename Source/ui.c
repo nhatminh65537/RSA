@@ -239,8 +239,6 @@ void inputCmd()
                 c = getch();
                 switch (c)
                 {
-                    case 71:
-                        break;
                     case UP:
                         clsInput();
                         if (!inHis) {
@@ -253,8 +251,6 @@ void inputCmd()
                         tabCnt = 0;
                         inTab = 0;
                         continue;
-                    case 73:
-                        break;
                     case RIGHT:
                         if (cmd.pos < cmd.count){
                             ++cmd.pos;
@@ -279,9 +275,22 @@ void inputCmd()
                         inTab = 0;  
                         inHis = 1;
                         continue;
-                    case 81:
-                        break;
-                    case 83:
+                    case DEL:
+                        if (cmd.pos < cmd.count && cmd.pos >= 0){
+                            ++cmd.pos;
+                            CUF(1);
+                            
+                            --cmd.pos;
+                            deleteChar(&cmd);
+
+                            putch('\b'); putch(' '); putch('\b');
+                            for (int i = cmd.pos; i < cmd.count; ++i)
+                                putch(cmd.string[i]);
+                            putch(' '); putch('\b');
+                            if (cmd.count - cmd.pos > 0)
+                                CUB(cmd.count - cmd.pos);
+                        
+                        }
                         break;
                 }
                 break;

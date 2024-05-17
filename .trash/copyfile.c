@@ -14,7 +14,6 @@ void copyFile(char *sourceFile, char *destinationFile) {
     destination = fopen(destinationFile, "w");
 
     if (destination == NULL) {
-        printf("Unable to open destination file to write.\n");
         fclose(source);
         return;
     }

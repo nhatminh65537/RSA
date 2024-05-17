@@ -1,121 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include "int256.h"
 #include <pthread.h>
-#include "../header/int256.h"
-#define NUM_THREADS 16
-
-struct argsThread
-{
-    INT256 *x;
-    INT256 *y;
-    INT256 *e;
-    INT256 *n;
-};
-
-struct argsThread enATL[NUM_THREADS], deATL[NUM_THREADS];
-
-void *powThread(void *argv)
-{
-    struct argsThread *args = (struct argsThread *) argv;
-    *args->y = ipow(*args->x, *args->e,*args->n);
-} 
-
-void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
-{
-    FILE *plaintextFile = fopen(plt, "r");
-    if (plaintextFile == NULL){
-        return;
-    }
-
-    FILE *ciphertextFile = fopen(cpt, "w");
-        if (ciphertextFile == NULL){
-            return;
-    }
-
-    char hex[MAXHEX + 1], buff[MAXBYTE + 1];
-    pthread_t threads[NUM_THREADS];
-    while (!feof(plaintextFile)){
-        int threadCnt = 0;
-
-        for (int i = 0; (i < NUM_THREADS) && !feof(plaintextFile); ++i){
-            INT256 *x, *y;
-            x = malloc(sizeof(INT256));
-            y = malloc(sizeof(INT256));
-            buff[fread(buff, 1, MAXBYTE/2, plaintextFile)] = '\0';
-            *x = int256_c(buff, ASCIIMODE);
-            struct argsThread *args = enATL + threadCnt;
-            args->x = x;
-            args->y = y;
-            args->e = &e;
-            args->n = &n;
-            ++threadCnt;
-            pthread_create(&threads[i], NULL, powThread, (void *) args);
-        }
-
-        for (int i = 0; i < threadCnt; ++i){
-            pthread_join(threads[i], NULL);
-            
-            conv2hex(hex, enATL[i].y);
-            fprintf(ciphertextFile, hex);
-            free(enATL[i].y);
-            free(enATL[i].x);
-        }
-    }
-
-    fclose(plaintextFile);
-    fclose(ciphertextFile);
-}
-
-void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt) 
-{
-    INT256 n = imul(p,q,NON);
-
-    FILE* ciphertextFile = fopen(cpt, "r"); 
-    if (ciphertextFile == NULL) {
-        return;
-    }
-
-    FILE* plaintextFile = fopen(plt, "w"); 
-    if (plaintextFile == NULL) {
-        return;
-    }
-
-    char ascii[MAXBYTE + 1], buff[MAXHEX + 1];
-    pthread_t threads[NUM_THREADS];
-    while(!feof(ciphertextFile)){
-        int threadCnt = 0;
-
-        for (int i = 0; (i < NUM_THREADS) && !feof(ciphertextFile); ++i){
-            INT256 *y, *x;
-            y   = malloc(sizeof(INT256));
-            x = malloc(sizeof(INT256));
-            buff[fread(buff, 1, MAXHEX, ciphertextFile)] = '\0';
-            *y = int256_c(buff, HEXMODE);
-            struct argsThread *args = deATL + threadCnt++;
-            args->x = y;
-            args->y = x;
-            args->e = &d;
-            args->n = &n;
-
-            pthread_create(&threads[i], NULL, powThread, (void *) args);
-        }
-
-        int argsInd = 0;
-        for (int i = 0; i < threadCnt; ++i){
-            pthread_join(threads[i], NULL);
-            
-            conv2char(ascii, deATL[i].y);
-            fprintf(plaintextFile, ascii);
-
-            free(deATL[i].y);
-            free(deATL[i].x);
-        }    
-    }
-
-    fclose(ciphertextFile);
-    fclose(plaintextFile);
-}
-
 #define NUM_GKTHREADS 32
 
 int millerRabin(INT256 n, int iterations) {
@@ -141,8 +28,8 @@ int millerRabin(INT256 n, int iterations) {
 
     for (int i = 0; i < iterations; i++) {
         int f = 1;
-        INT256 a = irand(0, MAXBYTE/2);
-        while (!(igt(a, one) && (ile(a, n)))) a = irand(0, MAXBYTE/2);
+        INT256 a = irand(0, MAXWORD/2);
+        while (!(igt(a, one) && (ile(a, n)))) a = irand(0, MAXWORD/2);
         INT256 x = ipow(a, d, n);
         if (ieq(x, one)) {
             break;
@@ -178,7 +65,7 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
         case 0:
             while (cnt > 0){
                 for (int i = 0; i < NUM_GKTHREADS; ++i){
-                    pList[i] = irand(MAXBYTE/4, MAXBYTE/2);
+                    pList[i] = irand(MAXWORD/4, MAXWORD/2);
                     pthread_create(&threads[i], NULL, prime, (void *) &pList[i]);
                 }
                 for (int i = 0; i < NUM_GKTHREADS; ++i){
@@ -198,16 +85,16 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
 
             *n = imul(*p, *q, NON);
             phi = imul(isub(*p, one, NON), isub(*q, one, NON), NON);
-            *e = irand(MAXBYTE/4, MAXBYTE/4*3);
+            *e = irand(MAXWORD/4, MAXWORD/4*3);
             while (!ieq(igcd(*e, phi) , one) || !ile(*e, phi)){
-                *e = irand(MAXBYTE/4, MAXBYTE/4*3);
+                *e = irand(MAXWORD/4, MAXWORD/4*3);
             }
             *d = imulInverse(phi, *e);
             break;
         case 1: 
             while (cnt > 0){
                 for (int i = 0; i < NUM_GKTHREADS; ++i){
-                    pList[i] = irand(MAXBYTE/4, MAXBYTE/2);
+                    pList[i] = irand(MAXWORD/4, MAXWORD/2);
                     pthread_create(&threads[i], NULL, prime, (void *) &pList[i]);
                 }
                 for (int i = 0; i < NUM_GKTHREADS; ++i){
@@ -232,7 +119,7 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
         case 2:
             while (cnt > 0){
                 for (int i = 0; i < NUM_GKTHREADS; ++i){
-                    pList[i] = irand(MAXBYTE/4, MAXBYTE/2);
+                    pList[i] = irand(MAXWORD/4, MAXWORD/2);
                     pthread_create(&threads[i], NULL, prime, (void *) &pList[i]);
                 }
                 for (int i = 0; i < NUM_GKTHREADS; ++i){
@@ -260,13 +147,39 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
             if (file == NULL) {
                 return;
             }
-            fread(p->value, 1, MAXBYTE, file);
-            fread(q->value, 1, MAXBYTE, file);
-            fread(d->value, 1, MAXBYTE, file);
+            fread(p->value, 1, MAXWORD, file);
+            fread(q->value, 1, MAXWORD, file);
+            fread(d->value, 1, MAXWORD, file);
             fclose(file);
             *n = imul(*p, *q, NON);
             phi = imul(isub(*p, one, NON), isub(*q, one, NON), NON);
             *e = imulInverse(phi, *d);
             break;
     }
+}
+
+void printInt256(INT256 num) 
+{
+    char buff[128];
+    conv2dec(buff, &num);
+    printf(buff);
+    printf("\n");
+}
+
+int main() {
+    initInt();
+    // printInt256(ipow(int256_c("125678", HEXMODE), int256_c("123456", HEXMODE), int256_c("12ff56", HEXMODE)));
+    int cnt = 10, st = 0;
+    while (cnt-- > 0){
+        long long t = time(NULL);
+        srand(time(NULL));
+        INT256 e, d, n, p, q;
+        genkey(0, &p, &q, &n, &e, &d, "");
+        printInt256(p);
+        printInt256(n);
+        printf("%lld\n", time(NULL) - t);
+        st += time(NULL) - t;
+    }
+    printf("\n%d\n", st);
+    return 0;
 }

@@ -1,12 +1,11 @@
 #include <string.h>
 #include <conio.h>
+#include <time.h>
 #include "../header/cmd.h"
 #include "../header/int256.h"
 #include "../header/ui.h"
 #include "../header/pv.h"
 #include "../header/uilib.h"
-
-// Task: Ket hop flag kiem soat chuong trinh
 
 char cmdList[][FULLCMDLEN] = {
     "show-plt", // show plaintext
@@ -53,7 +52,7 @@ int searchCmd(char* cmd, int s, int fullflag)
 {
     for (int i = 0; i < cmdListLen; ++i){
         int index = (s+i)%cmdListLen;
-            if (strcmp(cmd, cmdList[index])           == 0 )             return index;
+        if (strcmp(cmd, cmdList[index])               == 0 )             return index;
         if (strncmp(cmd, cmdList[index], strlen(cmd)) == 0 && !fullflag) return index;
     }
     return -1;
@@ -88,7 +87,7 @@ char* getParaVal(char* para, char args[][CMDARRCLEN])
     int onPara = 0;
     char (*arg)[CMDARRCLEN] = (args + 1);
     while (**arg != 0){
-        if (strcmp(para, *arg) == 0)                          return *++arg;
+        if (strcmp(para, *arg) == 0 && **(arg + 1) != '-')    return *++arg;
         if (**arg != '-' && !onPara && strcmp(para, "") == 0) return *arg;
         if (**arg == '-') onPara = 1;
         else              onPara = 0;
@@ -97,12 +96,11 @@ char* getParaVal(char* para, char args[][CMDARRCLEN])
     return NULL; 
 }
 
-
 int runCmd()
 {
     char *c = cmd.string;
-    char  args[CMDARRLEN][CMDARRCLEN];
-    char message[128];
+    char args[CMDARRLEN][CMDARRCLEN];
+    char message[MESSLEN];
     
     while (*c)
     {    
@@ -117,7 +115,12 @@ int runCmd()
             case 4 : enableBox(&cptBox, FALSE); break;
             case 5 : enableBox(&logBox, FALSE); break; 
             case 6 : addFile(&logText, "data/info-program.txt"); break;
-            case 7 : addFile(&logText, "data/info-pbl.txt")    ; break;
+            case 7 : 
+                cptBox.sx = FULL;
+                enableBox(&pltBox, FALSE);
+                enableBox(&cptBox, FALSE);
+                addFile(&logText, "data/info-pbl.txt"); 
+                break;
             case 8 : helpCmd(args + 1) ; break;
             case 9 : unloadPltCmd(args); break;
             case 10: unloadCptCmd(args); break;
@@ -161,9 +164,38 @@ void genkeyCmd(char args[][CMDARRCLEN])
         addWarning(&logText, "This private key haven't saved yet. Phease save it or add flag -f to force action.");
         return;
     }
+
+    int mode = 0;
+    if (getParaVal("-e", args) != NULL) {
+        e.val = int256_c(getParaVal("-e", args), DECMODE);
+        mode = 2;
+    } else if (getParaVal("-d", args) != NULL) {
+        d.val = int256_c(getParaVal("-d", args), DECMODE);
+        mode = 1;
+    } else if (getParaVal("-pr", args) != NULL) {
+        FILE* f = fopen(getParaVal("-pr", args) , "rb");
+        if (f == NULL){
+            addError(&logText, "The private key file doesn't exist.");
+            fclose(f);
+            return;
+        }
+        fread(p.val.value, 1, MAXBYTE, f);
+        fread(q.val.value, 1, MAXBYTE, f);
+        fread(d.val.value, 1, MAXBYTE, f);
+        fclose(f);
+        mode = 3;
+    }
+
     spr = 0; hpr = 1; 
     spu = 0; hpu = 1;
-    genkey(0 , &p.val, &q.val, &n.val, &e.val, &d.val, "");
+
+    int t = time(NULL);
+    genkey(mode, &p.val, &q.val, &n.val, &e.val, &d.val, "");
+    int new_t = time(NULL);
+    char mess[MESSLEN];
+    sprintf(mess, "Time-consuming: %ds\n", new_t - t);
+    addText(&logText, mess);
+
     fulfillKey(&e);
     fulfillKey(&n);
     fulfillKey(&p);
@@ -307,6 +339,13 @@ void loadPltCmd(char args[][CMDARRCLEN])
         addWarning(&logText, "The plaintext  haven't saved yet. Phease save it or add flag -f to force action.");
         return;
     }
+    FILE *f = fopen(getParaVal("", args), "r");
+    if (f == NULL) {
+        addError(&logText, "The plaintext  doesn't exist");
+        fclose(f);
+        return;
+    }
+    fclose(f);
     hplt = 1;
     splt = 1;
     cplt = 0;
@@ -319,6 +358,13 @@ void loadCptCmd(char args[][CMDARRCLEN])
         addWarning(&logText, "The ciphertext haven't saved yet. Phease save it or add flag -f to force action.");
         return;
     }
+    FILE *f = fopen(getParaVal("", args), "r");
+    if (f == NULL) {
+        addError(&logText, "The ciphertext doesn't exist");
+        fclose(f);
+        return;
+    }
+    fclose(f);
     hcpt = 1;
     scpt = 1;
     ccpt = 0;
@@ -342,6 +388,7 @@ void loadKeyCmd(char args[][CMDARRCLEN])
         f = fopen(file, "rb");
         if (f == NULL){
             addError(&logText, "The public  key file doesn't exist.");
+            fclose(f);
             return;
         }
         fread(n.val.value, 1, MAXBYTE, f);
@@ -358,6 +405,7 @@ void loadKeyCmd(char args[][CMDARRCLEN])
         f = fopen(file, "rb");
         if (f == NULL){
             addError(&logText, "The private key file doesn't exist.");
+            fclose(f);
             return;
         }
         fread(p.val.value, 1, MAXBYTE, f);
@@ -377,6 +425,7 @@ void loadKeyCmd(char args[][CMDARRCLEN])
         f = fopen(strcat(publicKeyFile, ".puk"), "rb");
         if (f == NULL){
             addError(&logText, "The public  key file doesn't exist");
+            fclose(f);
             return;
         }
         fread(n.val.value, 1, MAXBYTE, f);
@@ -393,6 +442,7 @@ void loadKeyCmd(char args[][CMDARRCLEN])
         f = fopen(strcat(privateKeyFile, ".prk"), "rb");
         if (f == NULL){
             addError(&logText, "The private key file doesn't exist");
+            fclose(f);
             return;
         }
         fread(p.val.value, 1, MAXBYTE, f);
@@ -477,15 +527,14 @@ void saveTextCmd(TEXT* text, char args[][CMDARRCLEN])
     char *file = getParaVal("", args);
     saveText(text, file);
     loadToText(text, file, text->box);
-    if (strcmp(args[0], "save-plt")) hplt = 1, hplt = 1, cplt = 0;
-    if (strcmp(args[0], "save-cpt")) hcpt = 1, hcpt = 1, ccpt = 0;
+    if (strcmp(args[0], "save-plt") == 0) hplt = 1, hplt = 1, cplt = 0;
+    if (strcmp(args[0], "save-cpt") == 0) hcpt = 1, hcpt = 1, ccpt = 0;
 }
 
 void helpCmd(char args[][CMDARRCLEN])
 {
     if (strcmp(args[0], "") == 0)
-        addFile(&logText, "data/help.txt");
-
+        addFile(&logText, "data/help/help.txt");
 }
 
 void clearLogCmd()
@@ -608,7 +657,12 @@ void encryptCmd(char args[][CMDARRCLEN])
     }
     if (!hcpt) scpt = 0;
 
+    int t = time(NULL);
     encrypt(e.val, n.val, input, output);
+    int new_t = time(NULL);
+    char mess[MESSLEN];
+    sprintf(mess, "Time-consuming: %ds\n", new_t - t);
+    addText(&logText, mess);
     addSuccess(&logText, "Encryption finished successly.");
     readText(&cipherText, 0);
     resetText(&cptBox);
@@ -626,7 +680,7 @@ void decryptCmd(char args[][CMDARRCLEN])
         addError(&logText, "Can't find ciphertext");
         return;
     }
-        FILE *f = fopen(input, "r");
+    FILE *f = fopen(input, "r");
     if (f == NULL) {
         addError(&logText, "The ciphertext doesn't exist");
         fclose(f);
@@ -668,7 +722,12 @@ void decryptCmd(char args[][CMDARRCLEN])
     }
     if (!hplt) splt = 0;
 
+    int t = time(NULL);
     decrypt(d.val, p.val, q.val, input, output);
+    int new_t = time(NULL);
+    char mess[MESSLEN];
+    sprintf(mess, "Time-consuming: %ds\n", new_t - t);
+    addText(&logText, mess);
     addSuccess(&logText, "Decryption finished successly.");
     readText(&plainText, 0);
     resetText(&pltBox);

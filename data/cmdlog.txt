@@ -1,30 +1,30 @@
-load-plt plt.txt
-encrypt
-load-key key
-encrypt
-unload-plt
-decrypt
-save-plt .mytest.txt
-load-key key
-load-plt plt.txt
+save-key key
+load-plt .mytest/plt.txt
 encrypt
 unload-plt
 decrypt
-load-cpt cptk2.txt; load-key key/2
-load-plt plt.txt; load-key k; encrypt; unload-plt
+help
+where
+where-key
+unload-key
+gene-key -e 3
+save-key key/1
+gene-key -e 3
 gene-key
-load-plt .mytest/plaintext.txt
+load-plt .trash/plt.txt
 encrypt
-focus-plt
-focus-cpt
-focus-plt
-unshow-plt
-unshow-cpt
-unshow-log
-show-cpt
-show-plt
-unload-plt
+decrypt -f
+gene-key
+gene-key -f
+load-plt .trash/plt.txt
+load-key key
 decrypt
-save-key key/3
-save-cpt .mytest/cpt.txt
+encrypt
+decrypt
+where-plt
+decrypt
+decrypt -f 
+encrypt -f
+unload-key
+gene-key
 exit

@@ -1,5 +1,6 @@
-#include "../header/int256.h"
+#include "int256.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 
 INT256 zero;
@@ -33,8 +34,8 @@ int _len(unsigned char *str)
 
 int _sub(INT256* result, INT256 a, INT256 b)
 {
-    int carry = 0;
-    for (int i = 0; i < MAXBYTE; ++i)
+    unsigned long long carry = 0;
+    for (int i = 0; i < MAXWORD; ++i)
     {
         result->value[i] = a.value[i] - b.value[i] - carry;
         if (a.value[i] < b.value[i] + carry) carry = 1;
@@ -44,11 +45,11 @@ int _sub(INT256* result, INT256 a, INT256 b)
 } 
 int _pls(INT256 *result, INT256 a, INT256 b)
 {
-    int carry = 0;
-    for (int i = 0; i < MAXBYTE; ++i)
+    unsigned long long carry = 0;
+    for (int i = 0; i < MAXWORD; ++i)
     {
         result->value[i] = a.value[i] + b.value[i] + carry;
-        if (a.value[i] + b.value[i] + carry > 0xff) carry = 1;
+        if (a.value[i] + b.value[i] + carry > maxval.value[0]) carry = 1;
         else                                        carry = 0;
     }
     return carry;
@@ -71,20 +72,20 @@ unsigned char _tohex(unsigned char c)
 int _index(INT256* num, int pos)
 {
     if (MAXBIT > pos && pos >= 0)
-        return (num->value[pos/8] >> (pos%8)) & 0x1;  
+        return (num->value[pos/WORD] >> (pos%WORD)) & 1;  
     else return -1; 
 }
 void _set(INT256* num, int pos, int value)
 {
     if (MAXBIT > pos && pos >= 0 && value == 1)
-        num->value[pos/8] |= 1 << (pos%8);
+        num->value[pos/WORD] |= 1 << (pos%WORD);
     if (MAXBIT > pos && pos >= 0 && value == 0) 
-        num->value[pos/8] &= ~(1 << (pos%8));
+        num->value[pos/WORD] &= ~(1 << (pos%WORD));
 }
 
 void assign(INT256* des, INT256* ref)
 {
-    for (int i = 0; i < MAXBYTE; ++i)
+    for (int i = 0; i < MAXWORD; ++i)
         des->value[i] = ref->value[i];
 }
 
@@ -95,20 +96,15 @@ INT256 int256_c(unsigned char* str, enum Mode mode)
 
     // ASCII mode
     if (mode == ASCIIMODE)
-        for (int i = 0; i < MAXBYTE; ++i)
+        for (int i = 0; i < MAXWORD; ++i)
         {
             result.value[i] = str[_min(i, len)];     
         }      
     
     // HEX mode
     if (mode == HEXMODE){
-        int num_left, num_right;
-        for (int i = 0; i < MAXBYTE; ++i)
-        {
-            num_right = --len >= 0? _tonum(str[len]): 0;
-            num_left  = --len >= 0? _tonum(str[len]): 0;
-            result.value[i] = num_right + (num_left << 4);
-        }
+        sscanf(str, "%x", result.value);
+        for (int i = len/(WORD/4) + 1; i < MAXWORD; ++i) result.value[i] = 0;
     }
         
     // DEC mode
@@ -128,20 +124,20 @@ INT256 int256_c(unsigned char* str, enum Mode mode)
 
 void conv2char(unsigned char* str, INT256* num)
 {
-    for (int i = 0; i < MAXBYTE; ++i)
+    for (int i = 0; i < MAXWORD; ++i)
         str[i] = num->value[i];
-    str[MAXBYTE] = 0;
+    str[MAXWORD] = 0;
 }
+
 void conv2hex(unsigned char* hex, INT256* num)
 {
-    for (int i = 0; i < MAXBYTE; ++i)
-    {
-        hex[2*i]     = _tohex(num->value[i] & 0x0f);
-        hex[2*i + 1] = _tohex(num->value[i] >> 4 & 0x0f );
+    for (int i = MAXWORD - 1; i >=0; --i){
+        sprintf(hex, "%04x", num->value[i]);
+        hex += 4;
     }
-    hex[MAXHEX] =  0 ;
-    _reverse(hex);
+    hex[MAXHEX] =  0;
 }
+
 void conv2dec(unsigned char* dec, INT256* num)
 {
     int i = 0;
@@ -159,7 +155,7 @@ void conv2dec(unsigned char* dec, INT256* num)
 
 int ile(INT256 a, INT256 b)
 {
-    int i = MAXBYTE - 1, result = 0;
+    int i = MAXWORD - 1, result = 0;
     while (i >= 0 && a.value[i] == b.value[i])
         --i;
     if (i < 0 || a.value[i] > b.value[i]) return 0;
@@ -167,7 +163,7 @@ int ile(INT256 a, INT256 b)
 }
 int ieq(INT256 a, INT256 b)
 {
-    int i = MAXBYTE - 1, result = 0;
+    int i = MAXWORD - 1, result = 0;
     while (i >= 0 && a.value[i] == b.value[i])
         --i;
     if (i < 0) return 1;
@@ -322,7 +318,7 @@ INT256 irand(int minByte, int maxByte)
 {
     INT256 result = zero;
     for (int i = 0; i < maxByte; i++) {
-        result.value[i] = rand() % 256*sizeof(result.value[i]);
+        result.value[i] = rand();
     }
     int check = 0;
     for (int i = minByte; i < maxByte; ++i) if (result.value[i] != 0) check = 1;
@@ -344,7 +340,7 @@ void initInt()
 {
     srand(time(NULL));
     zero = int256_c("0", HEXMODE);
-    for (int i = 0; i < MAXBYTE; ++i) maxval.value[i] = 0xff;
+    for (int i = 0; i < MAXWORD; ++i) maxval.value[i] = -1;
     one = int256_c("1", HEXMODE);
 }
 

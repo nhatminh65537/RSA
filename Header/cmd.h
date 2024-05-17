@@ -6,6 +6,7 @@
 #define CMDLEN        32
 #define CMDARRLEN     16
 #define CMDARRCLEN    64
+#define MESSLEN       256
 
 extern char cmdList[][FULLCMDLEN];
 int searchCmd(char*, int, int);

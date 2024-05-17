@@ -113,12 +113,19 @@ void loadToText(TEXT* text, const char *fileName, BOX* box)
     showText(box);
 }
 
-// need update copy text to text
 void saveText(TEXT* text, const char * fileName)
 {
-    FILE *f = fopen(fileName, "w");
-    fprintf(f, text->text);
-    fclose(f);
+    FILE *source, *destination;
+    char ch;
+    source = fopen(text->file, "r");
+    destination = fopen(fileName, "w");
+
+    while ((ch = fgetc(source)) != EOF) {
+        fputc(ch, destination);
+    }
+    
+    fclose(source);
+    fclose(destination);
 }
 
 void insertChar(CMDSTR* cstr, char c)
@@ -298,11 +305,6 @@ int _posChar(EDITTEXT* etext, char *c, int *x, int*y)
     return 0;
 }
 
-char* _getChar(EDITTEXT* etext, int x, int y)
-{
-
-}
-
 void edit(EDITTEXT* etext)
 {   
     int top = etext->box->top + 1, bottom = etext->box->bottom - 1,
@@ -363,6 +365,11 @@ void edit(EDITTEXT* etext)
                     case DOWN:
                         cc = nextEditLine(etext, cc);
                         while(*cc != '\n' && *cc != '\0' && t != x) ++cc, ++t;
+                        break;
+                    case DEL:
+                        if (cc < etext->end) ++cc;
+                         _deleteChar(etext->text, cc);
+                        if (cc != etext->text) --cc, --etext->end;
                         break;
                 }
                 break;
