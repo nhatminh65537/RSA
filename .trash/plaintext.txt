@@ -1,2 +1,0 @@
-Remote access
-    A host-to-network configuration is analogous to connecting a computer to a local area network. This type provides access to an enterprise[jargon] network, such as an intranet. This may be employed for remote workers, or to enable a mobile worker to access necessary tools without exposing them to the public Internet.
