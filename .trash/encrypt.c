@@ -6,10 +6,10 @@
 
 struct argsThread
 {
-  INT256 *x;
-  INT256 *y;
-  INT256 *e;
-  INT256 *n;
+  INT512 *x;
+  INT512 *y;
+  INT512 *e;
+  INT512 *n;
 };
 
 struct argsThread argsThreadList[NUM_THREADS];
@@ -20,7 +20,7 @@ void *powThread(void *argv)
   *args->y = ipow(*args->x, *args->e,*args->n);
 } 
 
-void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
+void encrypt(INT512 e, INT512 n, char *plt, char *cpt)
 {
   FILE *plaintextFile = fopen(plt, "r");
   if (plaintextFile == NULL){
@@ -38,9 +38,9 @@ void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
     int threadCnt = 0;
 
     for (int i = 0; (i < NUM_THREADS) && !feof(plaintextFile); ++i){
-      INT256 *x, *y;
-      x = malloc(sizeof(INT256));
-      y = malloc(sizeof(INT256));
+      INT512 *x, *y;
+      x = malloc(sizeof(INT512));
+      y = malloc(sizeof(INT512));
       buff[fread(buff, 1, MAXBYTE, plaintextFile)] = '\0';
       *x = int256_c(buff, ASCIIMODE);
       struct argsThread *args = argsThreadList + threadCnt;
@@ -66,9 +66,9 @@ void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
   fclose(ciphertextFile);
 }
 
-void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt) 
+void decrypt(INT512 d ,INT512 p , INT512 q, char* cpt, char* plt) 
 {
-  INT256 n = imul(p,q,NON);
+  INT512 n = imul(p,q,NON);
   
   FILE* ciphertextFile = fopen(cpt, "r"); 
   if (ciphertextFile == NULL) {
@@ -80,11 +80,11 @@ void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt)
     return;
   }
   
-  INT256 d_p = imod(d, isub(p, one,NON));
-  INT256 d_q = imod(d, isub(q, one,NON));
+  INT512 d_p = imod(d, isub(p, one,NON));
+  INT512 d_q = imod(d, isub(q, one,NON));
 
-  INT256 M_q = imulInverse(q, p);
-  INT256 M_p = imulInverse(p, q);
+  INT512 M_q = imulInverse(q, p);
+  INT512 M_p = imulInverse(p, q);
   
   char ascii[MAXBYTE + 1], buff[MAXBYTE + 1];
   pthread_t threads_p[NUM_THREADS/2], threads_q[NUM_THREADS/2];
@@ -92,10 +92,10 @@ void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt)
     int threadCnt = 0;
 
     for (int i = 0; (i < NUM_THREADS/2) && !feof(ciphertextFile); ++i){
-      INT256 *y, *x_q, *x_p;
-      y   = malloc(sizeof(INT256));
-      x_p = malloc(sizeof(INT256));
-      x_q = malloc(sizeof(INT256));
+      INT512 *y, *x_q, *x_p;
+      y   = malloc(sizeof(INT512));
+      x_p = malloc(sizeof(INT512));
+      x_q = malloc(sizeof(INT512));
       buff[fread(buff, 1, MAXHEX, ciphertextFile)] = '\0';
       *y = int256_c(buff, HEXMODE);
       struct argsThread *args_p = argsThreadList + threadCnt++, 
@@ -119,11 +119,11 @@ void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt)
       pthread_join(threads_p[i], NULL);
       pthread_join(threads_q[i], NULL);
 
-      INT256 *y   = (argsThreadList + argsInd  )->x;
-      INT256 *x_p = (argsThreadList + argsInd++)->y;
-      INT256 *x_q = (argsThreadList + argsInd++)->y;
+      INT512 *y   = (argsThreadList + argsInd  )->x;
+      INT512 *x_p = (argsThreadList + argsInd++)->y;
+      INT512 *x_q = (argsThreadList + argsInd++)->y;
           
-      INT256 x  = ipls(imul(imul(M_p , q , n) , *x_p , n),
+      INT512 x  = ipls(imul(imul(M_p , q , n) , *x_p , n),
                        imul(imul(M_q , p , n) , *x_q , n), n);
       
       conv2char(ascii, &x);
@@ -139,9 +139,9 @@ void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt)
   fclose(plaintextFile);
 }
 
-INT256 isub(INT256 a, INT256 b, INT256 n)
+INT512 isub(INT512 a, INT512 b, INT512 n)
 {
-    INT256 result;
+    INT512 result;
     int carry;
     
     carry = _sub(&result, a, b);

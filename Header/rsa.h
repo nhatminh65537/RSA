@@ -1,10 +1,10 @@
 #ifndef __RSA__
 #define __RSA__
 
-#include "int256.h"
+#include "int512.h"
 
-void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt);
-void encrypt(INT256 e, INT256 n, char *plt, char *cpt);
-void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename);
+void decrypt(INT512 d ,INT512 p , INT512 q, char* cpt, char* plt);
+void encrypt(INT512 e, INT512 n, char *plt, char *cpt);
+void genkey(int mode , INT512* p, INT512* q, INT512* n, INT512* e, INT512* d, char* filename);
 
 #endif

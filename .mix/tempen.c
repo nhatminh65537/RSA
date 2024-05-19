@@ -3,7 +3,7 @@
 
 #include "../header/int256.h"
 
-void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
+void encrypt(INT512 e, INT512 n, char *plt, char *cpt)
 {
   FILE *plaintextFile = fopen(plt, "r");
   if (plaintextFile == NULL){
@@ -17,7 +17,7 @@ void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
 
   char hex[MAXHEX + 1], buff[MAXBYTE + 1];
   while (!feof(plaintextFile)){
-      INT256 x, y;
+      INT512 x, y;
       buff[fread(buff, 1, MAXBYTE, plaintextFile)] = '\0';
       x = int256_c(buff, ASCIIMODE);
       y = ipow(x, e, n);

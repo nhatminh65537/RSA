@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include "../header/int256.h"
+#include "../header/int512.h"
 #define NUM_THREADS 16
 
 struct argsThread
 {
-    INT256 *x;
-    INT256 *y;
-    INT256 *e;
-    INT256 *n;
+    INT512 *x;
+    INT512 *y;
+    INT512 *e;
+    INT512 *n;
 };
 
 struct argsThread enATL[NUM_THREADS], deATL[NUM_THREADS];
@@ -20,7 +20,7 @@ void *powThread(void *argv)
     *args->y = ipow(*args->x, *args->e,*args->n);
 } 
 
-void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
+void encrypt(INT512 e, INT512 n, char *plt, char *cpt)
 {
     FILE *plaintextFile = fopen(plt, "r");
     if (plaintextFile == NULL){
@@ -28,9 +28,6 @@ void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
     }
 
     FILE *ciphertextFile = fopen(cpt, "w");
-        if (ciphertextFile == NULL){
-            return;
-    }
 
     char hex[MAXHEX + 1], buff[MAXBYTE + 1];
     pthread_t threads[NUM_THREADS];
@@ -38,9 +35,9 @@ void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
         int threadCnt = 0;
 
         for (int i = 0; (i < NUM_THREADS) && !feof(plaintextFile); ++i){
-            INT256 *x, *y;
-            x = malloc(sizeof(INT256));
-            y = malloc(sizeof(INT256));
+            INT512 *x, *y;
+            x = malloc(sizeof(INT512));
+            y = malloc(sizeof(INT512));
             buff[fread(buff, 1, MAXBYTE/2, plaintextFile)] = '\0';
             *x = int256_c(buff, ASCIIMODE);
             struct argsThread *args = enATL + threadCnt;
@@ -66,9 +63,9 @@ void encrypt(INT256 e, INT256 n, char *plt, char *cpt)
     fclose(ciphertextFile);
 }
 
-void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt) 
+void decrypt(INT512 d ,INT512 p , INT512 q, char* cpt, char* plt) 
 {
-  INT256 n = imul(p,q,NON);
+  INT512 n = imul(p,q,NON);
   
   FILE* ciphertextFile = fopen(cpt, "r"); 
   if (ciphertextFile == NULL) {
@@ -76,26 +73,23 @@ void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt)
   }
   
   FILE* plaintextFile = fopen(plt, "w"); 
-  if (plaintextFile == NULL) {
-    return;
-  }
   
-  INT256 d_p = imod(d, isub(p, one,NON));
-  INT256 d_q = imod(d, isub(q, one,NON));
+  INT512 d_p = imod(d, isub(p, one,NON));
+  INT512 d_q = imod(d, isub(q, one,NON));
 
-  INT256 M_q = imulInverse(q, p);
-  INT256 M_p = imulInverse(p, q);
+  INT512 M_q = imulInverse(q, p);
+  INT512 M_p = imulInverse(p, q);
   
-  char ascii[MAXBYTE + 1], buff[MAXBYTE + 1];
+  char ascii[MAXBYTE + 1], buff[MAXHEX + 1];
   pthread_t threads_p[NUM_THREADS/2], threads_q[NUM_THREADS/2];
   while(!feof(ciphertextFile)){
     int threadCnt = 0;
 
     for (int i = 0; (i < NUM_THREADS/2) && !feof(ciphertextFile); ++i){
-      INT256 *y, *x_q, *x_p;
-      y   = malloc(sizeof(INT256));
-      x_p = malloc(sizeof(INT256));
-      x_q = malloc(sizeof(INT256));
+      INT512 *y, *x_q, *x_p;
+      y   = malloc(sizeof(INT512));
+      x_p = malloc(sizeof(INT512));
+      x_q = malloc(sizeof(INT512));
       buff[fread(buff, 1, MAXHEX, ciphertextFile)] = '\0';
       *y = int256_c(buff, HEXMODE);
       struct argsThread *args_p = deATL + threadCnt++, 
@@ -119,11 +113,11 @@ void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt)
       pthread_join(threads_p[i], NULL);
       pthread_join(threads_q[i], NULL);
 
-      INT256 *y   = (deATL + argsInd  )->x;
-      INT256 *x_p = (deATL + argsInd++)->y;
-      INT256 *x_q = (deATL + argsInd++)->y;
+      INT512 *y   = (deATL + argsInd  )->x;
+      INT512 *x_p = (deATL + argsInd++)->y;
+      INT512 *x_q = (deATL + argsInd++)->y;
           
-      INT256 x  = ipls(imul(imul(M_p , q , n) , *x_p , n),
+      INT512 x  = ipls(imul(imul(M_p , q , n) , *x_p , n),
                        imul(imul(M_q , p , n) , *x_q , n), n);
       
       conv2char(ascii, &x);
@@ -141,7 +135,7 @@ void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt)
 
 #define NUM_GKTHREADS 32
 
-int millerRabin(INT256 n, int iterations) {
+int millerRabin(INT512 n, int iterations) {
     if (ieq(n, int256_c("2", HEXMODE))){
         return 1;
     }
@@ -155,8 +149,8 @@ int millerRabin(INT256 n, int iterations) {
         return 0;
     }
 
-    INT256 s = zero;
-    INT256 d = isub(n, one, NON), nso = isub(n, one, NON);
+    INT512 s = zero;
+    INT512 d = isub(n, one, NON), nso = isub(n, one, NON);
     int k = 0;
     for (int i = 0; i < MAXBIT; ++i){
         if (n.value[i/8] >> (i%8) & 1 == 0){
@@ -167,9 +161,9 @@ int millerRabin(INT256 n, int iterations) {
 
     for (int i = 0; i < iterations; i++) {
         int p = 0;
-        INT256 a = irand(0, MAXBYTE/2);
+        INT512 a = irand(0, MAXBYTE/2);
         while (!(igt(a, one) && (ile(a, n)))) a = irand(0, MAXBYTE/2);
-        INT256 x = ipow(a, d, n);
+        INT512 x = ipow(a, d, n);
         if (ieq(x, one)) {
             continue;
         }
@@ -188,16 +182,16 @@ int millerRabin(INT256 n, int iterations) {
     return 1;
 }
 
-INT256 pList[NUM_GKTHREADS];
+INT512 pList[NUM_GKTHREADS];
 void * prime(void * arg)
 {
-    INT256* num = (INT256*) arg;
+    INT512* num = (INT512*) arg;
     if(!millerRabin(*num, 50)) *num = zero;
 }
 
-void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename)
+void genkey(int mode , INT512* p, INT512* q, INT512* n, INT512* e, INT512* d, char* filename)
 {
-    INT256 phi;
+    INT512 phi;
     pthread_t threads[NUM_GKTHREADS];
     int cnt = 2;
     switch(mode){

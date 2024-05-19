@@ -1,11 +1,10 @@
-#ifndef __INT256__
-#define __INT256__
+#ifndef __INT512__
+#define __INT512__
 
-#define MAXWORD  128
-#define WORD     8
+#define MAXBYTE  64
 
-#define MAXHEX MAXWORD*WORD/4
-#define MAXBIT MAXWORD*WORD
+#define MAXHEX MAXBYTE*2
+#define MAXBIT MAXBYTE*8
 #define NON zero
 
 enum Mode
@@ -17,7 +16,7 @@ enum Mode
 
 struct Int512
 {
-    unsigned char value[MAXWORD];
+    unsigned char value[MAXBYTE];
 };
 typedef struct Int512 INT512;
 

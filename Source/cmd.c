@@ -2,7 +2,7 @@
 #include <conio.h>
 #include <time.h>
 #include "../header/cmd.h"
-#include "../header/int256.h"
+#include "../header/int512.h"
 #include "../header/ui.h"
 #include "../header/pv.h"
 #include "../header/uilib.h"
@@ -89,7 +89,7 @@ char* getParaVal(char* para, char args[][CMDARRCLEN])
     char (*arg)[CMDARRCLEN] = (args + 1);
     while (**arg != 0){
         if (strcmp(para, *arg) == 0){
-            if (**++arg != '-') return "";
+            if (**++arg == '-') return "";
             else                return *arg;
         } 
         if (**arg != '-' && !onPara && strcmp(para, "") == 0) return *arg;
@@ -635,7 +635,7 @@ void focusLogCmd(OUTTEXT* out)
 void encryptCmd(char args[][CMDARRCLEN])
 {
     char *input, *output;
-    INT256 ek, nk;
+    INT512 ek, nk;
 
     if (getParaVal("", args) != NULL) input = getParaVal("", args);
     else if (hplt || !splt)           input = plainText.file;
@@ -668,7 +668,8 @@ void encryptCmd(char args[][CMDARRCLEN])
         return;
     }
 
-    if (getParaVal("-o", args) != NULL) output = getParaVal("-o", args);
+    if (getParaVal("-o", args) != NULL) 
+        output = getParaVal("-o", args);
     else if (hcpt || !scpt){
         if (getParaVal("-f", args) == NULL){
             addWarning(&logText, "This action can be change your current content of ciphertext file. Please add output file or put flag -f to force action.");
@@ -698,7 +699,7 @@ void encryptCmd(char args[][CMDARRCLEN])
 void decryptCmd(char args[][CMDARRCLEN])
 {
     char *input, *output;
-    INT256 dk, pk, qk;
+    INT512 dk, pk, qk;
 
     if (getParaVal("", args) != NULL) input = getParaVal("", args);
     else if (hcpt || !scpt)           input = cipherText.file;

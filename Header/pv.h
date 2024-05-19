@@ -1,7 +1,7 @@
 #ifndef __PRGVAR__
 #define __PRGVAR__
 
-#include "int256.h"
+#include "int512.h"
 #include "ui.h"
 #include "uilib.h"
 
@@ -24,7 +24,7 @@ extern char publicKeyFile[], privateKeyFile[];
 
 typedef struct KeyElement 
 {
-    INT256 val;
+    INT512 val;
     char hex[MAXHEX+3];
     char dec[2*MAXHEX];
 

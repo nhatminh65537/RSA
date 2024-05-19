@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <time.h>
 
-INT256 zero;
-INT256 maxval;
-INT256 one;
+INT512 zero;
+INT512 maxval;
+INT512 one;
 
 int _min(int a, int b) 
 {
@@ -32,7 +32,7 @@ int _len(unsigned char *str)
     return result;
 }
 
-int _sub(INT256* result, INT256 a, INT256 b)
+int _sub(INT512* result, INT512 a, INT512 b)
 {
     unsigned long carry = 0;
     for (int i = 0; i < MAXWORD; ++i)
@@ -43,7 +43,7 @@ int _sub(INT256* result, INT256 a, INT256 b)
     } 
     return carry;
 } 
-int _pls(INT256 *result, INT256 a, INT256 b)
+int _pls(INT512 *result, INT512 a, INT512 b)
 {
     unsigned long carry = 0;
     for (int i = 0; i < MAXWORD; ++i)
@@ -54,7 +54,7 @@ int _pls(INT256 *result, INT256 a, INT256 b)
     }
     return carry;
 }
-void _mul(INT256* result, INT256* over, INT256 a, INT256 b)
+void _mul(INT512* result, INT512* over, INT512 a, INT512 b)
 {
     *result = zero;
     *over = zero;
@@ -90,13 +90,13 @@ unsigned char _tohex(unsigned char c)
     return '0';
 }
 
-int _index(INT256* num, int pos)
+int _index(INT512* num, int pos)
 {
     if (MAXBIT > pos && pos >= 0)
         return (num->value[pos/WORD] >> (pos%WORD)) & 1;  
     else return -1; 
 }
-void _set(INT256* num, int pos, int value)
+void _set(INT512* num, int pos, int value)
 {
     if (MAXBIT > pos && pos >= 0 && value == 1)
         num->value[pos/WORD] |= 1 << (pos%WORD);
@@ -104,16 +104,16 @@ void _set(INT256* num, int pos, int value)
         num->value[pos/WORD] &= ~(1 << (pos%WORD));
 }
 
-void assign(INT256* des, INT256* ref)
+void assign(INT512* des, INT512* ref)
 {
     for (int i = 0; i < MAXWORD; ++i)
         des->value[i] = ref->value[i];
 }
 
-INT256 int256_c(unsigned char* str, enum Mode mode)
+INT512 int256_c(unsigned char* str, enum Mode mode)
 {
     int len = _len(str);
-    INT256 result;
+    INT512 result;
 
     // ASCII mode
     if (mode == ASCIIMODE)
@@ -131,7 +131,7 @@ INT256 int256_c(unsigned char* str, enum Mode mode)
     // DEC mode
     if (mode == DECMODE){
         result = zero;
-        INT256 ten = int256_c("A", HEXMODE);
+        INT512 ten = int256_c("A", HEXMODE);
         char dig[2];
         dig[1] = '\0';
         for (int i = 0; i < len; ++i){
@@ -143,14 +143,14 @@ INT256 int256_c(unsigned char* str, enum Mode mode)
     return result;
 }
 
-void conv2char(unsigned char* str, INT256* num)
+void conv2char(unsigned char* str, INT512* num)
 {
     for (int i = 0; i < MAXWORD; ++i)
         str[i] = num->value[i];
     str[MAXWORD] = 0;
 }
 
-void conv2hex(unsigned char* hex, INT256* num)
+void conv2hex(unsigned char* hex, INT512* num)
 {
     for (int i = MAXWORD - 1; i >=0; --i){
         sprintf(hex, "%04x", num->value[i]);
@@ -159,10 +159,10 @@ void conv2hex(unsigned char* hex, INT256* num)
     hex[MAXHEX] =  0;
 }
 
-void conv2dec(unsigned char* dec, INT256* num)
+void conv2dec(unsigned char* dec, INT512* num)
 {
     int i = 0;
-    INT256 ten, dig;
+    INT512 ten, dig;
     dig = *num;
     ten = int256_c("A", HEXMODE);
     do{
@@ -174,7 +174,7 @@ void conv2dec(unsigned char* dec, INT256* num)
     _reverse(dec);
 }
 
-int ile(INT256 a, INT256 b)
+int ile(INT512 a, INT512 b)
 {
     int i = MAXWORD - 1, result = 0;
     while (i >= 0 && a.value[i] == b.value[i])
@@ -182,7 +182,7 @@ int ile(INT256 a, INT256 b)
     if (i < 0 || a.value[i] > b.value[i]) return 0;
     else                                  return 1;
 }
-int ieq(INT256 a, INT256 b)
+int ieq(INT512 a, INT512 b)
 {
     int i = MAXWORD - 1, result = 0;
     while (i >= 0 && a.value[i] == b.value[i])
@@ -190,22 +190,22 @@ int ieq(INT256 a, INT256 b)
     if (i < 0) return 1;
     else       return 0;
 }
-int igt(INT256 a, INT256 b)
+int igt(INT512 a, INT512 b)
 {
     return !ieq(a, b) && !ile(a, b);
 }
 
-INT256 shiftleft(INT256 num, int times)
+INT512 shiftleft(INT512 num, int times)
 {
-    INT256 result = zero;
+    INT512 result = zero;
     for (int i = times; i < MAXBIT; ++i)
         result.value[i/WORD] = result.value[i/WORD] | ((num.value[(i - times)/WORD] >> ((i - times)%WORD) & 1) << (i%WORD));
     return result;
 }
 
-INT256 imod(INT256 a, INT256 b)
+INT512 imod(INT512 a, INT512 b)
 {
-    INT256 remainder;
+    INT512 remainder;
     remainder = a;
 
     int mostbit = MAXBIT-1;
@@ -217,9 +217,9 @@ INT256 imod(INT256 a, INT256 b)
     
     return remainder;
 }
-INT256 idiv(INT256 a, INT256 b)
+INT512 idiv(INT512 a, INT512 b)
 {
-    INT256 result, remainder;
+    INT512 result, remainder;
     remainder = a;
     result = zero;
     int mostbit = MAXBIT - 1;
@@ -238,9 +238,9 @@ INT256 idiv(INT256 a, INT256 b)
     return result;
 }
 
-INT256 ipls(INT256 a, INT256 b, INT256 n)
+INT512 ipls(INT512 a, INT512 b, INT512 n)
 {
-    INT256 result;
+    INT512 result;
     int carry;
 
     carry = _pls(&result, a, b);
@@ -256,9 +256,9 @@ INT256 ipls(INT256 a, INT256 b, INT256 n)
     }
     return result;
 }
-INT256 isub(INT256 a, INT256 b, INT256 n)
+INT512 isub(INT512 a, INT512 b, INT512 n)
 {
-    INT256 result;
+    INT512 result;
     int carry;
     
     carry = _sub(&result, a, b);
@@ -275,10 +275,10 @@ INT256 isub(INT256 a, INT256 b, INT256 n)
     return result;
 }
 
-INT256 imul(INT256 a, INT256 b, INT256 n)
+INT512 imul(INT512 a, INT512 b, INT512 n)
 {
 
-    INT256 result, temp, over;
+    INT512 result, temp, over;
     result = zero;
     temp =  a;
     _mul(&result, &over, a, b);
@@ -301,9 +301,9 @@ INT256 imul(INT256 a, INT256 b, INT256 n)
     return result;
 }
 
-INT256 ipow(INT256 a, INT256 b, INT256 n)
+INT512 ipow(INT512 a, INT512 b, INT512 n)
 {
-    INT256 result;
+    INT512 result;
     result = one;
     int next = 1;
     for (int i = MAXBIT - 1; i>= 0; --i)
@@ -318,11 +318,11 @@ INT256 ipow(INT256 a, INT256 b, INT256 n)
     return result;
 }
 
-INT256 imulInverse(INT256 n, INT256 a)
+INT512 imulInverse(INT512 n, INT512 a)
 {
-    INT256 a0 = n, b0 = a;
-    INT256 t0 = zero, t = one;
-    INT256 q, r, temp;
+    INT512 a0 = n, b0 = a;
+    INT512 t0 = zero, t = one;
+    INT512 q, r, temp;
  
     q = idiv(a0, b0);
     r = imod(a0, b0);
@@ -344,9 +344,9 @@ INT256 imulInverse(INT256 n, INT256 a)
     return t;
 }
 
-INT256 irand(int minByte, int maxByte)
+INT512 irand(int minByte, int maxByte)
 {
-    INT256 result = zero;
+    INT512 result = zero;
     for (int i = 0; i < maxByte; i++) {
         result.value[i] = rand();
     }
@@ -356,10 +356,10 @@ INT256 irand(int minByte, int maxByte)
     return result;
 }
 
-INT256 igcd(INT256 a, INT256 b) 
+INT512 igcd(INT512 a, INT512 b) 
 {
     while (!ieq(b, zero)) {
-        INT256 r = imod(a, b);
+        INT512 r = imod(a, b);
         a = b;
         b = r;
     }
@@ -378,7 +378,7 @@ void initInt()
 // {
 //     initInt();
 //     char ch[1024];
-//     INT256 n,m,t,k,a,b,p;
+//     INT512 n,m,t,k,a,b,p;
 //     n = int256_c("Re", ASCIIMODE), 
 //     m = int256_c("6f"  , HEXMODE), 
 //     t = int256_c("3", HEXMODE),
@@ -390,7 +390,7 @@ void initInt()
 //     // conv2hex(&ch, &n);
 //     // printf("%s", ch);
 //     // printf("%d\n", &a);
-//     // INT256 re;
+//     // INT512 re;
 //     // re = imul(a, b, p);
 //     // show(ipow(a, b, p), HEXMODE); printf("\n");
 //     // show(a, HEXMODE);

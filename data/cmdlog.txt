@@ -1,21 +1,3 @@
-exit
-
-
-
-
-
-
-
-
-
-load-plt plt.txt
-focus-plt
-gene-key
-encrypt
-focus-cpt
-save-key key
-load-plt plt.txt
-load-key key
 encrypt
 where-cpt
 load-plt plt.txt; load-key key; encrypt; where-cpt
@@ -37,4 +19,22 @@ d
 focus-log
 info-pbl
 help
+load-key .test/key
+load .test/plt.txt
+load-plt .test/plt.txt
+encrypt
+unshow-plt
+show-plt
+unload-plt
+decrypt
+focus-plt
+decrypt -o .test/pltc.txt
+load-plt .test/plt.txt
+load-key .test/key
+encrypt -o .test/cpt.txt
+unload-plt
+decrypt .test/cpt.txt
+unload-key -pu
+unload-key -pr
+gene-key
 exit

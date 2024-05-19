@@ -5,9 +5,9 @@
 #include <pthread.h>
 #define NUM_GKTHREADS 32
 
-INT256 cnt;
+INT512 cnt;
 
-int millerRabin(INT256 n, int iterations) {
+int millerRabin(INT512 n, int iterations) {
     if (ieq(n, int256_c("2", HEXMODE))){
         return 1;
     }
@@ -21,8 +21,8 @@ int millerRabin(INT256 n, int iterations) {
         return 0;
     }
 
-    INT256 s = zero;
-    INT256 d = isub(n, one, NON), nso = isub(n, one, NON);
+    INT512 s = zero;
+    INT512 d = isub(n, one, NON), nso = isub(n, one, NON);
     int k = 0;
     for (int i = 0; i < MAXBIT; ++i){
         if (n.value[i/WORD] >> (i%WORD) & 1 == 0){
@@ -33,9 +33,9 @@ int millerRabin(INT256 n, int iterations) {
 
     for (int i = 0; i < iterations; i++) {
         int f = 1;
-        INT256 a = irand(0, MAXWORD/2);
+        INT512 a = irand(0, MAXWORD/2);
         while (!(igt(a, one) && (ile(a, n)))) a = irand(0, MAXWORD/2);
-        INT256 x = ipow(a, d, n);
+        INT512 x = ipow(a, d, n);
         if (ieq(x, one)) {
             continue;
         }
@@ -54,17 +54,17 @@ int millerRabin(INT256 n, int iterations) {
     return 1;
 }
 
-INT256 pList[NUM_GKTHREADS];
+INT512 pList[NUM_GKTHREADS];
 void * prime(void * arg)
 {
     cnt = ipls(cnt, one, NON);
-    INT256* num = (INT256*) arg;
+    INT512* num = (INT512*) arg;
     if(!millerRabin(*num, 50)) *num = zero;
 }
 
-void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename)
+void genkey(int mode , INT512* p, INT512* q, INT512* n, INT512* e, INT512* d, char* filename)
 {
-    INT256 phi;
+    INT512 phi;
     pthread_t threads[NUM_GKTHREADS];
     int cnt = 2;
     switch(mode){
@@ -164,7 +164,7 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
     }
 }
 
-void printInt256(INT256 num) 
+void printInt256(INT512 num) 
 {
     char buff[512];
     conv2dec(buff, &num);
@@ -177,7 +177,7 @@ int main() {
     printInt256(imul(int256_c("FF2B2ACD", HEXMODE), int256_c("F1E31231", HEXMODE), int256_c("a231", HEXMODE)));
     long long t = time(NULL);
     srand(time(NULL));
-    INT256 e, d, n, p, q;
+    INT512 e, d, n, p, q;
     genkey(0, &p, &q, &n, &e, &d, "");
     printInt256(p);
     printInt256(q);

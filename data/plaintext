@@ -1,0 +1,18 @@
+Virtual private networks may be classified into several categories:
+
+Remote access
+    A host-to-network configuration is analogous to connecting a computer to a local area network. This type provides access to an enterprise[jargon] network, such as an intranet. This may be employed for remote workers, or to enable a mobile worker to access necessary tools without exposing them to the public Internet.
+Site-to-site
+    A site-to-site configuration connects two networks. This configuration expands a network across geographically disparate offices or connects a group of offices to a data center installation. The interconnecting link may run over a dissimilar intermediate network, such as two IPv6 networks connected over an IPv4 network.[5]
+Extranet-based site-to-site
+    In the context of site-to-site configurations, the terms intranet and extranet are used to describe two different use cases.[6] An intranet site-to-site VPN describes a configuration where the sites connected by the VPN belong to the same organization, whereas an extranet site-to-site VPN joins sites belonging to multiple organizations.
+Typically, individuals interact with remote access VPNs, whereas businesses tend to make use of site-to-site connections for business-to-business, cloud computing, and branch office scenarios. However, these technologies are not mutually exclusive and, in a significantly complex business network, may be combined to enable remote access to resources located at any given site, such as an ordering system that resides in a data center.
+
+VPN systems also may be classified by:
+
+    the tunneling protocol used to tunnel the traffic
+    the tunnel's termination point location, e.g., on the customer edge or network-provider edge
+    the type of topology of connections, such as site-to-site or network-to-network
+    the levels of security provided
+    the OSI layer they present to the connecting network, such as Layer 2 circuits or Layer 3 network connectivity
+    the number of simultaneous connections

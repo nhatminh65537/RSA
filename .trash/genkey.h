@@ -5,9 +5,9 @@
 #include "../Header/int256.h"
 #define NUM_GKTHREADS 32
 
-INT256 irand(int minByte, int maxByte)
+INT512 irand(int minByte, int maxByte)
 {
-    INT256 result = zero;
+    INT512 result = zero;
     for (int i = 0; i < maxByte; i++) {
         result.value[i] = rand() % 256;
     }
@@ -18,7 +18,7 @@ INT256 irand(int minByte, int maxByte)
 }
 
 
-int millerRabin(INT256 n, int iterations) {
+int millerRabin(INT512 n, int iterations) {
     if (ieq(n, int256_c("2", HEXMODE))){
         return 1;
     }
@@ -32,8 +32,8 @@ int millerRabin(INT256 n, int iterations) {
         return 0;
     }
 
-    INT256 s = zero;
-    INT256 d = isub(n, one, NON);
+    INT512 s = zero;
+    INT512 d = isub(n, one, NON);
     while (ieq(imod(d, int256_c("2", HEXMODE)), zero)) {
         d = idiv(d, int256_c("2", HEXMODE));
         s = ipls(s, one, NON);
@@ -41,14 +41,14 @@ int millerRabin(INT256 n, int iterations) {
 
     for (int i = 0; i < iterations; i++) {
         int f = 1;
-        INT256 a = irand(0, MAXBYTE/2);
+        INT512 a = irand(0, MAXBYTE/2);
         while (!(igt(a, one) && (ile(a, n)))) a = irand(0, MAXBYTE/2);
-        INT256 x = ipow(a, d, n);
+        INT512 x = ipow(a, d, n);
         if (ieq(x, one)) {
             break;
         }
 
-        for (INT256 j = zero; ile(j, isub(s, one, NON)); j = ipls(j, one, NON)) {
+        for (INT512 j = zero; ile(j, isub(s, one, NON)); j = ipls(j, one, NON)) {
             if (ieq(x, isub(n, one, NON))) {
                 break;
                 f = 0;
@@ -62,9 +62,9 @@ int millerRabin(INT256 n, int iterations) {
     return 1;
 }
 
-INT256 igcd(INT256 a, INT256 b) {
+INT512 igcd(INT512 a, INT512 b) {
     while (!ieq(b, zero)) {
-        INT256 r = imod(a, b);
+        INT512 r = imod(a, b);
         a = b;
         b = r;
     }
@@ -73,7 +73,7 @@ INT256 igcd(INT256 a, INT256 b) {
 
 typedef struct Agrs
 {
-    INT256 n;
+    INT512 n;
     pthread_t * threadL;
 } ARGS;
 
@@ -89,9 +89,9 @@ void * prime(void * arg)
         pthread_cancel(num->threadL[i]);
 }
 
-void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename){
+void genkey(int mode , INT512* p, INT512* q, INT512* n, INT512* e, INT512* d, char* filename){
     switch(mode){
-        INT256 phi;
+        INT512 phi;
         case 0:
             pthread_t threads[NUM_GKTHREADS];
             int cnt = 2;
@@ -162,7 +162,7 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
     }
 }
 
-void printInt256(INT256 num) 
+void printInt256(INT512 num) 
 {
     char buff[128];
     conv2dec(buff, &num);
@@ -177,7 +177,7 @@ int main() {
     initInt();
     long long t = time(NULL);
     srand(time(NULL));
-    INT256 e, d, n, p, q;
+    INT512 e, d, n, p, q;
     genkey(0, &p, &q, &n, &e, &d, "");
     printInt256(p);
     printInt256(n);
@@ -190,9 +190,9 @@ int main() {
 #include <time.h>
 #include "../Header/int256.h"
 
-INT256 irand(int minByte, int maxByte)
+INT512 irand(int minByte, int maxByte)
 {
-    INT256 result = zero;
+    INT512 result = zero;
     for (int i = 0; i < maxByte; i++) {
         result.value[i] = rand() % 256;
     }
@@ -202,7 +202,7 @@ INT256 irand(int minByte, int maxByte)
     return result;
 }
 
-int millerRabin(INT256 n, int iterations) {
+int millerRabin(INT512 n, int iterations) {
     if (ieq(n, one) || ieq(n, int256_c("2", HEXMODE))) {
         return 1;
     }
@@ -210,8 +210,8 @@ int millerRabin(INT256 n, int iterations) {
         return 0;
     }
 
-    INT256 s = zero;
-    INT256 d = isub(n, one, NON);
+    INT512 s = zero;
+    INT512 d = isub(n, one, NON);
     while (ieq(imod(d, int256_c("2", HEXMODE)), zero)) {
         d = idiv(d, int256_c("2", HEXMODE));
         s = ipls(s, one, NON);
@@ -219,14 +219,14 @@ int millerRabin(INT256 n, int iterations) {
 
     for (int i = 0; i < iterations; i++) {
         int f = 1;
-        INT256 a = irand(0, MAXBYTE/2);
+        INT512 a = irand(0, MAXBYTE/2);
         while (!(igt(a, one) && (ile(a, n)))) a = irand(0, MAXBYTE/2);
-        INT256 x = ipow(a, d, n);
+        INT512 x = ipow(a, d, n);
         if (ieq(x, one)) {
             break;
         }
 
-        for (INT256 j = zero; ile(j, isub(s, one, NON)); j = ipls(j, one, NON)) {
+        for (INT512 j = zero; ile(j, isub(s, one, NON)); j = ipls(j, one, NON)) {
             if (ieq(x, isub(n, one, NON))) {
                 break;
                 f = 0;
@@ -242,18 +242,18 @@ int millerRabin(INT256 n, int iterations) {
 
 
 
-INT256 igcd(INT256 a, INT256 b) {
+INT512 igcd(INT512 a, INT512 b) {
     while (!ieq(b, zero)) {
-        INT256 r = imod(a, b);
+        INT512 r = imod(a, b);
         a = b;
         b = r;
     }
     return a;
 }
 
-void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename){
+void genkey(int mode , INT512* p, INT512* q, INT512* n, INT512* e, INT512* d, char* filename){
     switch(mode){
-        INT256 phi;
+        INT512 phi;
         case 0:
             *p = irand(MAXBYTE/4, MAXBYTE/2);
             *q = irand(MAXBYTE/4, MAXBYTE/2);
@@ -308,7 +308,7 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
     }
 }
 
-void printInt256(INT256 num) 
+void printInt256(INT512 num) 
 {
     char buff[128];
     conv2dec(buff, &num);
@@ -320,7 +320,7 @@ int main() {
     initInt();
     srand(time(NULL));
     long long t = time(NULL);
-    INT256 e, d, n, p, q;
+    INT512 e, d, n, p, q;
     genkey(0, &p, &q, &n, &e, &d, "");
     printInt256(p);
     printInt256(q);
@@ -336,9 +336,9 @@ int main() {
 #include "../Header/int256.h"
 #define NUM_GKTHREADS 32
 
-INT256 irand(int minByte, int maxByte)
+INT512 irand(int minByte, int maxByte)
 {
-    INT256 result = zero;
+    INT512 result = zero;
     for (int i = 0; i < maxByte; i++) {
         result.value[i] = rand() % 256;
     }
@@ -349,7 +349,7 @@ INT256 irand(int minByte, int maxByte)
 }
 
 
-int millerRabin(INT256 n, int iterations) {
+int millerRabin(INT512 n, int iterations) {
     if (ieq(n, int256_c("2", HEXMODE))){
         return 1;
     }
@@ -363,8 +363,8 @@ int millerRabin(INT256 n, int iterations) {
         return 0;
     }
 
-    INT256 s = zero;
-    INT256 d = isub(n, one, NON);
+    INT512 s = zero;
+    INT512 d = isub(n, one, NON);
     while (ieq(imod(d, int256_c("2", HEXMODE)), zero)) {
         d = idiv(d, int256_c("2", HEXMODE));
         s = ipls(s, one, NON);
@@ -372,14 +372,14 @@ int millerRabin(INT256 n, int iterations) {
 
     for (int i = 0; i < iterations; i++) {
         int f = 1;
-        INT256 a = irand(0, MAXBYTE/2);
+        INT512 a = irand(0, MAXBYTE/2);
         while (!(igt(a, one) && (ile(a, n)))) a = irand(0, MAXBYTE/2);
-        INT256 x = ipow(a, d, n);
+        INT512 x = ipow(a, d, n);
         if (ieq(x, one)) {
             break;
         }
 
-        for (INT256 j = zero; ile(j, isub(s, one, NON)); j = ipls(j, one, NON)) {
+        for (INT512 j = zero; ile(j, isub(s, one, NON)); j = ipls(j, one, NON)) {
             if (ieq(x, isub(n, one, NON))) {
                 break;
                 f = 0;
@@ -393,9 +393,9 @@ int millerRabin(INT256 n, int iterations) {
     return 1;
 }
 
-INT256 igcd(INT256 a, INT256 b) {
+INT512 igcd(INT512 a, INT512 b) {
     while (!ieq(b, zero)) {
-        INT256 r = imod(a, b);
+        INT512 r = imod(a, b);
         a = b;
         b = r;
     }
@@ -404,7 +404,7 @@ INT256 igcd(INT256 a, INT256 b) {
 
 typedef struct Agrs
 {
-    INT256 n;
+    INT512 n;
     pthread_t * threadL;
 } ARGS;
 
@@ -420,9 +420,9 @@ void * prime(void * arg)
         pthread_cancel(num->threadL[i]);
 }
 
-void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename){
+void genkey(int mode , INT512* p, INT512* q, INT512* n, INT512* e, INT512* d, char* filename){
     switch(mode){
-        INT256 phi;
+        INT512 phi;
         case 0:
             pthread_t threads[NUM_GKTHREADS];
             int cnt = 2;
@@ -497,7 +497,7 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
     }
 }
 
-void printInt256(INT256 num) 
+void printInt256(INT512 num) 
 {
     char buff[128];
     conv2dec(buff, &num);
@@ -512,7 +512,7 @@ int main() {
     initInt();
     long long t = time(NULL);
     srand(time(NULL));
-    INT256 e, d, n, p, q;
+    INT512 e, d, n, p, q;
     genkey(0, &p, &q, &n, &e, &d, "");
     printInt256(p);
     printInt256(n);
