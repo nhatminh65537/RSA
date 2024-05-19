@@ -217,6 +217,7 @@ void editPltCmd()
     }
     splt = 0;
     enableText(&pltBox, FALSE, pltBox.text);
+    enableBox(&pltBox, TRUE);
     printf("\x1b[?25h");
     edit(&pltEditText);
     printf("\x1b[?25l");
@@ -233,6 +234,7 @@ void editCptCmd()
     }
     scpt = 0;
     enableText(&cptBox, FALSE, cptBox.text);
+    enableBox(&cptBox, TRUE);
     printf("\x1b[?25h");
     edit(&cptEditText);
     printf("\x1b[?25l");

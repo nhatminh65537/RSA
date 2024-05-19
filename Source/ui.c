@@ -35,8 +35,8 @@ void initUI()
     enableBox(&keyBox, TRUE);
     enableBox(&wrkBox, TRUE);
     enableBox(&logBox, TRUE);
-    enableBox(&cptBox, TRUE);
-    enableBox(&pltBox, TRUE);
+    enableBox(&cptBox, FALSE);
+    enableBox(&pltBox, FALSE);
 
     resetDefaultPlaintext ();
     resetDefaultCiphertext();
