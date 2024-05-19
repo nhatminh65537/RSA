@@ -98,7 +98,8 @@ int readText(TEXT* text, int offset)
             text->pos += offset;
         }
         fseek(f, text->pos, SEEK_SET);
-        text->text[fread(text->text, 1, TEXTMAX, f)] = 0;
+        // fscanf(f, "%s", text->text);
+        text->text[fread(text->text, 1, TEXTMAX - 1, f)] = 0;
     }
     else
         addError(&logText, "File not Found!");
@@ -421,7 +422,11 @@ char* prevLine(OUTTEXT* out, char* pos)
     char* newpos = pos;
     if ( newpos - out->text > 1 && *(newpos - 1) == '\n') newpos -= 2;
     while (newpos - out->text > 0 && *newpos != '\n') --newpos;
-    while (nextLine(out, newpos) < pos) newpos = nextLine(out, newpos);
+    if (newpos != out->text) ++newpos;
+    while (nextLine(out, newpos) < pos) {
+        if (nextLine(out, newpos) + 1 == pos && *nextLine(out, newpos) == '\n') break;
+        newpos = nextLine(out, newpos);
+    }
     return newpos;
 
     // int width = out->box->right - out->box->left - 1;
@@ -490,18 +495,14 @@ void addText(OUTTEXT* out, char* str)
 void addFile(OUTTEXT* out, char* name)
 {
     char buff[128];
-    int cnt = (out->box->bottom - out->box->top - 1)*(out->box->right - out->box->left - 1) - (out->end - out->pos);
     FILE *f = fopen(name, "r");
     int pos = 0;
     while (!feof(f)){
         pos = fread(buff, 1, 127, f);
         buff[pos] = 0;
-        cnt -= pos;
         addText(out, buff);
     }
-    if (cnt < 0){
-        reassignText(out, startLine(out));
-    }
+    reassignText(out, startLine(out));
     fclose(f);
 }
 

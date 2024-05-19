@@ -1,0 +1,8 @@
+
+Reset plaintext file to normal.
+
+    UNLOAD-PLT [-f]
+
+Parameter:
+    -f      force action
+

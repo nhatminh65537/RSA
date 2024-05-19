@@ -1,0 +1,9 @@
+
+Load ciphertext from a file.
+
+    LOAD-CPT <file> [-f]
+
+Parameter:
+    <file>      file containing ciphertext
+    -f          force action
+

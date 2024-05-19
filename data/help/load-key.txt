@@ -1,0 +1,16 @@
+
+Load key from a file.
+
+    LOAD-KEY <key file> [-pr] | [-pu] [-f]
+
+Parameter:
+    -f              force action.
+    <key file>      key file for loading
+    -pr             load private key
+    -pu             load public  key
+
+Note:
+    If don't give -pr and -pu flag, the command will load two key from file.
+    When load two key from file, the name for publickey file and privatekey file corresponding with "name" is "name.puk" and "name.prk".
+
+ 

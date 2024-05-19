@@ -1,0 +1,13 @@
+
+Reset key (public key or private key) to normal.
+
+    UNLOAD-KEY [-pr] [-pu] [-f]
+
+Parameter:
+    -pr     unload private key
+    -pu     unload public key
+    -f      force action
+
+Note:
+    Default, all key will be unload.
+

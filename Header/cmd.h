@@ -14,11 +14,6 @@ int runCmd();
 char* phraseCmd (char*, char[][CMDARRCLEN]);
 char* getParaVal(char* para,  char args[][CMDARRCLEN]);
 
-
-
-void loadCmd();
-void exportCmd();
-void focusCmd();
 void unloadPltCmd(char [][CMDARRCLEN]);
 void unloadCptCmd(char [][CMDARRCLEN]);
 void unloadKeyCmd(char [][CMDARRCLEN]);
@@ -38,10 +33,6 @@ void editPltCmd();
 void genkeyCmd(char [][CMDARRCLEN]);
 void encryptCmd(char[][CMDARRCLEN]);
 void decryptCmd(char[][CMDARRCLEN]);
-
-// rsa.c
-void decrypt(INT256 d ,INT256 p , INT256 q, char* cpt, char* plt);
-void encrypt(INT256 e, INT256 n, char *plt, char *cpt);
-void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename);
+void infoPblCmd();
 
 #endif

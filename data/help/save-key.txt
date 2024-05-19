@@ -1,0 +1,15 @@
+
+Save or export key (public key or private key) to a file.
+
+    SAVE-KEY <key file> [-pr] | [-pu]
+
+Parameter:
+    <key file>          key file for saving
+    -pr                 save private key
+    -pu                 save public  key
+
+Note:
+    If don't give -pr and -pu flag, the command will save two key to file.
+    When save all two key to file, the name for publickey file and privatekey file corresponding with "name" is "name.puk" and "name.prk".
+
+ 

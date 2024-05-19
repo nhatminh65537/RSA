@@ -6,11 +6,12 @@
 #include "../header/ui.h"
 #include "../header/pv.h"
 #include "../header/uilib.h"
+#include "../header/rsa.h"
 
 char cmdList[][FULLCMDLEN] = {
-    "show-plt", // show plaintext
-    "show-cpt", // show ciphertext
-    "show-log", // show outputlog
+    "show-plt",
+    "show-cpt",
+    "show-log", 
     "unshow-plt", 
     "unshow-cpt", 
 
@@ -87,7 +88,10 @@ char* getParaVal(char* para, char args[][CMDARRCLEN])
     int onPara = 0;
     char (*arg)[CMDARRCLEN] = (args + 1);
     while (**arg != 0){
-        if (strcmp(para, *arg) == 0 && **(arg + 1) != '-')    return *++arg;
+        if (strcmp(para, *arg) == 0){
+            if (**++arg != '-') return "";
+            else                return *arg;
+        } 
         if (**arg != '-' && !onPara && strcmp(para, "") == 0) return *arg;
         if (**arg == '-') onPara = 1;
         else              onPara = 0;
@@ -115,12 +119,7 @@ int runCmd()
             case 4 : enableBox(&cptBox, FALSE); break;
             case 5 : enableBox(&logBox, FALSE); break; 
             case 6 : addFile(&logText, "data/info-program.txt"); break;
-            case 7 : 
-                cptBox.sx = FULL;
-                enableBox(&pltBox, FALSE);
-                enableBox(&cptBox, FALSE);
-                addFile(&logText, "data/info-pbl.txt"); 
-                break;
+            case 7 : infoPblCmd();       break;
             case 8 : helpCmd(args + 1) ; break;
             case 9 : unloadPltCmd(args); break;
             case 10: unloadCptCmd(args); break;
@@ -154,6 +153,14 @@ int runCmd()
     return 1;
 } 
 
+void infoPblCmd()
+{
+    cptBox.sx = FULL;
+    enableBox(&pltBox, FALSE);
+    enableBox(&cptBox, FALSE);
+    addFile(&logText, "data/info-pbl.txt"); 
+}
+
 void genkeyCmd(char args[][CMDARRCLEN])
 {
     if (!spu && getParaVal("-f", args) == NULL) {
@@ -165,6 +172,7 @@ void genkeyCmd(char args[][CMDARRCLEN])
         return;
     }
 
+    char *file = getParaVal("-pr", args);
     int mode = 0;
     if (getParaVal("-e", args) != NULL) {
         e.val = int256_c(getParaVal("-e", args), DECMODE);
@@ -172,16 +180,13 @@ void genkeyCmd(char args[][CMDARRCLEN])
     } else if (getParaVal("-d", args) != NULL) {
         d.val = int256_c(getParaVal("-d", args), DECMODE);
         mode = 1;
-    } else if (getParaVal("-pr", args) != NULL) {
-        FILE* f = fopen(getParaVal("-pr", args) , "rb");
+    } else if (file != NULL) {
+        FILE* f = fopen(file , "rb");
         if (f == NULL){
             addError(&logText, "The private key file doesn't exist.");
             fclose(f);
             return;
         }
-        fread(p.val.value, 1, MAXBYTE, f);
-        fread(q.val.value, 1, MAXBYTE, f);
-        fread(d.val.value, 1, MAXBYTE, f);
         fclose(f);
         mode = 3;
     }
@@ -190,7 +195,7 @@ void genkeyCmd(char args[][CMDARRCLEN])
     spu = 0; hpu = 1;
 
     int t = time(NULL);
-    genkey(mode, &p.val, &q.val, &n.val, &e.val, &d.val, "");
+    genkey(mode, &p.val, &q.val, &n.val, &e.val, &d.val, file);
     int new_t = time(NULL);
     char mess[MESSLEN];
     sprintf(mess, "Time-consuming: %ds\n", new_t - t);
@@ -275,7 +280,7 @@ void whereCptCmd()
 {
     char message[128];
     strcpy(message, "Ciphertext path: ");
-    strcat(message,  plainText.file);
+    strcat(message,  cipherText.file);
     if (!hcpt) strcat(message,  " (default)");
     strcat(message, "\n");
     addText(&logText, message);
@@ -316,7 +321,7 @@ void unloadKeyCmd(char args[][CMDARRCLEN])
             addWarning(&logText, "This private key haven't saved yet. Phease save it or add flag -f to force action.");
             return;
         }
-        resetDefaultPrKey;
+        resetDefaultPrKey();
     } else{
         if (!spu && getParaVal("-f", args) == NULL) {
             addWarning(&logText, "This public key haven't saved yet. Phease save it or add flag -f to force action.");
@@ -535,6 +540,27 @@ void helpCmd(char args[][CMDARRCLEN])
 {
     if (strcmp(args[0], "") == 0)
         addFile(&logText, "data/help/help.txt");
+    else {
+        switch (searchCmd(args[0], 0, 1)){
+            case 9 : addFile(&logText, "data/help/unload-plt.txt"); break;
+            case 10: addFile(&logText, "data/help/unload-cpt.txt"); break;
+            case 11: addFile(&logText, "data/help/unload-key.txt"); break;
+            case 18: addFile(&logText, "data/help/load-plt.txt"); break;  
+            case 19: addFile(&logText, "data/help/load-cpt.txt"); break;
+            case 20: addFile(&logText, "data/help/load-key.txt"); break;
+            case 21: addFile(&logText, "data/help/save-plt.txt"); break;
+            case 22: addFile(&logText, "data/help/save-cpt.txt"); break;
+            case 23: addFile(&logText, "data/help/save-key.txt"); break;
+            case 27: addFile(&logText, "data/help/gene-key.txt"); break;
+            case 29: addFile(&logText, "data/help/decrypt.txt" ); break;
+            case 30: addFile(&logText, "data/help/encrypt.txt" ); break;
+            default:
+                char mess[MESSLEN];
+                sprintf(mess, "Sorry! Can't fnd help file for \"%s\".\n", args[0]);
+                addError(&logText, mess);
+                break;
+        }
+    }
 }
 
 void clearLogCmd()
@@ -555,18 +581,18 @@ void focusCmd(TEXT* text)
             c = getch();
             switch (c)
             {
-            case UP:
-                readText(text, -linesize);
-                break;
-            case DOWN:
-                readText(text, linesize);
-                break;
-            case PGDN:
-                readText(text, -linesize*pagesize/2);
-                break;
-            case PGUP:
-                readText(text, linesize*pagesize/2);
-                break;
+                case UP:
+                    readText(text, -linesize);
+                    break;
+                case DOWN:
+                    readText(text, linesize);
+                    break;
+                case PGDN:
+                    readText(text, -linesize*pagesize/2);
+                    break;
+                case PGUP:
+                    readText(text, linesize*pagesize/2);
+                    break;
             }
         }
         if (c == EXIT){

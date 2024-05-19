@@ -33,7 +33,7 @@ int _len(unsigned char *str)
 
 int _sub(INT256* result, INT256 a, INT256 b)
 {
-    int carry = 0;
+    unsigned long carry = 0;
     for (int i = 0; i < MAXBYTE; ++i)
     {
         result->value[i] = a.value[i] - b.value[i] - carry;
@@ -44,7 +44,7 @@ int _sub(INT256* result, INT256 a, INT256 b)
 } 
 int _pls(INT256 *result, INT256 a, INT256 b)
 {
-    int carry = 0;
+    unsigned long carry = 0;
     for (int i = 0; i < MAXBYTE; ++i)
     {
         result->value[i] = a.value[i] + b.value[i] + carry;
@@ -52,6 +52,27 @@ int _pls(INT256 *result, INT256 a, INT256 b)
         else                                        carry = 0;
     }
     return carry;
+}
+void _mul(INT256* result, INT256* over, INT256 a, INT256 b)
+{
+    *result = zero;
+    *over = zero;
+    unsigned long carry = 0;
+    for (int i = 0; i < MAXBYTE; ++i){
+        for (int j = 0; j <= i; ++j){
+            carry = carry + (a.value[i-j]*b.value[j]);
+        }
+        result->value[i] = carry;
+        carry = carry >> 8;
+    }
+    for (int i = 1; i < MAXBYTE; ++i){
+        for (int j = i; j < MAXBYTE; ++j){
+            carry = carry + (a.value[MAXBYTE-1+i-j]*b.value[j]);
+        }
+        over->value[i-1] = carry;
+        carry = carry >> 8; 
+    }
+    over->value[MAXBYTE-1] = carry;
 }
 
 unsigned char _tonum(unsigned char c)
@@ -181,8 +202,8 @@ int igt(INT256 a, INT256 b)
 INT256 shiftleft(INT256 num, int times)
 {
     INT256 result = zero;
-    for (int i = 0; i < MAXBIT; ++i)
-        _set(&result, i + times, _index(&num, i));
+    for (int i = times; i < MAXBIT; ++i)
+        result.value[i/8] = result.value[i/8] | ((num.value[(i - times)/8] >> ((i - times)%8) & 1) << (i%8));
     return result;
 }
 
@@ -260,18 +281,26 @@ INT256 isub(INT256 a, INT256 b, INT256 n)
 
 INT256 imul(INT256 a, INT256 b, INT256 n)
 {
-    INT256 result, temp;
-    result = zero;
-    temp =  a;
-    for (int i = 0; i < MAXBIT; ++i)
-    {  
-        if (_index(&b, i) == 1)
+    INT256 result, temp, over;
+    _mul(&result, &over, a, b);
+    if (!ieq(n, NON)){
+        do {
+            result = ipls(result, over, n);
+            _mul(&temp, &over, imod(over, n), imod(maxval, n));
             result = ipls(result, temp, n);
-        if (_index(&temp, MAXBIT - 1) == 1) 
-            temp = ipls(ipls(shiftleft(temp, 1), one, n), imod(maxval, n), n);
-        else
-            temp = imod(shiftleft(temp, 1), n); 
+        } while (igt(over, zero));
     }
+    // result = zero;
+    // temp =  a;
+    // for (int i = 0; i < MAXBIT; ++i)
+    // {  
+    //     if (_index(&b, i) == 1)
+    //         result = ipls(result, temp, n);
+    //     if (_index(&temp, MAXBIT - 1) == 1) 
+    //         temp = ipls(ipls(shiftleft(temp, 1), one, n), imod(maxval, n), n);
+    //     else
+    //         temp = imod(shiftleft(temp, 1), n); 
+    // }
     return result;
 }
 
@@ -322,7 +351,7 @@ INT256 irand(int minByte, int maxByte)
 {
     INT256 result = zero;
     for (int i = 0; i < maxByte; i++) {
-        result.value[i] = rand() % 256*sizeof(result.value[i]);
+        result.value[i] = rand();
     }
     int check = 0;
     for (int i = minByte; i < maxByte; ++i) if (result.value[i] != 0) check = 1;

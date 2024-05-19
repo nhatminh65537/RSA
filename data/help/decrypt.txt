@@ -1,0 +1,16 @@
+Decrypt the content in ciphertext box or a file.
+
+    DECRYPT [-f] [<ciphertext file>] [-o <plaintext file>] [-k <key file>]
+
+Parameter:
+    <ciphertext>            choose ciphertext file for decryption
+    -f                      force action
+    -o <plaintext file>     choose file for outputing plaintext
+    -k <key> file           choose private key file for encryption
+
+Note:
+    If given't plaintext file or ciphertext file, the default two file for encryption is loading ciphertext and loading plaintext. You can check them with two command.
+
+        WHERE-CPT
+        WHERE-PLT
+

@@ -1,0 +1,10 @@
+Generate key for encryption and decryption
+
+    GENE-KEY [-f] [-pr <file name>] [-e <number>] [-d <number>]
+
+Parameter:
+    -f                  force action       
+    -pr <file name>     load private key and generate public key from this
+    -e <number>         choose e before generate key
+    -d <number>         choose d before generate key
+

@@ -5,11 +5,12 @@
 #include "ui.h"
 #include "uilib.h"
 
+
 #define OUTLEN        1<<15
 #define NAMEMAX       128
 #define TEXTMAX       1<<12 
 #define FULLCMDLEN    256
-#define MAXHIS        30
+#define MAXHIS        40
 #define EDITSIZE      1<<15
 
 void initPV();

@@ -5,6 +5,8 @@
 #include <pthread.h>
 #define NUM_GKTHREADS 32
 
+INT256 cnt;
+
 int millerRabin(INT256 n, int iterations) {
     if (ieq(n, int256_c("2", HEXMODE))){
         return 1;
@@ -20,10 +22,13 @@ int millerRabin(INT256 n, int iterations) {
     }
 
     INT256 s = zero;
-    INT256 d = isub(n, one, NON);
-    while (ieq(imod(d, int256_c("2", HEXMODE)), zero)) {
-        d = idiv(d, int256_c("2", HEXMODE));
-        s = ipls(s, one, NON);
+    INT256 d = isub(n, one, NON), nso = isub(n, one, NON);
+    int k = 0;
+    for (int i = 0; i < MAXBIT; ++i){
+        if (n.value[i/WORD] >> (i%WORD) & 1 == 0){
+            d = idiv(d, int256_c("2", HEXMODE));
+            ++k;
+        } else break;
     }
 
     for (int i = 0; i < iterations; i++) {
@@ -32,18 +37,18 @@ int millerRabin(INT256 n, int iterations) {
         while (!(igt(a, one) && (ile(a, n)))) a = irand(0, MAXWORD/2);
         INT256 x = ipow(a, d, n);
         if (ieq(x, one)) {
-            break;
+            continue;
         }
 
-        for (INT256 j = zero; ile(j, isub(s, one, NON)); j = ipls(j, one, NON)) {
-            if (ieq(x, isub(n, one, NON))) {
-                break;
+        for (int j = 0; j < k; ++j) {
+            if (ieq(x, nso)) {
                 f = 0;
+                break;
             } else {
-                x = ipow(x, int256_c("2", HEXMODE), n);
+                x = imul(x, x, n);
             }
-            if (f == 0) break;
         }
+        if (f == 0) continue;
         return 0;
     }
     return 1;
@@ -52,8 +57,9 @@ int millerRabin(INT256 n, int iterations) {
 INT256 pList[NUM_GKTHREADS];
 void * prime(void * arg)
 {
+    cnt = ipls(cnt, one, NON);
     INT256* num = (INT256*) arg;
-    if(!millerRabin(*num, 75)) *num = zero;
+    if(!millerRabin(*num, 50)) *num = zero;
 }
 
 void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, char* filename)
@@ -160,7 +166,7 @@ void genkey(int mode , INT256* p, INT256* q, INT256* n, INT256* e, INT256* d, ch
 
 void printInt256(INT256 num) 
 {
-    char buff[128];
+    char buff[512];
     conv2dec(buff, &num);
     printf(buff);
     printf("\n");
@@ -168,18 +174,15 @@ void printInt256(INT256 num)
 
 int main() {
     initInt();
-    // printInt256(ipow(int256_c("125678", HEXMODE), int256_c("123456", HEXMODE), int256_c("12ff56", HEXMODE)));
-    int cnt = 10, st = 0;
-    while (cnt-- > 0){
-        long long t = time(NULL);
-        srand(time(NULL));
-        INT256 e, d, n, p, q;
-        genkey(0, &p, &q, &n, &e, &d, "");
-        printInt256(p);
-        printInt256(n);
-        printf("%lld\n", time(NULL) - t);
-        st += time(NULL) - t;
-    }
-    printf("\n%d\n", st);
+    printInt256(imul(int256_c("FF2B2ACD", HEXMODE), int256_c("F1E31231", HEXMODE), int256_c("a231", HEXMODE)));
+    long long t = time(NULL);
+    srand(time(NULL));
+    INT256 e, d, n, p, q;
+    genkey(0, &p, &q, &n, &e, &d, "");
+    printInt256(p);
+    printInt256(q);
+    printInt256(n);
+    printf("%lld\n", time(NULL) - t);
+    printInt256(cnt);
     return 0;
 }

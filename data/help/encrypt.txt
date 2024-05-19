@@ -1,0 +1,16 @@
+Encrypt the content in plaintext box or a file
+
+    ENCRYPT [-f] [<plaintext file>] [-o <ciphertext file>] [-k <key file>]
+
+Parameter:
+    <plaintext>             choose plaintext file for encryption
+    -f                      force action
+    -o <ciphertext file>    choose file for outputing ciphertext
+    -k <key> file           choose public key file for encryption
+
+Note:
+    If given't plaintext file or ciphertext file, the default two file for encryption is loading ciphertext and loading plaintext. You can check them with two command.
+
+        WHERE-CPT
+        WHERE-PLT
+

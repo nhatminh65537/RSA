@@ -1,0 +1,8 @@
+
+Save or export ciphertext to a file.
+
+    SAVE-CPT <file name>
+
+Parameter:
+    <file name>     save ciphertext to file.
+

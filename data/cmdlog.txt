@@ -1,30 +1,40 @@
+exit
+
+
+
+
+
+
+
+
+
+load-plt plt.txt
+focus-plt
+gene-key
+encrypt
+focus-cpt
 save-key key
-load-plt .mytest/plt.txt
-encrypt
-unload-plt
-decrypt
-help
-where
-where-key
-unload-key
-gene-key -e 3
-save-key key/1
-gene-key -e 3
-gene-key
-load-plt .trash/plt.txt
-encrypt
-decrypt -f
-gene-key
-gene-key -f
-load-plt .trash/plt.txt
+load-plt plt.txt
 load-key key
-decrypt
 encrypt
+where-cpt
+load-plt plt.txt; load-key key; encrypt; where-cpt
+focus-plt
+decrypt -f
+load-plt plt.txt; load-key key; encrypt; where-cpt
+focus-cpt
+unload 
+unload-cpt
+unload-plt -f
 decrypt
-where-plt
-decrypt
-decrypt -f 
+decrypt -f
+load-plt plt.txt; load-key key; encrypt; where-cpt
+decrypt -f
 encrypt -f
-unload-key
-gene-key
+fd
+help
+d
+focus-log
+info-pbl
+help
 exit

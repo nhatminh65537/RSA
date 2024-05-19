@@ -1,0 +1,8 @@
+
+Reset ciphertext file to normal.
+
+    UNLOAD-CPT [-f]
+
+Parameter:
+    -f      force action
+

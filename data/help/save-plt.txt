@@ -1,0 +1,8 @@
+
+Save or export plaintext to a file.
+
+    SAVE-PLT <file name>
+
+Parameter:
+    <file name>     save plaintext to file.
+

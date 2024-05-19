@@ -1,7 +1,7 @@
 #ifndef __INT256__
 #define __INT256__
 
-#define MAXBYTE  32
+#define MAXBYTE  64
 
 #define MAXHEX MAXBYTE*2
 #define MAXBIT MAXBYTE*8

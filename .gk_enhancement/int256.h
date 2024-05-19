@@ -1,8 +1,8 @@
 #ifndef __INT256__
 #define __INT256__
 
-#define MAXWORD  16
-#define WORD     16
+#define MAXWORD  128
+#define WORD     8
 
 #define MAXHEX MAXWORD*WORD/4
 #define MAXBIT MAXWORD*WORD
@@ -17,7 +17,7 @@ enum Mode
 
 struct Int256
 {
-    unsigned short value[MAXWORD];
+    unsigned char value[MAXWORD];
 };
 typedef struct Int256 INT256;
 

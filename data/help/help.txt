@@ -1,5 +1,40 @@
-About program:
-    RSA is a public cryptosystem.
-    there 2 type of key:
-        public  key: n, e
-        private key: p, q, d
+
+For more information on a specific command, type HELP command-name
+SHOW-PLT        display plaintext box
+SHOW-CPT        display ciphertext box
+SHOW-LOG        display log box
+UNSHOW-PLT      hide plaintext box
+UNSHOW-CPT      hide ciphertext box
+
+UNSHOW-LOG      hide log box
+INFO-PROGRAM    output to screen information about rsa-project
+INFO-PBL        output to screen information about PBL
+HELP            provide help information
+UNLOAD-PLT      reset plaintext file to normal
+
+UNLOAD-CPT      reset ciphertextfile to normal
+UNLOAD-KEY      reset key (public key or private key) to normal
+FOCUS-PLT       change focus on plaintext for read
+FOCUS-CPT       change focus on ciphertext for read
+FOCUS-LOG       change focus on log for read
+
+EDIT-PLT        change focus and enable cursor on plaintext for edit
+EDIT-CPT        change focus and enable cursor on ciphertext for edit
+EXIT            exit program
+LOAD-PLT        load plaintext from a file
+LOAD-CPT        load ciphertext from a file
+
+LOAD-KEY        load key from a file
+SAVE-PLT        save or export plaintext to a file
+SAVE-CPT        save or export ciphertext to a file
+SAVE-KEY        save or export key (public key or private key) to a file
+WHERE-KEY       display path of loading key file (public key and private key)
+
+WHERE-CPT       display path of loading ciphertext file
+WHERE-PLT       display path of loading plaintext file
+GENE-KEY        generate key for encryption and decryption
+CLEAR-LOG       clear content in log box
+ENCRYPT         encrypt the content in plaintext box or a file
+
+DECRYPT         decrypt the content in ciphertext box or a file
+

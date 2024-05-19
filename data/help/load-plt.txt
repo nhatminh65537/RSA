@@ -1,0 +1,10 @@
+
+
+Load plaintext from a file.
+
+    LOAD-PLT <file> [-f]
+
+Parameter:
+    <file>      file containing plaintext
+    -f          force action
+
