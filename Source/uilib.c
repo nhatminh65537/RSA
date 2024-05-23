@@ -167,7 +167,6 @@ void initBox(BOX* newBox, char* name, BOX* parent, enum LayoutType layout,
 {
     newBox->enable = FALSE;
     strcpy(newBox->name, name);
-    // for (int i = 0; i < MAXCHILD; ++i) 
 
     newBox->childCnt       = 0;
     newBox->childEnableCnt = 0;
@@ -237,18 +236,8 @@ void initBox(BOX* newBox, char* name, BOX* parent, enum LayoutType layout,
             if (parent->gridType == INNER){
                 newBox->x = x;
                 newBox->y = y;
-                // unsigned freeSpaceX = parent->right - parent->left - 1,
-                //          freeSpaceY = parent->bottom - parent->top - 1;
-                
-                // for (int i = parent->xBox; i = parent->xBox + 1 - x; ++i) 
-                //     freeSpaceX = freeSpaceX - round((float)freeSpaceX/i);
                 newBox->left  = parent->left + 1 + round((float)(parent->right - parent->left - 2)*(x-1)  /parent->xBox);
                 newBox->right = parent->left + 1 + round((float)(parent->right - parent->left - 2)*(x-1+sx)/parent->xBox);
-
-                // for (int i = parent->yBox; i = parent->yBox + 1 - y; ++i) 
-                //     freeSpaceY = freeSpaceY - round((float)freeSpaceY/i);
-                // newBox->top    = parent->bottom - freeSpaceX + 1;
-                // newBox->bottom = newBox->top    + round((float)freeSpaceY/(parent->yBox + 1 - y));
                 newBox->top    = parent->top + 1 + round((float)(parent->bottom - parent->top - 2)*(y-1)   /parent->yBox);
                 newBox->bottom = parent->top + 1 + round((float)(parent->bottom - parent->top - 2)*(y-1+sy)/parent->yBox);
             }        
@@ -322,22 +311,7 @@ void enableBox(BOX* box, int val)
         if (box->enable)
             ++parent->childEnableCnt;
         else --parent->childEnableCnt;
-        break;
-    //         if (parent->gridType == INNER){
-    //             unsigned freeSpaceX = parent->right - parent->left - 1,
-    //                      freeSpaceY = parent->bottom - parent->top - 1;
-                
-    //             for (int i = parent->xBox; i = parent->xBox + 1 - x; ++i) 
-    //                 freeSpaceX = freeSpaceX - round((float)freeSpaceX/i);
-    //             box->left  = parent->right - freeSpaceX + 1;
-    //             box->right = box->left  + round((float)freeSpaceX/(parent->xBox + 1 - x));
-
-    //             for (int i = parent->yBox; i = parent->yBox + 1 - y; ++i) 
-    //                 freeSpaceY = freeSpaceY - round((float)freeSpaceY/i);
-    //             box->top    = parent->bottom - freeSpaceX + 1;
-    //             box->bottom = box->top    + round((float)freeSpaceY/(parent->yBox + 1 - y));
-    //         }     
-        
+        break;     
     }
     clearBox(parent);
     show(parent);

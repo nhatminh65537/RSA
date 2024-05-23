@@ -1,17 +1,3 @@
-encrypt
-where-cpt
-load-plt plt.txt; load-key key; encrypt; where-cpt
-focus-plt
-decrypt -f
-load-plt plt.txt; load-key key; encrypt; where-cpt
-focus-cpt
-unload 
-unload-cpt
-unload-plt -f
-decrypt
-decrypt -f
-load-plt plt.txt; load-key key; encrypt; where-cpt
-decrypt -f
 encrypt -f
 fd
 help
@@ -37,4 +23,18 @@ decrypt .test/cpt.txt
 unload-key -pu
 unload-key -pr
 gene-key
+help
+info-pbl
+gene-key
+help
+plaintext launch.c
+load-plt launch.c
+show-plt
+show-cpt
+unshow-cpt
+edit-plt
+decrypt
+encrypt
+show-cpt
+decrypt -f
 exit

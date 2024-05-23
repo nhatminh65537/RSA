@@ -3,7 +3,6 @@
 #include <conio.h>
 #include "../header/pv.h"
 #include "../header/ui.h"
-// #include <conio.>
 
 #define CHECKRANGE 16
 #define PREPRINT   256
@@ -98,7 +97,6 @@ int readText(TEXT* text, int offset)
             text->pos += offset;
         }
         fseek(f, text->pos, SEEK_SET);
-        // fscanf(f, "%s", text->text);
         text->text[fread(text->text, 1, TEXTMAX - 1, f)] = 0;
     }
     else
@@ -317,15 +315,7 @@ void edit(EDITTEXT* etext)
         int l = _posChar(etext, cc, &x, &y);
         if (etext->end - etext->text >= EDITSIZE) {
             addError(&logText, "Size reach Limit.");
-        } 
-        // if (y > bottom) {
-        //     --y;
-        //     etext->pos = nextEditLine(etext, etext->pos);
-        // }   
-        // if (y < top) {
-        //     ++y;
-        //     etext->pos = prevEditLine(etext);
-        // }  
+        }  
         showEditText(etext);
 
         MOVEXY(x, y);
@@ -382,7 +372,6 @@ void edit(EDITTEXT* etext)
                 break;    
         }
     }
-    // etext->box->tPoint = etext->pos;
 }
 
 int fstrlen(char* fstr, char end)
@@ -428,46 +417,6 @@ char* prevLine(OUTTEXT* out, char* pos)
         newpos = nextLine(out, newpos);
     }
     return newpos;
-
-    // int width = out->box->right - out->box->left - 1;
-    // while (width > 0){       
-    //     if (*newpos == 'm'){
-    //         for (int i = 1; i < CHECKRANGE; ++i){
-    //             if (newpos - out->text < i || *(newpos - i) == 'm') break;
-    //             else if (*(newpos - i) == '\x1b'){
-    //                 newpos = newpos - i;
-    //                 break;
-    //             } 
-    //         }
-    //     }
-    //     else if (0x20 <= *newpos && *newpos <= 0x7f){
-    //         --width;
-    //     }
-    //     // else if (*newpos == '\x1b'){
-    //     //     int count = 1;
-    //     //     while (*(newpos + count) != 'm') ++count;
-    //     //     width += count;
-    //     // }
-    //     else if (*newpos == '\n'){
-    //         ++newpos;
-    //         break;
-    //     }
-    //     if (newpos == out->text) break;
-    //     --newpos;
-    // }
-    // // for (int i = CHECKRANGE; i > 0; --i){
-    // //     if (newpos - out->text < i) continue;;
-    // //     if (*(newpos - i) == '\x1b'){
-    // //         int j = i;
-    // //         while (*(newpos - j) != 'm') --j;
-    // //         if (j < 0){
-    // //             newpos = newpos - i;
-    // //             break;
-    // //         } 
-    // //         i = j;
-    // //     }
-    // // }
-    // return newpos;
 }
 
 void addText(OUTTEXT* out, char* str)

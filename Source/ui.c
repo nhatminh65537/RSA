@@ -74,50 +74,36 @@ void initUI()
     enableText(&logBox, FALSE, NULL);
     initOutText(&logText, &logBox);
     reassignText(&logText, logText.pos);
-
-    // show(&rsaBox);
 }
 
 void showRsaBox()
 {
-    // CSI(DIM); 
-    // clearBox(&rsaBox);
     drawBox(&rsaBox, BCYAN, LIGHT , CURVE , BCYAN, TRUE);
     CSI(RESET);
 }
 void showCmdBox()
 {
-    // CSI(DIM);   
-    // clearBox(&cmdBox); 
     drawBox(&cmdBox, WHITE, DOUBLE, DOUBLE, WHITE, TRUE); 
     CSI(RESET);
 }
 void showKeyBox()
 {
-    // CSI(DIM); 
-    // clearBox(&keyBox);
     drawBox(&keyBox, WHITE, HEAVY , HEAVY , WHITE, TRUE); 
     CSI(RESET);
 }
 void showOptBox()
 {
-    // CSI(DIM); 
-    // clearBox(&wrkBox);
     drawBox(&wrkBox, WHITE, HEAVY , HEAVY , WHITE, TRUE); 
     CSI(RESET);
 }
 void showLogBox()
 {
-    // CSI(DIM); 
-    // clearBox(&logBox);
     drawBox(&logBox, WHITE, LIGHT , LIGHT , WHITE, TRUE); 
     showOutText(&logText);
     CSI(RESET);   
 }
 void showCptBox()
 {
-    // CSI(DIM); 
-    // clearBox(&cptBox);
     drawBox(&cptBox, WHITE, LIGHT , LIGHT , WHITE, TRUE);
     resetText(&cptBox);
     showText(&cptBox); 
@@ -125,8 +111,6 @@ void showCptBox()
 }
 void showPltBox()
 {
-    // CSI(DIM); 
-    // clearBox(&pltBox);
     drawBox(&pltBox, WHITE, LIGHT , LIGHT , WHITE, TRUE); 
     resetText(&pltBox);
     showText(&pltBox);
@@ -134,8 +118,6 @@ void showPltBox()
 }
 void showEBox()
 {
-    // CSI(DIM); 
-    // clearBox(&eBox);
     drawBox(&eBox, GREEN, LIGHT , LIGHT , WHITE, TRUE); 
     resetText(&eBox);
     showText(&eBox);
@@ -143,8 +125,6 @@ void showEBox()
 }
 void showDBox()
 {
-    // CSI(DIM); 
-    // clearBox(&dBox);
     drawBox(&dBox, RED, LIGHT , LIGHT , WHITE, TRUE); 
     resetText(&dBox);
     showText(&dBox);
@@ -152,8 +132,6 @@ void showDBox()
 }
 void showPBox()
 {
-    // CSI(DIM); 
-    // clearBox(&pBox);
     drawBox(&pBox, RED, LIGHT , LIGHT , WHITE, TRUE); 
     resetText(&pBox);
     showText(&pBox);
@@ -161,8 +139,6 @@ void showPBox()
 }
 void showQBox()
 {
-    // CSI(DIM); 
-    // clearBox(&qBox);
     drawBox(&qBox, RED, LIGHT , LIGHT , WHITE, TRUE); 
     resetText(&qBox);
     showText(&qBox);
@@ -170,8 +146,6 @@ void showQBox()
 }
 void showNBox()
 {
-    // CSI(DIM); 
-    // clearBox(&nBox);
     drawBox(&nBox, GREEN, LIGHT , LIGHT , WHITE, TRUE); 
     resetText(&nBox);
     showText(&nBox);
@@ -307,25 +281,5 @@ void inputCmd()
         inHis = 0;
         tabCnt = 0;
         inTab = 0;
-        // if (32 <= c & c <= 126){
-            
-        // }
-        // else 
-        // }
-        // else if (c == '\b'){
-              
-        // }
-        // else if ((unsigned) c > 126 || c < 32){
-        //     char buff[8];
-        //     while ((unsigned) c > 126){
-        //         sprintf(buff , "%d ", (int) c);
-        //         c = getch();
-        //         strcat(logText.text, buff);
-        //     }
-        //         sprintf(buff , "%d ", (int) c);
-        //         strcat(logText.text, buff);
-        //         strcat(logText.text, "\n");
-        //         show(&logBox);
-        // }
     } 
 }

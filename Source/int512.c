@@ -114,14 +114,12 @@ INT512 int256_c(unsigned char* str, enum Mode mode)
     int len = _len(str);
     INT512 result;
 
-    // ASCII mode
     if (mode == ASCIIMODE)
         for (int i = 0; i < MAXBYTE; ++i)
         {
             result.value[i] = str[_min(i, len)];     
         }      
-    
-    // HEX mode
+
     if (mode == HEXMODE){
         int num_left, num_right;
         for (int i = 0; i < MAXBYTE; ++i)
@@ -131,8 +129,7 @@ INT512 int256_c(unsigned char* str, enum Mode mode)
             result.value[i] = num_right + (num_left << 4);
         }
     }
-        
-    // DEC mode
+
     if (mode == DECMODE){
         result = zero;
         INT512 ten = int256_c("A", HEXMODE);
@@ -290,17 +287,6 @@ INT512 imul(INT512 a, INT512 b, INT512 n)
             result = ipls(result, temp, n);
         } while (igt(over, zero));
     }
-    // result = zero;
-    // temp =  a;
-    // for (int i = 0; i < MAXBIT; ++i)
-    // {  
-    //     if (_index(&b, i) == 1)
-    //         result = ipls(result, temp, n);
-    //     if (_index(&temp, MAXBIT - 1) == 1) 
-    //         temp = ipls(ipls(shiftleft(temp, 1), one, n), imod(maxval, n), n);
-    //     else
-    //         temp = imod(shiftleft(temp, 1), n); 
-    // }
     return result;
 }
 
@@ -376,28 +362,3 @@ void initInt()
     for (int i = 0; i < MAXBYTE; ++i) maxval.value[i] = 0xff;
     one = int256_c("1", HEXMODE);
 }
-
-// int main()
-// {
-//     initInt();
-//     char ch[1024];
-//     INT256 n,m,t,k,a,b,p;
-//     n = int256_c("Re", ASCIIMODE), 
-//     m = int256_c("6f"  , HEXMODE), 
-//     t = int256_c("3", HEXMODE),
-//     k = int256_c("123", HEXMODE),
-//     a = int256_c("aaff541414514355145454514545fffaaff541414514355145454514545fff", HEXMODE),
-//     b = int256_c("fffee13466756453bbbc92347767677aaff541414514355145454514545fff", HEXMODE),
-//     p = int256_c("234134bcbcbbfbeba75346741326481aaff541414514355145454514545fff", HEXMODE);
-//     // show(n, HEXMODE);
-//     // conv2hex(&ch, &n);
-//     // printf("%s", ch);
-//     // printf("%d\n", &a);
-//     // INT256 re;
-//     // re = imul(a, b, p);
-//     // show(ipow(a, b, p), HEXMODE); printf("\n");
-//     // show(a, HEXMODE);
-//     // printf("\n%d\n", &a);
-//     // show(ipow(m, t, k), HEXMODE);
-//     return 0;
-// }

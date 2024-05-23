@@ -95,7 +95,6 @@ typedef struct Box
     
     void (*show)();
 
-    // For grid
     unsigned xBox;
     unsigned yBox;
     enum GridType gridType;

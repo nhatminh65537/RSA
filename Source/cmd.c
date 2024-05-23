@@ -110,9 +110,15 @@ int runCmd()
     {    
         c = phraseCmd(c, args);
         switch (searchCmd(args[0], 0, 1)){
-            case 0 : cptBox.sx = OVER;
-                     enableBox(&pltBox, TRUE); break;
-            case 1 : enableBox(&cptBox, TRUE); break;
+            case 0 :
+                cptBox.sx = OVER;
+                showEditText(&pltEditText);
+                enableBox(&pltBox, TRUE);
+                break;
+            case 1 : 
+                enableBox(&cptBox, TRUE); 
+                showEditText(&cptEditText);
+                break;
             case 2 : enableBox(&logBox, TRUE); break;
             case 3 : cptBox.sx = FULL;
                      enableBox(&pltBox, FALSE); break;
@@ -601,7 +607,6 @@ void focusCmd(TEXT* text)
             break;
         }
         resetText(text->box);
-        // clearBox(&pltBox);
         showText(text->box);
     }
 }
