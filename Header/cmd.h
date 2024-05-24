@@ -8,6 +8,8 @@
 #define CMDARRCLEN    64
 #define MESSLEN       256
 
+void inputCmd();
+
 extern char cmdList[][FULLCMDLEN];
 int searchCmd(char*, int, int);
 int runCmd();
@@ -30,6 +32,7 @@ void wherePltCmd();
 void whereCptCmd();
 void clearLogCmd();
 void editPltCmd();
+void editCptCmd();
 void genkeyCmd(char [][CMDARRCLEN]);
 void encryptCmd(char[][CMDARRCLEN]);
 void decryptCmd(char[][CMDARRCLEN]);

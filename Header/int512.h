@@ -14,11 +14,10 @@ enum Mode
     DECMODE,
 };
 
-struct Int512
+typedef struct Int512
 {
     unsigned char value[MAXBYTE];
-};
-typedef struct Int512 INT512;
+} INT512;
 
 extern INT512 zero;
 extern INT512 maxval;

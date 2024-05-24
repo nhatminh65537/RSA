@@ -8,6 +8,143 @@
 #include "../header/uilib.h"
 #include "../header/rsa.h"
 
+void inputCmd()
+{
+    char c;
+    int inHis = 0, tabCnt = 0, inTab = 0;
+    
+    resetCmd(&cmd);
+    
+    while (TRUE)
+    {        
+        c = getch();
+        int tempCnt;
+
+        switch (c){
+            case RETURN:
+                if (cmd.count != 0 ){
+                    recordCmd(&cmdHis, cmd.string, 1);
+                    addText(&logText, "\x1b[38;5;42m$ \x1b[38;5;229m");
+                    addText(&logText, cmd.string);
+                    resetText(logText.box);
+                    reassignText(&logText, startLine(&logText));
+                    addText(&logText, "\x1b[39m\n");
+                    return;
+                }
+                break;
+            case BACKSPACE:
+                if (cmd.count > 0 && cmd.pos > 0){
+                    --cmd.pos;
+                    deleteChar(&cmd);
+
+                    putch(c); putch(' '); putch(c);
+                    for (int i = cmd.pos; i < cmd.count; ++i)
+                        putch(cmd.string[i]);
+                    putch(' '); putch('\b');
+                    if (cmd.count - cmd.pos > 0)
+                        CUB(cmd.count - cmd.pos);
+                }
+                break;
+            case TAB:
+                if (!inTab){
+                    recordCmd(&cmdHis, cmd.string, 0);
+                }
+                tabCnt = searchCmd(cmdHis.cmdHis[cmdHis.cur], tabCnt, 0);
+                if (tabCnt == -1) break;
+                clsInput();
+                retrievCmd(&cmd, cmdList[tabCnt]);
+                printf(cmd.string);
+                ++tabCnt;
+                inTab = 1;
+                inHis = 0;
+                continue;
+            case EXT:
+                c = getch();
+                switch (c)
+                {
+                    case UP:
+                        clsInput();
+                        if (!inHis) {
+                            recordCmd(&cmdHis, cmd.string, 0);
+                            cmdHis.pos = cmdHis.cur;
+                        }
+                        retrievCmd(&cmd, preCmd(&cmdHis));
+                        printf(cmd.string);
+                        inHis = 1;
+                        tabCnt = 0;
+                        inTab = 0;
+                        continue;
+                    case RIGHT:
+                        if (cmd.pos < cmd.count){
+                            ++cmd.pos;
+                            CUF(1);
+                        }
+                        break;
+                    case LEFT:
+                    if (0 < cmd.pos){
+                            --cmd.pos;
+                            CUB(1);
+                        }
+                        break;
+                    case DOWN:
+                        clsInput();
+                        if (!inHis) {
+                            recordCmd(&cmdHis, cmd.string, 0);
+                            cmdHis.pos = cmdHis.cur;
+                        }
+                        retrievCmd(&cmd, sucCmd(&cmdHis));
+                        printf(cmd.string);
+                        tabCnt = 0;
+                        inTab = 0;  
+                        inHis = 1;
+                        continue;
+                    case DEL:
+                        if (cmd.pos < cmd.count && cmd.pos >= 0){
+                            ++cmd.pos;
+                            CUF(1);
+                            
+                            --cmd.pos;
+                            deleteChar(&cmd);
+
+                            putch('\b'); putch(' '); putch('\b');
+                            for (int i = cmd.pos; i < cmd.count; ++i)
+                                putch(cmd.string[i]);
+                            putch(' '); putch('\b');
+                            if (cmd.count - cmd.pos > 0)
+                                CUB(cmd.count - cmd.pos);
+                        
+                        }
+                        break;
+                }
+                break;
+            default:
+                if (32 > c || c > 126) break;
+                insertChar(&cmd, c);
+                putch(c);
+                for (int i = cmd.pos; i < cmd.count; ++i)
+                    putch(cmd.string[i]);
+                if (cmd.count - cmd.pos > 0)
+                    CUB(cmd.count - cmd.pos);
+                break;
+        }
+        inHis = 0;
+        tabCnt = 0;
+        inTab = 0;
+    } 
+}
+
+char *lowercase(char *s)
+{
+    char *p = s;
+    while (*p)
+    {
+        if (*p >= 'A' && *p <= 'Z')
+            *p += 32;
+        p++;
+    }
+    return s;
+}
+
 char cmdList[][FULLCMDLEN] = {
     "show-plt",
     "show-cpt",
@@ -51,6 +188,7 @@ int cmdListLen = 31;
 
 int searchCmd(char* cmd, int s, int fullflag) 
 {
+    cmd = lowercase(cmd);
     for (int i = 0; i < cmdListLen; ++i){
         int index = (s+i)%cmdListLen;
         if (strcmp(cmd, cmdList[index])               == 0 )             return index;
@@ -112,12 +250,14 @@ int runCmd()
         switch (searchCmd(args[0], 0, 1)){
             case 0 :
                 cptBox.sx = OVER;
+                showEditText(&cptEditText);
                 showEditText(&pltEditText);
                 enableBox(&pltBox, TRUE);
                 break;
             case 1 : 
                 enableBox(&cptBox, TRUE); 
                 showEditText(&cptEditText);
+                showEditText(&pltEditText);
                 break;
             case 2 : enableBox(&logBox, TRUE); break;
             case 3 : cptBox.sx = FULL;
@@ -134,7 +274,7 @@ int runCmd()
             case 13: focusCmd(&cipherText); break;
             case 14: focusLogCmd(&logText); break;
             case 15: editPltCmd()         ; break;
-            case 16: editPltCmd()         ; break;
+            case 16: editCptCmd()         ; break;
             case 17: return 0             ; break;
             case 18: loadPltCmd(args)              ; break;  
             case 19: loadCptCmd(args)              ; break;
@@ -564,7 +704,7 @@ void helpCmd(char args[][CMDARRCLEN])
             case 30: addFile(&logText, "data/help/encrypt.txt" ); break;
             default:
                 char mess[MESSLEN];
-                sprintf(mess, "Sorry! Can't fnd help file for \"%s\".\n", args[0]);
+                sprintf(mess, "Sorry! Can't find help file for \"%s\".\n", args[0]);
                 addError(&logText, mess);
                 break;
         }

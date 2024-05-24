@@ -1,7 +1,3 @@
-encrypt -f
-fd
-help
-d
 focus-log
 info-pbl
 help
@@ -37,4 +33,8 @@ decrypt
 encrypt
 show-cpt
 decrypt -f
+help
+info-program
+info-pbl
+exir
 exit

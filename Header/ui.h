@@ -10,8 +10,8 @@
 
 extern BOX screen, rsaBox, cmdBox, keyBox, wrkBox, logBox, cptBox, pltBox,
            eBox  , dBox  , qBox  , pBox  , nBox;
-void initUI();
-void inputCmd();
+
 void clsInput();
+void initUI();
 
 #endif
