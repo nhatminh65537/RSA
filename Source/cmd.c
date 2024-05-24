@@ -250,14 +250,14 @@ int runCmd()
         switch (searchCmd(args[0], 0, 1)){
             case 0 :
                 cptBox.sx = OVER;
-                showEditText(&cptEditText);
-                showEditText(&pltEditText);
+                if (ccpt) showEditText(&cptEditText);
+                if (cplt) showEditText(&pltEditText);
                 enableBox(&pltBox, TRUE);
                 break;
             case 1 : 
                 enableBox(&cptBox, TRUE); 
-                showEditText(&cptEditText);
-                showEditText(&pltEditText);
+                if (ccpt) showEditText(&cptEditText);
+                if (cplt) showEditText(&pltEditText);
                 break;
             case 2 : enableBox(&logBox, TRUE); break;
             case 3 : cptBox.sx = FULL;
@@ -680,8 +680,8 @@ void saveTextCmd(TEXT* text, char args[][CMDARRCLEN])
     char *file = getParaVal("", args);
     saveText(text, file);
     loadToText(text, file, text->box);
-    if (strcmp(args[0], "save-plt") == 0) hplt = 1, hplt = 1, cplt = 0;
-    if (strcmp(args[0], "save-cpt") == 0) hcpt = 1, hcpt = 1, ccpt = 0;
+    if (strcmp(args[0], "save-plt") == 0) hplt = 1, splt = 1, cplt = 0;
+    if (strcmp(args[0], "save-cpt") == 0) hcpt = 1, scpt = 1, ccpt = 0;
 }
 
 void helpCmd(char args[][CMDARRCLEN])

@@ -149,7 +149,6 @@ int millerRabin(INT512 n, int iterations) {
         return 0;
     }
 
-    INT512 s = zero;
     INT512 d = isub(n, one, NON), nso = isub(n, one, NON);
     int k = 0;
     for (int i = 0; i < MAXBIT; ++i){

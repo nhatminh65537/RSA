@@ -1,40 +1,40 @@
-focus-log
-info-pbl
-help
-load-key .test/key
-load .test/plt.txt
-load-plt .test/plt.txt
-encrypt
-unshow-plt
-show-plt
-unload-plt
-decrypt
-focus-plt
-decrypt -o .test/pltc.txt
-load-plt .test/plt.txt
-load-key .test/key
-encrypt -o .test/cpt.txt
-unload-plt
-decrypt .test/cpt.txt
-unload-key -pu
-unload-key -pr
-gene-key
-help
-info-pbl
-gene-key
-help
-plaintext launch.c
-load-plt launch.c
-show-plt
-show-cpt
-unshow-cpt
-edit-plt
-decrypt
-encrypt
-show-cpt
-decrypt -f
-help
 info-program
 info-pbl
 exir
+load-plt D:\test\plaintext.txt
+load-plt D:\test\plt.txt
+gene-key
+save-key D:\test\key
+where-key
+load-plt D:\test\plt.txt
+show-plt
+show-cpt
+where-plt
+encrypt
+save-cpt D:\test\cpt.txt
+where-cpt
+where-plt
+unload-plt
+unload-cpt
+where-cpt
+unload-cpt
+unload-cpt -f
+unload-key
+where-key
+where-cpt
+where-plt
+load-key key.prk -pr
+load-key D:\test\key.prk -pr
+decrypt D:\test\cpt.txt
+show-plt D:\test\pltcmp.txt
+save-plt D:\test\pltcmp.txt
+load-plt fd
+show-plt
+edit-plt
+show-plt
+load-plt
+save-plt D:\test\pltcmp.txt
+load-plt D:\test\plt.txt
+load-plt D:\test\plt.txt -f
+show-plt
 exit
