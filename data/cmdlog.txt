@@ -1,10 +1,3 @@
-info-program
-info-pbl
-exir
-load-plt D:\test\plaintext.txt
-load-plt D:\test\plt.txt
-gene-key
-save-key D:\test\key
 where-key
 load-plt D:\test\plt.txt
 show-plt
@@ -37,4 +30,11 @@ save-plt D:\test\pltcmp.txt
 load-plt D:\test\plt.txt
 load-plt D:\test\plt.txt -f
 show-plt
+load-plt D:\test\plt.txt 
+show-plt
+show-cpt
+gene-key
+encrypt
+unshow-plt
+edit-cpt
 exit
