@@ -1,6 +1,6 @@
 Generate key for encryption and decryption
 
-    GENE-KEY [-f] [-pr <file name>] [-e <number>] [-d <number>]
+    GENE-KEY [-pr <file name>] [-e <number>] [-d <number>] [-f]
 
 Parameter:
     -f                  force action       

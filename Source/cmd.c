@@ -700,8 +700,8 @@ void helpCmd(char args[][CMDARRCLEN])
             case 22: addFile(&logText, "data/help/save-cpt.txt"); break;
             case 23: addFile(&logText, "data/help/save-key.txt"); break;
             case 27: addFile(&logText, "data/help/gene-key.txt"); break;
-            case 29: addFile(&logText, "data/help/decrypt.txt" ); break;
-            case 30: addFile(&logText, "data/help/encrypt.txt" ); break;
+            case 30: addFile(&logText, "data/help/decrypt.txt" ); break;
+            case 29: addFile(&logText, "data/help/encrypt.txt" ); break;
             default:
                 char mess[MESSLEN];
                 sprintf(mess, "Sorry! Can't find help file for \"%s\".\n", args[0]);

@@ -89,7 +89,10 @@ int readText(TEXT* text, int offset)
     FILE* f = fopen(text->file, "r");
     if(f != NULL) {
         fseek(f, 0, SEEK_END);
-        if (text->pos + offset >= ftell(f)) return 0;
+        if (text->pos + offset >= ftell(f)){
+            return 0;
+            fclose(f);
+        } 
         if (text->pos + offset < 0){
             text->pos = 0;
         }
@@ -116,6 +119,9 @@ void saveText(TEXT* text, const char * fileName)
 {
     FILE *source, *destination;
     char ch;
+
+    if (strcmp(text->file, fileName) == 0) return;
+
     source = fopen(text->file, "r");
     destination = fopen(fileName, "w");
 

@@ -1,6 +1,6 @@
 Encrypt the content in plaintext box or a file
 
-    ENCRYPT [-f] [<plaintext file>] [-o <ciphertext file>] [-k <key file>]
+    ENCRYPT [<plaintext file>] [-f] [-o <ciphertext file>] [-k <key file>]
 
 Parameter:
     <plaintext>             choose plaintext file for encryption

@@ -1,6 +1,6 @@
 Decrypt the content in ciphertext box or a file.
 
-    DECRYPT [-f] [<ciphertext file>] [-o <plaintext file>] [-k <key file>]
+    DECRYPT [<ciphertext file>] [-f] [-o <plaintext file>] [-k <key file>]
 
 Parameter:
     <ciphertext>            choose ciphertext file for decryption

@@ -24,9 +24,9 @@ launch: $(BUILD_DIR)/launch.o
 	$(CC) -o $@ $^
 
 $(BUILD_DIR)/launch.o: launch.c
-	mkdir -p $(dir $@)
+	$(SPATH)/mkdir -p $(dir $@)
 	$(CC) $(FLAGS) -c $< -o $@
 
 .PHONY: clean
 clean:
-	rm -r $(BUILD_DIR)
+	$(SPATH)/rm -r $(BUILD_DIR)
