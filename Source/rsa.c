@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include "../header/int512.h"
-#define NUM_THREADS 16
+#define NUM_THREADS 32
 
 struct argsThread
 {
@@ -133,7 +133,7 @@ void decrypt(INT512 d ,INT512 p , INT512 q, char* cpt, char* plt)
   fclose(plaintextFile);
 }
 
-#define NUM_GKTHREADS 32
+#define NUM_GKTHREADS 64*4
 
 int millerRabin(INT512 n, int iterations) {
     if (ieq(n, int256_c("2", HEXMODE))){

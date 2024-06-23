@@ -1,16 +1,3 @@
-decrypt D:\test\cpt.txt
-show-plt D:\test\pltcmp.txt
-save-plt D:\test\pltcmp.txt
-load-plt fd
-show-plt
-edit-plt
-show-plt
-load-plt
-save-plt D:\test\pltcmp.txt
-load-plt D:\test\plt.txt
-load-plt D:\test\plt.txt -f
-show-plt
-load-plt D:\test\plt.txt 
 show-plt
 show-cpt
 gene-key
@@ -37,4 +24,17 @@ show-plt
 load-plt D:\plt.txt
 show-plt
 save-plt D:\plt.txt
+gene-key
+anime
+show-plt
+show-cpt
+encrypt test/plt.txt -o test/cpt_o.txt -k test/key.puk
+decrypt test/cpt_o.txt -o test/plt_o.txt -k test/key.prk
+where-cpt
+where-plt
+decrypt test/cpt_o.txt -o test/plt_o.txt -k test/key.prk
+encrypt test/plt.txt -o test/cpt_o.txt -k test/key.puk
+decrypt test/cpt_o.txt -o test/plt_o.txt -k test/key.prk
+decrypt test/cpt_.txt -o test/plt_o.txt -k test/key.prk
+decrypt test/cpt_o.txt -o test/plt_o.txt -k test/key.prk
 exit

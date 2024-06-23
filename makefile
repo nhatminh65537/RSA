@@ -18,7 +18,7 @@ main: $(OBJS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS)
 	$(SPATH)/mkdir -p $(dir $@)
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS) -c $< -o $@ 
 
 launch: $(BUILD_DIR)/launch.o
 	$(CC) -o $@ $^

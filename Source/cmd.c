@@ -249,12 +249,14 @@ int runCmd()
         c = phraseCmd(c, args);
         switch (searchCmd(args[0], 0, 1)){
             case 0 :
+                if (pltBox.enable) break;
                 cptBox.sx = OVER;
                 if (ccpt) showEditText(&cptEditText);
                 if (cplt) showEditText(&pltEditText);
                 enableBox(&pltBox, TRUE);
                 break;
             case 1 : 
+                if (cptBox.enable) break;
                 enableBox(&cptBox, TRUE); 
                 if (ccpt) showEditText(&cptEditText);
                 if (cplt) showEditText(&pltEditText);
@@ -484,6 +486,8 @@ void unloadKeyCmd(char args[][CMDARRCLEN])
        resetDefaultPrKey();
     }
     show(&keyBox);
+    spr = 0; hpr = 0;
+    spu = 0; hpu = 0;
 }
 
 void loadPltCmd(char args[][CMDARRCLEN])
@@ -832,7 +836,7 @@ void encryptCmd(char args[][CMDARRCLEN])
     if (!hcpt) scpt = 0;
 
     int t = time(NULL);
-    encrypt(e.val, n.val, input, output);
+    encrypt(ek, nk, input, output);
     int new_t = time(NULL);
     char mess[MESSLEN];
     sprintf(mess, "Time-consuming: %ds\n", new_t - t);
@@ -896,8 +900,10 @@ void decryptCmd(char args[][CMDARRCLEN])
     }
     if (!hplt) splt = 0;
 
+    // addText(&logText, strcat(strcat("Output file: ", output), "\n"));
+    // addText(&logText, strcat(strcat("Input  file: ", input), "\n")); 
     int t = time(NULL);
-    decrypt(d.val, p.val, q.val, input, output);
+    decrypt(dk, pk, qk, input, output);
     int new_t = time(NULL);
     char mess[MESSLEN];
     sprintf(mess, "Time-consuming: %ds\n", new_t - t);
